@@ -1,4 +1,5 @@
 import app from '../../src/app'
+import { MethodNotAllowed } from '@feathersjs/errors'
 
 interface Year {
   _id?: string
@@ -39,7 +40,7 @@ describe("'years' service", () => {
       result = null
     })
 
-    it('should find a year', async () => {
+    it('should find', async () => {
       // Find all documents in the DB using mongoose
       const dbResults: any = await app
         .get('mongooseClient')
@@ -56,7 +57,7 @@ describe("'years' service", () => {
       expect(results.data.length).toBe(dbLength)
     })
 
-    it('should create a year', async () => {
+    it('should create', async () => {
       expect(result).toBeDefined()
       expect(result).toHaveProperty('_id')
       expect(result).toHaveProperty('name', year.name)
@@ -64,19 +65,30 @@ describe("'years' service", () => {
       expect(result).toHaveProperty('updatedAt')
     })
 
-    it('should update a year', async () => {
-      const updatedResult = await app
+    it('shoult not update (disallow)', async () => {
+      let error: any
+      try {
+        await app.service('years').update(result._id, anotherYear)
+        error = {}
+      } catch (e) {
+        error = e
+      }
+      expect(error).toBeInstanceOf(MethodNotAllowed)
+    })
+
+    it('should patch', async () => {
+      const patchedResult = await app
         .service('years')
         .patch(result._id, anotherYear)
 
-      expect(updatedResult).toBeDefined()
-      expect(updatedResult).toHaveProperty('_id')
-      expect(updatedResult).toHaveProperty('name', anotherYear.name)
-      expect(updatedResult).toHaveProperty('createdAt')
-      expect(updatedResult).toHaveProperty('updatedAt')
+      expect(patchedResult).toBeDefined()
+      expect(patchedResult).toHaveProperty('_id')
+      expect(patchedResult).toHaveProperty('name', anotherYear.name)
+      expect(patchedResult).toHaveProperty('createdAt')
+      expect(patchedResult).toHaveProperty('updatedAt')
     })
 
-    it('should delete a year', async () => {
+    it('should delete', async () => {
       const deleteResult = await app.service('years').remove(result._id)
 
       expect(deleteResult).toBeDefined()
