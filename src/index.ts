@@ -9,9 +9,7 @@ process.on('unhandledRejection', (reason, p) =>
 )
 
 server.on('listening', () =>
-  logger.info(
-    'Feathers application started on http://%s:%d',
-    app.get('host'),
-    port
-  )
+  logger.info(`API TutorINSA started on http://${app.get('host')}:${port}`, {
+    type: 'start',
+  })
 )

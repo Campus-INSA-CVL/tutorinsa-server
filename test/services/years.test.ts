@@ -41,6 +41,7 @@ describe("'years' service", () => {
     })
 
     it('should find', async () => {
+      expect.assertions(4)
       // Find all documents in the DB using mongoose
       const dbResults: any = await app
         .get('mongooseClient')
@@ -58,6 +59,8 @@ describe("'years' service", () => {
     })
 
     it('should create', async () => {
+      expect.assertions(5)
+
       expect(result).toBeDefined()
       expect(result).toHaveProperty('_id')
       expect(result).toHaveProperty('name', year.name)
@@ -66,6 +69,7 @@ describe("'years' service", () => {
     })
 
     it('shoult not update (disallow)', async () => {
+      expect.assertions(1)
       let error: any
       try {
         await app.service('years').update(result._id, anotherYear)
@@ -77,6 +81,8 @@ describe("'years' service", () => {
     })
 
     it('should patch', async () => {
+      expect.assertions(5)
+
       const patchedResult = await app
         .service('years')
         .patch(result._id, anotherYear)
@@ -89,6 +95,8 @@ describe("'years' service", () => {
     })
 
     it('should delete', async () => {
+      expect.assertions(5)
+
       const deleteResult = await app.service('years').remove(result._id)
 
       expect(deleteResult).toBeDefined()
