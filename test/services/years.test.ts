@@ -28,6 +28,7 @@ describe("'years' service", () => {
       try {
         result = await app.service('years').create(year)
       } catch (error) {
+        // tslint:disable-next-line
         console.error(error)
       }
     })
