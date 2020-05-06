@@ -1,0 +1,81 @@
+{
+  "name": "feathersjs-server",
+  "description": "",
+  "version": "0.0.0",
+  "homepage": "",
+  "private": true,
+  "main": "src",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "Esteban S",
+    "email": "esteban.soubiran@insa-cvl.fr"
+  },
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src",
+    "test": "test/",
+    "config": "config/"
+  },
+  "engines": {
+    "node": "^12.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "scripts": {
+    "test": "npm run compile && npm run jest",
+    "dev": "ts-node-dev --no-notify src/",
+    "lint": "tslint 'src/**/*.ts'",
+    "start": "npm run compile && node lib/",
+    "jest": "jest  --forceExit",
+    "compile": "shx rm -rf lib/ && tsc",
+    "precommit": "npm run lint"
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ],
+    "ignore": []
+  },
+  "types": "lib/",
+  "dependencies": {
+    "@feathersjs/authentication": "^4.5.3",
+    "@feathersjs/authentication-local": "^4.5.4",
+    "@feathersjs/authentication-oauth": "^4.5.4",
+    "@feathersjs/configuration": "^4.5.3",
+    "@feathersjs/errors": "^4.5.3",
+    "@feathersjs/express": "^4.5.4",
+    "@feathersjs/feathers": "^4.5.3",
+    "@feathersjs/socketio": "^4.5.4",
+    "@feathersjs/transport-commons": "^4.5.3",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "feathers-mongoose": "^8.3.0",
+    "helmet": "^3.22.0",
+    "mongodb-core": "^3.2.7",
+    "mongoose": "^5.9.11",
+    "serve-favicon": "^2.5.0",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.0",
+    "@types/cors": "^2.8.6",
+    "@types/helmet": "0.0.46",
+    "@types/jest": "^25.2.1",
+    "@types/jsonwebtoken": "^8.3.9",
+    "@types/mongoose": "^5.7.14",
+    "@types/serve-favicon": "^2.5.0",
+    "axios": "^0.19.2",
+    "jest": "^25.5.4",
+    "nodemon": "^2.0.3",
+    "prettier": "^2.0.5",
+    "shx": "^0.3.2",
+    "ts-jest": "^25.4.0",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "tslint": "^6.1.2",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.3.0",
+    "typescript": "^3.8.3"
+  }
+}
