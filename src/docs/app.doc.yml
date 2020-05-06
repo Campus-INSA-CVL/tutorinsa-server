@@ -1,0 +1,128 @@
+info:
+  title: API Tutorinsa CVL
+  description: API REST pour l'[application]() et le [site web](#) de l'association Tutorinsa de l'[INSA Centre Val de Loire](http://www.insa-centrevaldeloire.fr/). Pour plus d'information, vous pouvez consulter la page [Facebook](https://www.facebook.com/tutorinsacvl/).</br>Ce projet est entièrement réalisé par des étudiants de l'INSA Centre-Val de Loire. Si vous rencontrez des bugs, ou que vous souhaitez nous faire un retour d'expérence, n'hésitez pas à nous contacter.
+  version: 0.8.0
+  termsOfService:
+  contact:
+    email: esteban.soubiran@insa-cvl.fr
+  licence:
+    name:
+    url:
+
+components:
+  schemas:
+    errors:
+      type: object
+      properties:
+        name:
+          type: string
+        message:
+          type: string
+        code:
+          type: integer
+        className:
+          type: string
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+        errors:
+          type: object
+    subscription:
+      type: object
+      properties:
+        type:
+          type: string
+    credentials:
+      type: object
+      properties:
+        strategy:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    auth:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        authentication:
+          type: object
+          properties:
+            strategy:
+              type: string
+        user:
+          type: object
+          items:
+            $ref: "#/components/schemas/user"
+
+  responses:
+    BadRequest:
+      description: bad request
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errors"
+          example:
+            name: BadRequest
+            message: Cast to ObjectId failed for value '${value}' at path '${path}' for model '${modelName}'
+            code: 400
+            className: bad-request
+            errors: {}
+    Forbidden:
+      description: forbiden
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errors"
+          example:
+            name: Forbidden
+            message: You are not allowed to ${method} ${service}
+            code: 403
+            className: forbidden
+            errors: {}
+    NotFound:
+      description: not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errors"
+          example:
+            name: NotFound
+            message: No record found for id ${_id}
+            code: 404
+            className: not-found
+            errors: {}
+    NotAllowed:
+      description: method not allowed
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errors"
+          example:
+            name: MethodNotAllowed
+            message: Provider 'rest' can not call '${method}'. (disallow)
+            code: 405
+            className: method-not-allowed
+            errors: {}
+    GeneralError:
+      description: error in server
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/errors"
+          example:
+            name: GeneralError
+            message: ""
+            code: 500
+            className: general-error
+            data: {}
+            errors: {}
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      sheme: bearer
+      bearerFormat: JWT

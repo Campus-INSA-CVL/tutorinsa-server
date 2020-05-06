@@ -17,6 +17,7 @@ import appHooks from './app.hooks'
 import channels from './channels'
 import authentication from './authentication'
 import mongoose from './mongoose'
+import swagger from './swagger'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const app: Application = express(feathers())
@@ -38,6 +39,9 @@ app.configure(express.rest())
 app.configure(socketio())
 
 app.configure(mongoose)
+
+// Configure the documentation
+app.configure(swagger)
 
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware)

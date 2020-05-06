@@ -28,7 +28,15 @@ const options: {
 }
 
 // Add transports depending of the env
-if (process.env.NODE_ENV !== 'development') {
+if (process.env.NODE_ENV === 'test') {
+  const consoleLogs = new transports.Console({
+    format: format.simple(),
+  })
+
+  options.transports.push(consoleLogs)
+}
+
+if (process.env.NODE_ENV === 'development') {
   const consoleLogs = new transports.Console({
     format: format.combine(format.colorize(), logFormat),
   })

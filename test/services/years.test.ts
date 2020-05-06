@@ -14,6 +14,13 @@ describe("'years' service", () => {
     expect(service).toBeTruthy()
   })
 
+  describe('documentation', () => {
+    it('should have a documentation', () => {
+      const service = app.service('years')
+      expect(service.docs).toBeDefined()
+    })
+  })
+
   describe('internal CRUD', () => {
     let result: Year | null = null
 
