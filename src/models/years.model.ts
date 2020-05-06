@@ -10,7 +10,12 @@ export default function (app: Application) {
   const { Schema } = mongooseClient
   const schema = new Schema(
     {
-      text: { type: String, required: true },
+      name: {
+        type: String,
+        lowercase: true,
+        unique: true,
+        required: true,
+      },
     },
     {
       timestamps: true,
