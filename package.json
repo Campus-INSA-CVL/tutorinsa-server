@@ -26,7 +26,7 @@
   "scripts": {
     "test": "npm run compile && npm run jest",
     "dev": "ts-node-dev --no-notify src/",
-    "lint": "tslint 'src/**/*.ts'",
+    "lint": "tslint 'src/**/*.ts' 'test/**/*.ts'",
     "start": "npm run compile && node lib/",
     "jest": "jest  --forceExit",
     "compile": "shx rm -rf lib/ && tsc",

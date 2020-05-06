@@ -1,8 +1,8 @@
-import app from '../../src/app';
+import app from '../../src/app'
 
-describe('\'years\' service', () => {
+describe("'years' service", () => {
   it('registered the service', () => {
-    const service = app.service('years');
-    expect(service).toBeTruthy();
-  });
-});
+    const service = app.service('years')
+    expect(service).toBeTruthy()
+  })
+})
