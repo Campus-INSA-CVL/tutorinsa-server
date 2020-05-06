@@ -28,7 +28,7 @@
     "dev": "ts-node-dev --no-notify src/",
     "lint": "tslint 'src/**/*.ts' 'test/**/*.ts'",
     "start": "npm run compile && node lib/",
-    "jest": "jest  --forceExit",
+    "jest": "jest  --forceExit --detectOpenHandles",
     "compile": "shx rm -rf lib/ && tsc",
     "precommit": "npm run lint"
   },
