@@ -17,7 +17,9 @@ describe("'years' service", () => {
   describe('documentation', () => {
     it('should have a documentation', () => {
       const service = app.service('years')
+
       expect(service.docs).toBeDefined()
+      expect(service.docs).toHaveProperty('description')
     })
   })
 
@@ -75,7 +77,7 @@ describe("'years' service", () => {
       expect(result).toHaveProperty('updatedAt')
     })
 
-    it('shoult not update (disallow)', async () => {
+    it('should not update (disallow)', async () => {
       expect.assertions(1)
       let error: any
       try {
