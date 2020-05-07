@@ -5,6 +5,7 @@ interface User {
   firstName: string
   email: string
   password: string
+  permissions: string[]
 }
 
 describe('authentication', () => {
@@ -18,6 +19,7 @@ describe('authentication', () => {
       firstName: 'username',
       email: 'auth@insa-cvl.fr',
       password: 'azerty',
+      permissions: ['eleve'],
     }
 
     beforeAll(async () => {

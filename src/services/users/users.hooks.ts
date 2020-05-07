@@ -1,6 +1,6 @@
 import * as feathersAuthentication from '@feathersjs/authentication'
 import * as local from '@feathersjs/authentication-local'
-import adminPermission from '../../hooks/admin-permission'
+import permissions from '../../hooks/permissions'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const { authenticate } = feathersAuthentication.hooks
@@ -11,9 +11,9 @@ export default {
     all: [],
     find: [authenticate('jwt')],
     get: [authenticate('jwt')],
-    create: [hashPassword('password'), adminPermission()],
+    create: [hashPassword('password'), permissions()],
     update: [hashPassword('password'), authenticate('jwt')],
-    patch: [hashPassword('password'), authenticate('jwt'), adminPermission()],
+    patch: [hashPassword('password'), authenticate('jwt'), permissions()],
     remove: [authenticate('jwt')],
   },
 
