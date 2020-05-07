@@ -3,7 +3,7 @@ import { MethodNotAllowed } from '@feathersjs/errors'
 
 const serviceName = 'subjects'
 
-interface Subjects {
+interface Subject {
   _id?: string
   name: string
   createdAt?: string
@@ -26,13 +26,13 @@ describe(`'${serviceName}' service`, () => {
   })
 
   describe('internal CRUD', () => {
-    let result: Subjects | null = null
+    let result: Subject | null = null
 
-    const subject = {
+    const subject: Subject = {
       name: 'CC',
     }
 
-    const anotherSubject = {
+    const anotherSubject: Subject = {
       name: 'eps',
     }
 
@@ -69,9 +69,7 @@ describe(`'${serviceName}' service`, () => {
       expect(results.data.length).toBe(dbLength)
     })
 
-    it('should create', async () => {
-      expect.assertions(5)
-
+    it('should create', () => {
       expect(result).toBeDefined()
       expect(result).toHaveProperty('_id')
       expect(result).toHaveProperty('name', subject.name.toLowerCase())

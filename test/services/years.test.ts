@@ -28,11 +28,11 @@ describe(`'${serviceName}' service`, () => {
   describe('internal CRUD', () => {
     let result: Year | null = null
 
-    const year = {
+    const year: Year = {
       name: '3A',
     }
 
-    const anotherYear = {
+    const anotherYear: Year = {
       name: '5a',
     }
 
@@ -69,9 +69,7 @@ describe(`'${serviceName}' service`, () => {
       expect(results.data.length).toBe(dbLength)
     })
 
-    it('should create', async () => {
-      expect.assertions(5)
-
+    it('should create', () => {
       expect(result).toBeDefined()
       expect(result).toHaveProperty('_id')
       expect(result).toHaveProperty('name', year.name.toLowerCase())

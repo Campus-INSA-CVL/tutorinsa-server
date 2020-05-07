@@ -2,7 +2,7 @@ import app from '../../src/app'
 import { MethodNotAllowed } from '@feathersjs/errors'
 
 const serviceName = 'departments'
-interface Departments {
+interface Department {
   _id?: string
   name: string
   createdAt?: string
@@ -25,13 +25,13 @@ describe(`'${serviceName}' service`, () => {
   })
 
   describe('internal CRUD', () => {
-    let result: Departments | null = null
+    let result: Department | null = null
 
-    const department = {
+    const department: Department = {
       name: 'STPI',
     }
 
-    const anotherDepartment = {
+    const anotherDepartment: Department = {
       name: 'sti',
     }
 
@@ -68,9 +68,7 @@ describe(`'${serviceName}' service`, () => {
       expect(results.data.length).toBe(dbLength)
     })
 
-    it('should create', async () => {
-      expect.assertions(5)
-
+    it('should create', () => {
       expect(result).toBeDefined()
       expect(result).toHaveProperty('_id')
       expect(result).toHaveProperty('name', department.name.toLowerCase())

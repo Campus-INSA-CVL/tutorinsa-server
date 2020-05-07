@@ -9,7 +9,23 @@ export default function (app: Application) {
   const mongooseClient = app.get('mongooseClient')
   const schema = new mongooseClient.Schema(
     {
-      email: { type: String, unique: true, lowercase: true },
+      lastName: { type: String, required: true, lowercase: true },
+      firstName: { type: String, required: true, lowercase: true },
+      email: {
+        type: String,
+        unique: true,
+        lowercase: true,
+        validate: {
+          validator: (v: string) => {
+            const regex = new RegExp(
+              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@insa-cvl\.fr$/
+            )
+            return regex.test(v)
+          },
+          message: (props: any) =>
+            `${props.value} n'est pas une adresse mail insa valide`,
+        },
+      },
       password: { type: String },
     },
     {
