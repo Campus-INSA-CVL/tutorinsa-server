@@ -25,7 +25,7 @@ describe("'years' service", () => {
     let result: Year | null = null
 
     const year = {
-      name: '3a',
+      name: '3A',
     }
 
     const anotherYear = {
@@ -70,7 +70,7 @@ describe("'years' service", () => {
 
       expect(result).toBeDefined()
       expect(result).toHaveProperty('_id')
-      expect(result).toHaveProperty('name', year.name)
+      expect(result).toHaveProperty('name', year.name.toLowerCase())
       expect(result).toHaveProperty('createdAt')
       expect(result).toHaveProperty('updatedAt')
     })
@@ -96,7 +96,10 @@ describe("'years' service", () => {
 
       expect(patchedResult).toBeDefined()
       expect(patchedResult).toHaveProperty('_id')
-      expect(patchedResult).toHaveProperty('name', anotherYear.name)
+      expect(patchedResult).toHaveProperty(
+        'name',
+        anotherYear.name.toLowerCase()
+      )
       expect(patchedResult).toHaveProperty('createdAt')
       expect(patchedResult).toHaveProperty('updatedAt')
     })
@@ -108,7 +111,7 @@ describe("'years' service", () => {
 
       expect(deleteResult).toBeDefined()
       expect(deleteResult).toHaveProperty('_id')
-      expect(deleteResult).toHaveProperty('name', result.name)
+      expect(deleteResult).toHaveProperty('name', result.name.toLowerCase())
       expect(deleteResult).toHaveProperty('createdAt')
       expect(deleteResult).toHaveProperty('updatedAt')
     })

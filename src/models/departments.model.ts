@@ -1,21 +1,16 @@
-// subjects-model.js - A mongoose model
+// departments-model.js - A mongoose model
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 import { Application } from '../declarations'
 
 export default function (app: Application) {
-  const modelName = 'subjects'
+  const modelName = 'departments'
   const mongooseClient = app.get('mongooseClient')
   const { Schema } = mongooseClient
   const schema = new Schema(
     {
-      name: {
-        type: String,
-        lowercase: true,
-        unique: true,
-        required: true,
-      },
+      text: { type: String, required: true },
     },
     {
       timestamps: true,
