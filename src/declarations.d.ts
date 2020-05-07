@@ -5,3 +5,17 @@ import { Application as ExpressFeathers } from '@feathersjs/express'
 export interface ServiceTypes {}
 // The application instance type that will be used everywhere else
 export type Application = ExpressFeathers<ServiceTypes>
+
+declare global {
+  type UserPermission = 'eleve' | 'tuteur' | 'admin'
+  interface User {
+    _id?: string
+    lastName: string
+    firstName: string
+    email: string
+    password: string
+    permissions: UserPermission[]
+    createdAt?: string
+    updatedAt?: string
+  }
+}

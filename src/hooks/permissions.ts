@@ -3,20 +3,20 @@
 import { Hook, HookContext } from '@feathersjs/feathers'
 
 export default (options = {}): Hook => {
-  return async (context: HookContext) => {
+  return async (context: HookContext<User>) => {
     const { data, params } = context
     const { user } = params
 
     if (
-      data.permissions.includes('admin') &&
+      data?.permissions?.includes('admin') &&
       !user?.permissions.includes('admin')
     ) {
       data.permissions = data.permissions.filter(
-        (permission: string): boolean => permission !== 'admin'
+        (permission: UserPermission): boolean => permission !== 'admin'
       )
     }
 
-    if (data.permissions.length === 0) {
+    if (data?.permissions?.length === 0) {
       data.permissions.push('eleve')
     }
 

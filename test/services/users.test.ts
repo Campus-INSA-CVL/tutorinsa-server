@@ -1,15 +1,11 @@
-import app from '../../src/app'
 import { MethodNotAllowed } from '@feathersjs/errors'
+import app from '../../src/app'
+import mongoose from 'mongoose'
+import { Paginated } from '@feathersjs/feathers'
 
 const serviceName = 'users'
 
-interface User {
-  lastName: string
-  firstName: string
-  email: string
-  password: string
-  permissions: string[]
-}
+const permissions: UserPermission[] = ['eleve', 'tuteur', 'admin']
 
 describe(`'${serviceName}' service`, () => {
   it('registered the service', () => {
@@ -29,15 +25,13 @@ describe(`'${serviceName}' service`, () => {
   describe('internal CRUD', () => {
     let result: User | null = null
 
-    const permissions: string[] = ['eleve', 'tuteur', 'admin']
-
     // User with admin permission
     const user: User = {
       lastName: 'fakeLastName',
       firstName: 'username',
       email: 'username@insa-cvl.fr',
       password: 'azerty',
-      permissions: ['eleve', 'tuteur', 'admin'],
+      permissions,
     }
 
     // User without permissions
@@ -46,6 +40,7 @@ describe(`'${serviceName}' service`, () => {
       firstName: 'another',
       email: 'another@insa-cvl.fr',
       password: 'azerty',
+      // should be empty
       permissions: [],
     }
 
@@ -120,6 +115,125 @@ describe(`'${serviceName}' service`, () => {
         error = e
       }
       expect(error).toBeInstanceOf(MethodNotAllowed)
+    })
+
+    it('should update the permission', async () => {
+      const newPermission = ['eleve']
+
+      const updatedResult = await app
+        .service(serviceName)
+        .patch(result._id, { permissions: newPermission })
+
+      expect(updatedResult.permissions).toStrictEqual(newPermission)
+    })
+  })
+
+  describe('manage admin', () => {
+    const fakeUser: User = {
+      lastName: 'fake',
+      firstName: 'usere',
+      email: 'fake.user@insa-cvl.fr',
+      password: '',
+      permissions,
+    }
+
+    let adminUser: User | null = null
+
+    let userModel: mongoose.Model<mongoose.Document>
+    let userInDB: mongoose.Document
+
+    beforeAll(async () => {
+      // Connect to db
+      try {
+        await mongoose.connect(app.get('mongodb'), {
+          useCreateIndex: true,
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        })
+      } catch (e) {
+        // tslint:disable-next-line
+        console.error(e)
+      }
+
+      // Create  user schema
+      userModel = mongoose.model(
+        'User',
+        new mongoose.Schema({
+          lastName: String,
+          firstName: String,
+          email: String,
+          password: String,
+          permissions: [
+            {
+              type: String,
+              enum: ['eleve', 'tuteur', 'admin'],
+              required: true,
+            },
+          ],
+        })
+      )
+
+      // Create admin
+      userInDB = new userModel(fakeUser)
+    })
+
+    beforeEach(async () => {
+      // Save admin
+      await userInDB.save()
+      // Retrieve admin user
+      const response = (await app.service(serviceName).find({
+        query: {
+          email: fakeUser.email,
+        },
+      })) as Paginated<User>
+
+      adminUser = response.data[0]
+    })
+
+    afterEach(() => {
+      // Delete admin
+      userModel.deleteOne({ email: fakeUser.email })
+      adminUser = null
+    })
+
+    afterAll(() => {
+      mongoose.connection.close()
+    })
+
+    it('should update permissions but stay admin', async () => {
+      expect.assertions(1)
+
+      const newPermissions = ['eleve', 'admin']
+
+      // Update users
+      const updatedResult = await app.service('users').patch(
+        adminUser._id,
+        { permissions: newPermissions },
+        // Add user info to params
+        { authenticated: true, user: fakeUser }
+      )
+
+      expect(updatedResult.permissions).toStrictEqual(newPermissions)
+    })
+
+    it('should loose admin permission', async () => {
+      expect.assertions(1)
+
+      const newPermissions = ['eleve']
+      // Update users
+      const updatedResult = await app.service('users').patch(
+        adminUser._id,
+        {
+          permissions: newPermissions,
+        },
+        // Add user info to params
+        {
+          authenticated: true,
+          user: fakeUser,
+        }
+      )
+
+      expect(updatedResult.permissions).toStrictEqual(newPermissions)
     })
   })
 })

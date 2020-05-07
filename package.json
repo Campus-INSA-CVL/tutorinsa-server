@@ -28,7 +28,7 @@
     "dev": "ts-node-dev --no-notify src/",
     "lint": "tslint 'src/**/*.ts' 'test/**/*.ts'",
     "start": "npm run compile && node lib/",
-    "jest": "jest  --forceExit --detectOpenHandles",
+    "jest": "jest --forceExit --detectOpenHandles",
     "compile": "shx rm -rf lib/ && tsc",
     "precommit": "npm run lint"
   },
@@ -71,7 +71,7 @@
     "@types/helmet": "0.0.46",
     "@types/jest": "^25.2.1",
     "@types/jsonwebtoken": "^8.3.9",
-    "@types/mongoose": "^5.7.14",
+    "@types/mongoose": "^5.7.15",
     "@types/serve-favicon": "^2.5.0",
     "axios": "^0.19.2",
     "jest": "^25.5.4",
