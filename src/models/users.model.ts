@@ -27,6 +27,13 @@ export default function (app: Application) {
         },
       },
       password: { type: String },
+      permissions: [
+        {
+          type: String,
+          enum: ['eleve', 'tuteur', 'admin'],
+          required: true,
+        },
+      ],
     },
     {
       timestamps: true,

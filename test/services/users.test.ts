@@ -7,6 +7,7 @@ interface User {
   firstName: string
   email: string
   password: string
+  permissions: string[]
 }
 
 describe(`'${serviceName}' service`, () => {
@@ -27,11 +28,14 @@ describe(`'${serviceName}' service`, () => {
   describe('internal CRUD', () => {
     let result: User | null = null
 
+    const permissions: string[] = ['eleve', 'tuteur', 'admin']
+
     const user: User = {
       lastName: 'fakeLastName',
       firstName: 'username',
       email: 'username@insa-cvl.fr',
       password: 'azerty',
+      permissions: ['eleve', 'tuteur', 'admin'],
     }
 
     const anotherUser: User = {
@@ -39,6 +43,7 @@ describe(`'${serviceName}' service`, () => {
       firstName: 'another',
       email: 'another@insa-cvl.fr',
       password: 'azerty',
+      permissions: [],
     }
 
     beforeEach(async () => {
@@ -62,6 +67,8 @@ describe(`'${serviceName}' service`, () => {
       expect(result).toHaveProperty('lastName', user.lastName.toLowerCase())
       expect(result).toHaveProperty('firstName', user.firstName.toLowerCase())
       expect(result).toHaveProperty('email', user.email.toLowerCase())
+
+      expect(result.permissions).toEqual(expect.not.arrayContaining(['admin']))
 
       expect(result.password).not.toBe(user.password)
 
