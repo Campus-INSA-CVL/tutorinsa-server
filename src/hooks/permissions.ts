@@ -2,6 +2,10 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import { Hook, HookContext } from '@feathersjs/feathers'
 
+/**
+ * Remove admin permission from data if user is not already an admin
+ * Add a default (eleve) permission if permissions is empty
+ */
 export default (options = {}): Hook => {
   return async (context: HookContext<User>) => {
     const { data, params } = context

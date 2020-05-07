@@ -46,7 +46,7 @@ describe(`'${serviceName}' service`, () => {
 
     beforeEach(async () => {
       try {
-        result = await app.service(serviceName).create(user)
+        result = (await app.service(serviceName).create(user)) as User
       } catch (error) {
         // tslint:disable-next-line
         console.error(error)
@@ -118,9 +118,9 @@ describe(`'${serviceName}' service`, () => {
     })
 
     it('should update the permission', async () => {
-      const newPermission = ['eleve']
+      const newPermission: UserPermission[] = ['eleve']
 
-      const updatedResult = await app
+      const updatedResult: User = await app
         .service(serviceName)
         .patch(result._id, { permissions: newPermission })
 
@@ -203,10 +203,10 @@ describe(`'${serviceName}' service`, () => {
     it('should update permissions but stay admin', async () => {
       expect.assertions(1)
 
-      const newPermissions = ['eleve', 'admin']
+      const newPermissions: UserPermission[] = ['eleve', 'admin']
 
       // Update users
-      const updatedResult = await app.service('users').patch(
+      const updatedResult: User = await app.service(serviceName).patch(
         adminUser._id,
         { permissions: newPermissions },
         // Add user info to params
@@ -219,9 +219,9 @@ describe(`'${serviceName}' service`, () => {
     it('should loose admin permission', async () => {
       expect.assertions(1)
 
-      const newPermissions = ['eleve']
+      const newPermissions: UserPermission[] = ['eleve']
       // Update users
-      const updatedResult = await app.service('users').patch(
+      const updatedResult: User = await app.service(serviceName).patch(
         adminUser._id,
         {
           permissions: newPermissions,

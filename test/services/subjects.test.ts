@@ -1,14 +1,8 @@
 import app from '../../src/app'
 import { MethodNotAllowed } from '@feathersjs/errors'
+import { Paginated } from '@feathersjs/feathers'
 
 const serviceName = 'subjects'
-
-interface Subject {
-  _id?: string
-  name: string
-  createdAt?: string
-  updatedAt?: string
-}
 
 describe(`'${serviceName}' service`, () => {
   it('registered the service', () => {
@@ -38,7 +32,7 @@ describe(`'${serviceName}' service`, () => {
 
     beforeEach(async () => {
       try {
-        result = await app.service(serviceName).create(subject)
+        result = (await app.service(serviceName).create(subject)) as Subject
       } catch (error) {
         // tslint:disable-next-line
         console.error(error)
@@ -61,7 +55,9 @@ describe(`'${serviceName}' service`, () => {
       const dbLength: number = dbResults.length
 
       // Find data using the Feathersjs service
-      const results: any = await app.service(serviceName).find()
+      const results = (await app.service(serviceName).find()) as Paginated<
+        Subject
+      >
 
       expect(results).toBeDefined()
       expect(results).toHaveProperty('total', dbLength)
@@ -92,7 +88,7 @@ describe(`'${serviceName}' service`, () => {
     it('should patch', async () => {
       expect.assertions(5)
 
-      const patchedResult = await app
+      const patchedResult: Subject = await app
         .service(serviceName)
         .patch(result._id, anotherSubject)
 
@@ -109,7 +105,9 @@ describe(`'${serviceName}' service`, () => {
     it('should delete', async () => {
       expect.assertions(5)
 
-      const deleteResult = await app.service(serviceName).remove(result._id)
+      const deleteResult: Subject = await app
+        .service(serviceName)
+        .remove(result._id)
 
       expect(deleteResult).toBeDefined()
       expect(deleteResult).toHaveProperty('_id')

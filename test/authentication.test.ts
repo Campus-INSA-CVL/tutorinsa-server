@@ -1,13 +1,5 @@
 import app from '../src/app'
 
-interface User {
-  lastName: string
-  firstName: string
-  email: string
-  password: string
-  permissions: string[]
-}
-
 describe('authentication', () => {
   it('registered the authentication service', () => {
     expect(app.service('authentication')).toBeTruthy()

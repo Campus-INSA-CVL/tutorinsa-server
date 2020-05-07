@@ -18,4 +18,24 @@ declare global {
     createdAt?: string
     updatedAt?: string
   }
+
+  interface Year {
+    _id?: string
+    name: string
+    createdAt?: string
+    updatedAt?: string
+  }
+
+  interface Subject {
+    _id?: string
+    name: string
+    createdAt?: string
+    updatedAt?: string
+  }
+  interface Department {
+    _id?: string
+    name: string
+    createdAt?: string
+    updatedAt?: string
+  }
 }
