@@ -1,8 +1,19 @@
 import app from '../../src/app'
 
-describe("'users' service", () => {
+const serviceName = 'users'
+
+describe(`'${serviceName}' service`, () => {
   it('registered the service', () => {
-    const service = app.service('users')
+    const service = app.service(serviceName)
     expect(service).toBeTruthy()
+  })
+
+  describe('documentation', () => {
+    it('should have a documentation', () => {
+      const service = app.service(serviceName)
+
+      expect(service.docs).toBeDefined()
+      expect(service.docs).toHaveProperty('description')
+    })
   })
 })

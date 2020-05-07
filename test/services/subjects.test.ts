@@ -1,6 +1,8 @@
 import app from '../../src/app'
 import { MethodNotAllowed } from '@feathersjs/errors'
 
+const serviceName = 'subjects'
+
 interface Subjects {
   _id?: string
   name: string
@@ -8,7 +10,7 @@ interface Subjects {
   updatedAt?: string
 }
 
-describe("'subjects' service", () => {
+describe(`'${serviceName}' service`, () => {
   it('registered the service', () => {
     const service = app.service('subjects')
     expect(service).toBeTruthy()
@@ -16,7 +18,7 @@ describe("'subjects' service", () => {
 
   describe('documentation', () => {
     it('should have a documentation', () => {
-      const service = app.service('subjects')
+      const service = app.service(serviceName)
 
       expect(service.docs).toBeDefined()
       expect(service.docs).toHaveProperty('description')
@@ -36,7 +38,7 @@ describe("'subjects' service", () => {
 
     beforeEach(async () => {
       try {
-        result = await app.service('subjects').create(subject)
+        result = await app.service(serviceName).create(subject)
       } catch (error) {
         // tslint:disable-next-line
         console.error(error)
@@ -45,7 +47,7 @@ describe("'subjects' service", () => {
 
     afterEach(async () => {
       // Delete all the data from the subjects collection
-      await app.get('mongooseClient').model('subjects').find().deleteMany()
+      await app.get('mongooseClient').model(serviceName).find().deleteMany()
       result = null
     })
 
@@ -54,12 +56,12 @@ describe("'subjects' service", () => {
       // Find all documents in the DB using mongoose
       const dbResults: any = await app
         .get('mongooseClient')
-        .model('subjects')
+        .model(serviceName)
         .find()
       const dbLength: number = dbResults.length
 
       // Find data using the Feathersjs service
-      const results: any = await app.service('subjects').find()
+      const results: any = await app.service(serviceName).find()
 
       expect(results).toBeDefined()
       expect(results).toHaveProperty('total', dbLength)
@@ -81,7 +83,7 @@ describe("'subjects' service", () => {
       expect.assertions(1)
       let error: any
       try {
-        await app.service('subjects').update(result._id, anotherSubject)
+        await app.service(serviceName).update(result._id, anotherSubject)
         error = {}
       } catch (e) {
         error = e
@@ -93,7 +95,7 @@ describe("'subjects' service", () => {
       expect.assertions(5)
 
       const patchedResult = await app
-        .service('subjects')
+        .service(serviceName)
         .patch(result._id, anotherSubject)
 
       expect(patchedResult).toBeDefined()
@@ -109,7 +111,7 @@ describe("'subjects' service", () => {
     it('should delete', async () => {
       expect.assertions(5)
 
-      const deleteResult = await app.service('subjects').remove(result._id)
+      const deleteResult = await app.service(serviceName).remove(result._id)
 
       expect(deleteResult).toBeDefined()
       expect(deleteResult).toHaveProperty('_id')

@@ -1,6 +1,8 @@
 import app from '../../src/app'
 import { MethodNotAllowed } from '@feathersjs/errors'
 
+const serviceName = 'years'
+
 interface Year {
   _id?: string
   name: string
@@ -8,15 +10,15 @@ interface Year {
   updatedAt?: string
 }
 
-describe("'years' service", () => {
+describe(`'${serviceName}' service`, () => {
   it('registered the service', () => {
-    const service = app.service('years')
+    const service = app.service(serviceName)
     expect(service).toBeTruthy()
   })
 
   describe('documentation', () => {
     it('should have a documentation', () => {
-      const service = app.service('years')
+      const service = app.service(serviceName)
 
       expect(service.docs).toBeDefined()
       expect(service.docs).toHaveProperty('description')
@@ -36,7 +38,7 @@ describe("'years' service", () => {
 
     beforeEach(async () => {
       try {
-        result = await app.service('years').create(year)
+        result = await app.service(serviceName).create(year)
       } catch (error) {
         // tslint:disable-next-line
         console.error(error)
@@ -45,7 +47,7 @@ describe("'years' service", () => {
 
     afterEach(async () => {
       // Delete all the data from the years collection
-      await app.get('mongooseClient').model('years').find().deleteMany()
+      await app.get('mongooseClient').model(serviceName).find().deleteMany()
       result = null
     })
 
@@ -54,12 +56,12 @@ describe("'years' service", () => {
       // Find all documents in the DB using mongoose
       const dbResults: any = await app
         .get('mongooseClient')
-        .model('years')
+        .model(serviceName)
         .find()
       const dbLength: number = dbResults.length
 
       // Find data using the Feathersjs service
-      const results: any = await app.service('years').find()
+      const results: any = await app.service(serviceName).find()
 
       expect(results).toBeDefined()
       expect(results).toHaveProperty('total', dbLength)
@@ -81,7 +83,7 @@ describe("'years' service", () => {
       expect.assertions(1)
       let error: any
       try {
-        await app.service('years').update(result._id, anotherYear)
+        await app.service(serviceName).update(result._id, anotherYear)
         error = {}
       } catch (e) {
         error = e
@@ -93,7 +95,7 @@ describe("'years' service", () => {
       expect.assertions(5)
 
       const patchedResult = await app
-        .service('years')
+        .service(serviceName)
         .patch(result._id, anotherYear)
 
       expect(patchedResult).toBeDefined()
@@ -109,7 +111,7 @@ describe("'years' service", () => {
     it('should delete', async () => {
       expect.assertions(5)
 
-      const deleteResult = await app.service('years').remove(result._id)
+      const deleteResult = await app.service(serviceName).remove(result._id)
 
       expect(deleteResult).toBeDefined()
       expect(deleteResult).toHaveProperty('_id')
