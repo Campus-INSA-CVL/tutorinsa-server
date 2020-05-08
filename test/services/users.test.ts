@@ -1,4 +1,8 @@
-import { MethodNotAllowed, BadRequest } from '@feathersjs/errors'
+import {
+  MethodNotAllowed,
+  BadRequest,
+  FeathersErrorJSON,
+} from '@feathersjs/errors'
 import app from '../../src/app'
 import mongoose from 'mongoose'
 import { Paginated, Id } from '@feathersjs/feathers'
@@ -161,10 +165,9 @@ describe(`'${serviceName}' service`, () => {
 
     it('should not create user beacause of a weak password', async () => {
       expect.assertions(2)
-      let error: any
+      let error: FeathersErrorJSON | null = null
       try {
         await app.service(serviceName).create(weakUser)
-        error = {}
       } catch (e) {
         error = e
       }
@@ -174,10 +177,9 @@ describe(`'${serviceName}' service`, () => {
 
     it('should not update (disallow)', async () => {
       expect.assertions(1)
-      let error: any
+      let error: FeathersErrorJSON | null = null
       try {
         await app.service(serviceName).update(result._id, anotherUser)
-        error = {}
       } catch (e) {
         error = e
       }

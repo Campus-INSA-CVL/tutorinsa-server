@@ -1,5 +1,5 @@
 import app from '../../src/app'
-import { MethodNotAllowed } from '@feathersjs/errors'
+import { MethodNotAllowed, FeathersErrorJSON } from '@feathersjs/errors'
 import { Paginated } from '@feathersjs/feathers'
 
 const serviceName = 'departments'
@@ -77,10 +77,9 @@ describe(`'${serviceName}' service`, () => {
 
     it('should not update (disallow)', async () => {
       expect.assertions(1)
-      let error: any
+      let error: FeathersErrorJSON | null = null
       try {
         await app.service(serviceName).update(result._id, anotherDepartment)
-        error = {}
       } catch (e) {
         error = e
       }

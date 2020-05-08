@@ -169,7 +169,7 @@ describe(`'${serviceName}' service`, () => {
       expect(error.message).toBe('name must be a string')
     })
 
-    it('shoult sanitize data', async () => {
+    it('should sanitize data', async () => {
       expect.assertions(1)
 
       // add spaces
