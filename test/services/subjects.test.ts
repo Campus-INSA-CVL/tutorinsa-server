@@ -46,7 +46,7 @@ describe(`'${serviceName}' service`, () => {
     })
 
     it('should find', async () => {
-      expect.assertions(4)
+      expect.assertions(3)
       // Find all documents in the DB using mongoose
       const dbResults: any = await app
         .get('mongooseClient')
@@ -55,14 +55,11 @@ describe(`'${serviceName}' service`, () => {
       const dbLength: number = dbResults.length
 
       // Find data using the Feathersjs service
-      const results = (await app.service(serviceName).find()) as Paginated<
-        Subject
-      >
+      const results = (await app.service(serviceName).find()) as Subject[]
 
       expect(results).toBeDefined()
-      expect(results).toHaveProperty('total', dbLength)
-      expect(results).toHaveProperty('data')
-      expect(results.data.length).toBe(dbLength)
+      expect(Array.isArray(results)).toBeTruthy()
+      expect(results.length).toBe(dbLength)
     })
 
     it('should create', () => {

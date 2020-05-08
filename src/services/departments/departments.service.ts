@@ -17,7 +17,6 @@ declare module '../../declarations' {
 export default function (app: Application) {
   const options = {
     Model: createModel(app),
-    paginate: app.get('paginate'),
   }
 
   let departments: Departments & { docs?: object }
