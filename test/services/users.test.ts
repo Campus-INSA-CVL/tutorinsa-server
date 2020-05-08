@@ -1,7 +1,7 @@
 import { MethodNotAllowed, BadRequest } from '@feathersjs/errors'
 import app from '../../src/app'
 import mongoose from 'mongoose'
-import { Paginated } from '@feathersjs/feathers'
+import { Paginated, Id } from '@feathersjs/feathers'
 
 const serviceName = 'users'
 
@@ -32,6 +32,10 @@ describe(`'${serviceName}' service`, () => {
       email: 'username@insa-cvl.fr',
       password: '$Azerty1',
       permissions,
+      yearId: '',
+      departmentId: '',
+      favoriteSubjectsIds: [],
+      difficultSubjectsIds: [],
     }
 
     // User without permissions
@@ -42,6 +46,10 @@ describe(`'${serviceName}' service`, () => {
       password: '$Azerty1',
       // should be empty
       permissions: [],
+      yearId: '',
+      departmentId: '',
+      favoriteSubjectsIds: [],
+      difficultSubjectsIds: [],
     }
 
     // User without strong password
@@ -52,7 +60,43 @@ describe(`'${serviceName}' service`, () => {
       password: 'azer',
       // should be empty
       permissions: ['eleve'],
+      yearId: '',
+      departmentId: '',
+      favoriteSubjectsIds: [],
+      difficultSubjectsIds: [],
     }
+
+    beforeAll(async () => {
+      // Create data to put in users
+      const year = (await app.service('years').create({ name: '3A' })) as Year
+      const department = (await app
+        .service('departments')
+        .create({ name: 'STPI' })) as Department
+      const subject = (await app
+        .service('subjects')
+        .create({ name: 'EPS' })) as Subject
+
+      user.yearId = year._id as string
+      user.departmentId = department._id as string
+      user.favoriteSubjectsIds.push(subject._id as string)
+      user.difficultSubjectsIds.push(subject._id as string)
+
+      anotherUser.yearId = year._id as string
+      anotherUser.departmentId = department._id as string
+      anotherUser.favoriteSubjectsIds.push(subject._id as string)
+      anotherUser.difficultSubjectsIds.push(subject._id as string)
+
+      weakUser.yearId = year._id as string
+      weakUser.departmentId = department._id as string
+      weakUser.favoriteSubjectsIds.push(subject._id as string)
+      weakUser.difficultSubjectsIds.push(subject._id as string)
+    })
+
+    afterAll(async () => {
+      await app.get('mongooseClient').model('subjects').find().deleteMany()
+      await app.get('mongooseClient').model('departments').find().deleteMany()
+      await app.get('mongooseClient').model('years').find().deleteMany()
+    })
 
     beforeEach(async () => {
       try {
@@ -143,11 +187,65 @@ describe(`'${serviceName}' service`, () => {
     it('should patch the permission', async () => {
       const newPermission: UserPermission[] = ['eleve']
 
-      const updatedResult: User = await app
+      const patchedResult: User = await app
         .service(serviceName)
         .patch(result._id, { permissions: newPermission })
 
-      expect(updatedResult.permissions).toStrictEqual(newPermission)
+      expect(patchedResult.permissions).toStrictEqual(newPermission)
+    })
+
+    it('should patch the yearId', async () => {
+      expect.assertions(2)
+
+      const newYear: Year = await app.service('years').create({ name: '4A' })
+
+      const patchedResult: User = await app
+        .service(serviceName)
+        .patch(result._id, { yearId: newYear._id })
+
+      expect(typeof patchedResult.yearId).toBe('object')
+      expect(patchedResult.yearId).toEqual(newYear._id)
+    })
+
+    it('should patch the departmentId', async () => {
+      expect.assertions(2)
+
+      const newDepartment: Department = await app
+        .service('departments')
+        .create({ name: 'STI' })
+
+      const patchedResult: User = await app
+        .service(serviceName)
+        .patch(result._id, { departmentId: newDepartment._id })
+
+      expect(typeof patchedResult.departmentId).toBe('object')
+      expect(patchedResult.departmentId).toEqual(newDepartment._id)
+    })
+
+    it('should patch the subjectsId', async () => {
+      expect.assertions(2)
+
+      const newSubjects: Subject = await app
+        .service('subjects')
+        .create({ name: 'CC' })
+
+      let patchedResult: User
+
+      patchedResult = (await app
+        .service(serviceName)
+        .patch(result._id, { favoriteSubjectsIds: newSubjects._id })) as User
+
+      expect(patchedResult.favoriteSubjectsIds).toEqual(
+        expect.arrayContaining([newSubjects._id])
+      )
+
+      patchedResult = (await app
+        .service(serviceName)
+        .patch(result._id, { difficultSubjectsIds: newSubjects._id })) as User
+
+      expect(patchedResult.difficultSubjectsIds).toEqual(
+        expect.arrayContaining([newSubjects._id])
+      )
     })
   })
 
@@ -159,6 +257,10 @@ describe(`'${serviceName}' service`, () => {
       password: '',
       // User with all permissions
       permissions,
+      yearId: '',
+      departmentId: '',
+      favoriteSubjectsIds: [],
+      difficultSubjectsIds: [],
     }
 
     let adminUser: User | null = null

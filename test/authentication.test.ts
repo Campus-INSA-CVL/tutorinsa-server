@@ -12,9 +12,27 @@ describe('authentication', () => {
       email: 'auth@insa-cvl.fr',
       password: '$Azerty1',
       permissions: ['eleve'],
+      yearId: '',
+      departmentId: '',
+      favoriteSubjectsIds: [],
+      difficultSubjectsIds: [],
     }
 
     beforeAll(async () => {
+      // Create data to put in users
+      const year = (await app.service('years').create({ name: '3A' })) as Year
+      const department = (await app
+        .service('departments')
+        .create({ name: 'STPI' })) as Department
+      const subject = (await app
+        .service('subjects')
+        .create({ name: 'EPS' })) as Subject
+
+      userInfo.yearId = year._id as string
+      userInfo.departmentId = department._id as string
+      userInfo.favoriteSubjectsIds.push(subject._id as string)
+      userInfo.difficultSubjectsIds.push(subject._id as string)
+
       try {
         await app.service('users').create(userInfo)
       } catch (error) {

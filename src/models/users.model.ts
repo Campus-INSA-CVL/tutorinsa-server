@@ -34,6 +34,30 @@ export default function (app: Application) {
           required: true,
         },
       ],
+      yearId: {
+        type: mongooseClient.Schema.Types.ObjectId,
+        ref: 'years',
+        required: true,
+      },
+      departmentId: {
+        type: mongooseClient.Schema.Types.ObjectId,
+        ref: 'departments',
+        required: true,
+      },
+      favoriteSubjectsIds: [
+        {
+          type: mongooseClient.Schema.Types.ObjectId,
+          ref: 'subjects',
+          required: true,
+        },
+      ],
+      difficultSubjectsIds: [
+        {
+          type: mongooseClient.Schema.Types.ObjectId,
+          ref: 'subjects',
+          required: true,
+        },
+      ],
     },
     {
       timestamps: true,
