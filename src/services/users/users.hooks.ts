@@ -2,7 +2,9 @@ import * as feathersAuthentication from '@feathersjs/authentication'
 import * as local from '@feathersjs/authentication-local'
 import { disallow } from 'feathers-hooks-common'
 // Don't remove this comment. It's needed to format import lines nicely.
-import permissions from '../../hooks/permissions'
+import checkPermissions from '../../hooks/check-permissions'
+
+import checkPassword from '../../hooks/check-password'
 
 const { authenticate } = feathersAuthentication.hooks
 const { hashPassword, protect } = local.hooks
@@ -12,9 +14,14 @@ export default {
     all: [],
     find: [authenticate('jwt')],
     get: [authenticate('jwt')],
-    create: [hashPassword('password'), permissions()],
+    create: [checkPassword(), hashPassword('password'), checkPermissions()],
     update: [disallow()],
-    patch: [hashPassword('password'), authenticate('jwt'), permissions()],
+    patch: [
+      checkPassword(),
+      hashPassword('password'),
+      authenticate('jwt'),
+      checkPermissions(),
+    ],
     remove: [authenticate('jwt')],
   },
 

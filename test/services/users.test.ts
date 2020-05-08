@@ -1,4 +1,4 @@
-import { MethodNotAllowed } from '@feathersjs/errors'
+import { MethodNotAllowed, BadRequest } from '@feathersjs/errors'
 import app from '../../src/app'
 import mongoose from 'mongoose'
 import { Paginated } from '@feathersjs/feathers'
@@ -30,7 +30,7 @@ describe(`'${serviceName}' service`, () => {
       lastName: 'fakeLastName',
       firstName: 'username',
       email: 'username@insa-cvl.fr',
-      password: 'azerty',
+      password: '$Azerty1',
       permissions,
     }
 
@@ -39,9 +39,19 @@ describe(`'${serviceName}' service`, () => {
       lastName: 'anotherLastName',
       firstName: 'another',
       email: 'another@insa-cvl.fr',
-      password: 'azerty',
+      password: '$Azerty1',
       // should be empty
       permissions: [],
+    }
+
+    // User without strong password
+    const weakUser: User = {
+      lastName: 'weakLastName',
+      firstName: 'weak',
+      email: 'weak@insa-cvl.fr',
+      password: 'azer',
+      // should be empty
+      permissions: ['eleve'],
     }
 
     beforeEach(async () => {
@@ -103,6 +113,19 @@ describe(`'${serviceName}' service`, () => {
 
       expect(anotherResult).toHaveProperty('createdAt')
       expect(anotherResult).toHaveProperty('updatedAt')
+    })
+
+    it('should not create user beacause of weak password', async () => {
+      expect.assertions(2)
+      let error: any
+      try {
+        await app.service(serviceName).create(weakUser)
+        error = {}
+      } catch (e) {
+        error = e
+      }
+      expect(error).toBeInstanceOf(BadRequest)
+      expect(error.message).toBe('this password is not strong enought')
     })
 
     it('should not update (disallow)', async () => {

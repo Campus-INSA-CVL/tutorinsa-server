@@ -10,7 +10,7 @@ describe('authentication', () => {
       lastName: 'authLastName',
       firstName: 'username',
       email: 'auth@insa-cvl.fr',
-      password: 'azerty',
+      password: '$Azerty1',
       permissions: ['eleve'],
     }
 

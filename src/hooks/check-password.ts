@@ -1,0 +1,19 @@
+// Use this hook to manipulate incoming or outgoing data.
+// For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
+import { Hook, HookContext } from '@feathersjs/feathers'
+import { BadRequest } from '@feathersjs/errors'
+
+export default (options = {}): Hook => {
+  return async (context: HookContext<User>) => {
+    const { data } = context
+
+    const regex = new RegExp(
+      '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})'
+    )
+
+    if (data?.password && !regex.test(data.password))
+      throw new BadRequest('this password is not strong enought')
+
+    return context
+  }
+}
