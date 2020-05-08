@@ -1,4 +1,5 @@
 import { disallow } from 'feathers-hooks-common'
+import checkData from '../../hooks/check-data'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default {
@@ -6,9 +7,9 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [checkData()],
     update: [disallow()],
-    patch: [],
+    patch: [checkData()],
     remove: [],
   },
 

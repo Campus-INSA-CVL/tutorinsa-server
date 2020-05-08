@@ -42,6 +42,9 @@ describe('authentication', () => {
 
     afterAll(async () => {
       await app.get('mongooseClient').model('users').find().deleteMany()
+      await app.get('mongooseClient').model('subjects').find().deleteMany()
+      await app.get('mongooseClient').model('departments').find().deleteMany()
+      await app.get('mongooseClient').model('years').find().deleteMany()
     })
 
     it('authenticates user and creates accessToken', async () => {

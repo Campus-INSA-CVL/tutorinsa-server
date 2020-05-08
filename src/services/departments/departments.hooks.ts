@@ -1,13 +1,15 @@
 import { disallow } from 'feathers-hooks-common'
 
+import checkData from '../../hooks/check-data'
+
 export default {
   before: {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [checkData()],
     update: [disallow()],
-    patch: [],
+    patch: [checkData()],
     remove: [],
   },
 

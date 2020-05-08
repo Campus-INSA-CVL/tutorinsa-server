@@ -222,7 +222,7 @@ describe(`'${serviceName}' service`, () => {
       expect(patchedResult.departmentId).toEqual(newDepartment._id)
     })
 
-    it('should patch the subjectsId', async () => {
+    it('should patch subjectsId', async () => {
       expect.assertions(2)
 
       const newSubjects: Subject = await app

@@ -6,6 +6,8 @@ import checkPermissions from '../../hooks/check-permissions'
 
 import checkPassword from '../../hooks/check-password'
 
+import checkData from '../../hooks/check-data'
+
 const { authenticate } = feathersAuthentication.hooks
 const { hashPassword, protect } = local.hooks
 
@@ -14,9 +16,15 @@ export default {
     all: [],
     find: [authenticate('jwt')],
     get: [authenticate('jwt')],
-    create: [checkPassword(), hashPassword('password'), checkPermissions()],
+    create: [
+      checkData(),
+      checkPassword(),
+      hashPassword('password'),
+      checkPermissions(),
+    ],
     update: [disallow()],
     patch: [
+      checkData(),
       checkPassword(),
       hashPassword('password'),
       authenticate('jwt'),
