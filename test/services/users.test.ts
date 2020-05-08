@@ -83,7 +83,7 @@ describe(`'${serviceName}' service`, () => {
       expect(result).toHaveProperty('updatedAt')
     })
 
-    it('should create a user, with the default permission (eleve)', async () => {
+    it('should create a user with the default permission (eleve)', async () => {
       expect.assertions(9)
 
       const anotherResult: User = await app
@@ -115,7 +115,7 @@ describe(`'${serviceName}' service`, () => {
       expect(anotherResult).toHaveProperty('updatedAt')
     })
 
-    it('should not create user beacause of weak password', async () => {
+    it('should not create user beacause of a weak password', async () => {
       expect.assertions(2)
       let error: any
       try {
@@ -140,7 +140,7 @@ describe(`'${serviceName}' service`, () => {
       expect(error).toBeInstanceOf(MethodNotAllowed)
     })
 
-    it('should update the permission', async () => {
+    it('should patch the permission', async () => {
       const newPermission: UserPermission[] = ['eleve']
 
       const updatedResult: User = await app
@@ -157,6 +157,7 @@ describe(`'${serviceName}' service`, () => {
       firstName: 'usere',
       email: 'fake.user@insa-cvl.fr',
       password: '',
+      // User with all permissions
       permissions,
     }
 
@@ -223,9 +224,10 @@ describe(`'${serviceName}' service`, () => {
       mongoose.connection.close()
     })
 
-    it('should update permissions but stay admin', async () => {
+    it('should patch permissions but user is still admin', async () => {
       expect.assertions(1)
 
+      // Must contain admin permission
       const newPermissions: UserPermission[] = ['eleve', 'admin']
 
       // Update users
