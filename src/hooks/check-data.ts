@@ -5,7 +5,18 @@ import validator from 'validator'
 import { BadRequest } from '@feathersjs/errors'
 
 /**
- * Validate and sanitizefata from the hook context (able to manage many services)
+ * Trim and sanitize a string
+ * @param value a string to trim and sanitize
+ * @returns a trimed and sanitized string
+ */
+function trimSanitize(value: string): string {
+  value = validator.trim(value)
+  value = validator.escape(value)
+  return value
+}
+
+/**
+ * Validate and sanitize data from the hook context (able to manage many services)
  */
 export default (options = {}): Hook => {
   return async (context: HookContext<User | Year | Subject | Department>) => {
@@ -44,8 +55,9 @@ export default (options = {}): Hook => {
                 !Array.isArray((data as User).difficultSubjectsIds)
               ) {
                 throw new BadRequest('type of data are incorrect')
+              } else {
+                // Valid case
               }
-              // Password is test after
               break
             case 'patch':
               break
@@ -61,11 +73,8 @@ export default (options = {}): Hook => {
             throw new BadRequest('name must be a string')
           } else {
             // Valid case
-            // Trim and sanitize
-            let { name } = data as Year
-            name = validator.trim(name)
-            name = validator.escape(name)
-            ;(data as Year).name = name
+            const { name } = data as Year
+            ;(data as Year).name = trimSanitize(name)
           }
           break
         case 'departments':
@@ -76,11 +85,8 @@ export default (options = {}): Hook => {
             throw new BadRequest('name must be a string')
           } else {
             // Valid case
-            // Trim and sanitize
-            let { name } = data as Department
-            name = validator.trim(name)
-            name = validator.escape(name)
-            ;(data as Department).name = name
+            const { name } = data as Department
+            ;(data as Department).name = trimSanitize(name)
           }
           break
         case 'subjects':
@@ -92,10 +98,8 @@ export default (options = {}): Hook => {
           } else {
             // Valid case
             // Trim and sanitize
-            let { name } = data as Subject
-            name = validator.trim(name)
-            name = validator.escape(name)
-            ;(data as Subject).name = name
+            const { name } = data as Subject
+            ;(data as Subject).name = trimSanitize(name)
           }
           break
         default:

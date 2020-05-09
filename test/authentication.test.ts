@@ -1,4 +1,5 @@
 import app from '../src/app'
+import addDataToUser from './utils/addDataToUser'
 
 describe('authentication', () => {
   it('registered the authentication service', () => {
@@ -19,55 +20,7 @@ describe('authentication', () => {
     }
 
     beforeAll(async () => {
-      let results: any[]
-      // Create data to put in users
-      results = (await app
-        .service('years')
-        .find({ query: { name: '3a' } })) as Year[]
-
-      let year: Year = results[0]
-      if (!year) {
-        try {
-          year = (await app.service('years').create({ name: '3A' })) as Year
-        } catch (error) {
-          // Do nothing, it just means the user already exists and can be tested
-        }
-      }
-
-      results = (await app
-        .service('departments')
-        .find({ query: { name: 'stpi' } })) as Department[]
-
-      let department: Department = results[0]
-      if (!department) {
-        try {
-          department = (await app
-            .service('departments')
-            .create({ name: 'STPI' })) as Department
-        } catch (error) {
-          // Do nothing, it just means the user already exists and can be tested
-        }
-      }
-
-      results = (await app
-        .service('subjects')
-        .find({ query: { name: 'eps' } })) as Subject[]
-
-      let subject: Subject = results[0]
-      if (!subject) {
-        try {
-          subject = (await app
-            .service('subjects')
-            .create({ name: 'EPS' })) as Subject
-        } catch (error) {
-          // Do nothing, it just means the user already exists and can be tested
-        }
-      }
-
-      userInfo.yearId = year._id.toString()
-      userInfo.departmentId = department._id.toString()
-      userInfo.favoriteSubjectsIds.push(subject._id.toString())
-      userInfo.difficultSubjectsIds.push(subject._id.toString())
+      await addDataToUser(userInfo)
 
       try {
         await app.service('users').create(userInfo)
@@ -88,6 +41,6 @@ describe('authentication', () => {
 
       expect(accessToken).toBeTruthy()
       expect(user).toBeTruthy()
-    })
+    }, 1000)
   })
 })

@@ -1,9 +1,5 @@
 import app from '../../src/app'
-import {
-  MethodNotAllowed,
-  FeathersErrorJSON,
-  BadRequest,
-} from '@feathersjs/errors'
+import { MethodNotAllowed, FeathersErrorJSON } from '@feathersjs/errors'
 
 const serviceName = 'subjects'
 
@@ -38,7 +34,7 @@ describe(`'${serviceName}' service`, () => {
       await app.get('mongooseClient').model(serviceName).find().deleteMany()
     })
 
-    beforeEach(async () => {
+    beforeEach(async (done) => {
       let results: Subject[]
 
       results = (await app.service(serviceName).find({
@@ -55,9 +51,10 @@ describe(`'${serviceName}' service`, () => {
           // Do nothing, it just means the user already exists and can be tested
         }
       }
+      done()
     })
 
-    afterEach(async () => {
+    afterEach(() => {
       result = null
     })
 
@@ -126,74 +123,6 @@ describe(`'${serviceName}' service`, () => {
       expect(deleteResult).toHaveProperty('name', result.name.toLowerCase())
       expect(deleteResult).toHaveProperty('createdAt')
       expect(deleteResult).toHaveProperty('updatedAt')
-    })
-  })
-
-  describe('validate data', () => {
-    beforeAll(async () => {
-      // Delete all the data from the subjects collection
-      await app.get('mongooseClient').model(serviceName).find().deleteMany()
-    })
-
-    afterEach(async () => {
-      // Delete all the data from the subjects collection
-      await app.get('mongooseClient').model(serviceName).find().deleteMany()
-    })
-
-    it('should not create because of an empty request', async () => {
-      expect.assertions(2)
-
-      let error: Error | null = null
-      try {
-        // @ts-ignore
-        await app.service(serviceName).create()
-      } catch (e) {
-        error = e
-      }
-
-      expect(error).toBeInstanceOf(Error)
-      expect(error.message).toBe(
-        `A data object must be provided to the '${serviceName}.create' method`
-      )
-    })
-
-    it('should not create because of invalid data field', async () => {
-      expect.assertions(2)
-
-      let error: FeathersErrorJSON | null = null
-      try {
-        await app.service(serviceName).create({})
-      } catch (e) {
-        error = e
-      }
-
-      expect(error).toBeInstanceOf(BadRequest)
-      expect(error.message).toBe('request must contain correct fields')
-    })
-
-    it('should not create because of incorrect type of data', async () => {
-      expect.assertions(2)
-
-      let error: FeathersErrorJSON | null = null
-      try {
-        await app.service(serviceName).create({ name: 2 })
-      } catch (e) {
-        error = e
-      }
-
-      expect(error).toBeInstanceOf(BadRequest)
-      expect(error.message).toBe('name must be a string')
-    })
-
-    it('should sanitize data', async () => {
-      expect.assertions(1)
-
-      // add spaces
-      const result: Subject = await app
-        .service(serviceName)
-        .create({ name: '   IT/  ' })
-
-      expect(result.name).toBe('it&#x2f;')
     })
   })
 })
