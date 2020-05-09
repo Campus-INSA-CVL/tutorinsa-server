@@ -1,6 +1,9 @@
 import app from '../../src/app'
-import { MethodNotAllowed, FeathersErrorJSON } from '@feathersjs/errors'
-import { Paginated } from '@feathersjs/feathers'
+import {
+  MethodNotAllowed,
+  FeathersErrorJSON,
+  BadRequest,
+} from '@feathersjs/errors'
 
 const serviceName = 'departments'
 
@@ -30,20 +33,31 @@ describe(`'${serviceName}' service`, () => {
       name: 'sti',
     }
 
+    beforeAll(async () => {
+      // Delete all the data from the departments collection
+      await app.get('mongooseClient').model(serviceName).find().deleteMany()
+    })
+
     beforeEach(async () => {
-      try {
-        result = (await app
-          .service(serviceName)
-          .create(department)) as Department
-      } catch (error) {
-        // tslint:disable-next-line
-        console.error(error)
+      let results: Department[]
+
+      results = (await app.service(serviceName).find({
+        query: { name: department.name.toLowerCase() },
+      })) as Department[]
+
+      result = results[0]
+      if (!result) {
+        try {
+          result = (await app
+            .service(serviceName)
+            .create({ name: department.name })) as Department
+        } catch (error) {
+          // Do nothing, it just means the user already exists and can be tested
+        }
       }
     })
 
     afterEach(async () => {
-      // Delete all the data from the departments collection
-      await app.get('mongooseClient').model(serviceName).find().deleteMany()
       result = null
     })
 
@@ -112,6 +126,74 @@ describe(`'${serviceName}' service`, () => {
       expect(deleteResult).toHaveProperty('name', result.name.toLowerCase())
       expect(deleteResult).toHaveProperty('createdAt')
       expect(deleteResult).toHaveProperty('updatedAt')
+    })
+  })
+
+  describe('validate data', () => {
+    beforeAll(async () => {
+      // Delete all the data from the departments collection
+      await app.get('mongooseClient').model(serviceName).find().deleteMany()
+    })
+
+    afterEach(async () => {
+      // Delete all the data from the departments collection
+      await app.get('mongooseClient').model(serviceName).find().deleteMany()
+    })
+
+    it('should not create because of an empty request', async () => {
+      expect.assertions(2)
+
+      let error: Error | null = null
+      try {
+        // @ts-ignore
+        await app.service(serviceName).create()
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeInstanceOf(Error)
+      expect(error.message).toBe(
+        `A data object must be provided to the '${serviceName}.create' method`
+      )
+    })
+
+    it('should not create because of invalid data field', async () => {
+      expect.assertions(2)
+
+      let error: FeathersErrorJSON | null = null
+      try {
+        await app.service(serviceName).create({})
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeInstanceOf(BadRequest)
+      expect(error.message).toBe('request must contain correct fields')
+    })
+
+    it('should not create because of incorrect type of data', async () => {
+      expect.assertions(2)
+
+      let error: FeathersErrorJSON | null = null
+      try {
+        await app.service(serviceName).create({ name: 2 })
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeInstanceOf(BadRequest)
+      expect(error.message).toBe('name must be a string')
+    })
+
+    it('should sanitize data', async () => {
+      expect.assertions(1)
+
+      // add spaces
+      const result: Department = await app
+        .service(serviceName)
+        .create({ name: '   STI/  ' })
+
+      expect(result.name).toBe('sti&#x2f;')
     })
   })
 })

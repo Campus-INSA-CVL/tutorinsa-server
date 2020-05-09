@@ -71,51 +71,91 @@ describe(`'${serviceName}' service`, () => {
     }
 
     beforeAll(async () => {
-      // Create data to put in users
-      const year = (await app.service('years').create({ name: '3A' })) as Year
-      const department = (await app
-        .service('departments')
-        .create({ name: 'STPI' })) as Department
-      const subject = (await app
-        .service('subjects')
-        .create({ name: 'EPS' })) as Subject
-
-      user.yearId = year._id as string
-      user.departmentId = department._id as string
-      user.favoriteSubjectsIds.push(subject._id as string)
-      user.difficultSubjectsIds.push(subject._id as string)
-
-      anotherUser.yearId = year._id as string
-      anotherUser.departmentId = department._id as string
-      anotherUser.favoriteSubjectsIds.push(subject._id as string)
-      anotherUser.difficultSubjectsIds.push(subject._id as string)
-
-      weakUser.yearId = year._id as string
-      weakUser.departmentId = department._id as string
-      weakUser.favoriteSubjectsIds.push(subject._id as string)
-      weakUser.difficultSubjectsIds.push(subject._id as string)
-    })
-
-    afterAll(async () => {
-      await app.get('mongooseClient').model('subjects').find().deleteMany()
-      await app.get('mongooseClient').model('departments').find().deleteMany()
+      await app.get('mongooseClient').model(serviceName).find().deleteMany()
       await app.get('mongooseClient').model('years').find().deleteMany()
+      await app.get('mongooseClient').model('departments').find().deleteMany()
+      await app.get('mongooseClient').model('subjects').find().deleteMany()
     })
 
     beforeEach(async () => {
-      try {
-        result = (await app.service(serviceName).create(user)) as User
-      } catch (error) {
-        // tslint:disable-next-line
-        console.error(error)
+      let results: any[] | Paginated<User>
+      // Create data to put in users
+      results = (await app
+        .service('years')
+        .find({ query: { name: '3a' } })) as Year[]
+
+      let year: Year = results[0]
+      if (!year) {
+        try {
+          year = (await app.service('years').create({ name: '3A' })) as Year
+        } catch (error) {
+          // Do nothing, it just means the user already exists and can be tested
+        }
+      }
+
+      results = (await app
+        .service('departments')
+        .find({ query: { name: 'stpi' } })) as Department[]
+
+      let department: Department = results[0]
+      if (!department) {
+        try {
+          department = (await app
+            .service('departments')
+            .create({ name: 'STPI' })) as Department
+        } catch (error) {
+          // Do nothing, it just means the user already exists and can be tested
+        }
+      }
+
+      results = (await app
+        .service('subjects')
+        .find({ query: { name: 'eps' } })) as Subject[]
+
+      let subject: Subject = results[0]
+      if (!subject) {
+        try {
+          subject = (await app
+            .service('subjects')
+            .create({ name: 'EPS' })) as Subject
+        } catch (error) {
+          // Do nothing, it just means the user already exists and can be tested
+        }
+      }
+
+      user.yearId = year._id.toString()
+      user.departmentId = department._id.toString()
+      user.favoriteSubjectsIds.push(subject._id.toString())
+      user.difficultSubjectsIds.push(subject._id.toString())
+
+      anotherUser.yearId = year._id.toString()
+      anotherUser.departmentId = department._id.toString()
+      anotherUser.favoriteSubjectsIds.push(subject._id.toString())
+      anotherUser.difficultSubjectsIds.push(subject._id.toString())
+
+      weakUser.yearId = year._id.toString()
+      weakUser.departmentId = department._id.toString()
+      weakUser.favoriteSubjectsIds.push(subject._id.toString())
+      weakUser.difficultSubjectsIds.push(subject._id.toString())
+
+      results = (await app
+        .service(serviceName)
+        .find({ query: { email: user.email } })) as Paginated<User>
+
+      result = results.data[0]
+      if (!result) {
+        try {
+          result = (await app.service(serviceName).create(user)) as User
+        } catch (error) {
+          // Do nothing, it just means the user already exists and can be tested
+        }
       }
     })
 
     afterEach(async () => {
-      // Delete all the data from the users collection
-      await app.get('mongooseClient').model(serviceName).find().deleteMany()
       result = null
     })
+
     it('should create a user removing admin permission', () => {
       expect(result).toBeDefined()
 
@@ -324,8 +364,8 @@ describe(`'${serviceName}' service`, () => {
       adminUser = null
     })
 
-    afterAll(() => {
-      mongoose.connection.close()
+    afterAll(async () => {
+      await mongoose.connection.close()
     })
 
     it('should patch permissions but user is still admin', async () => {
@@ -364,5 +404,76 @@ describe(`'${serviceName}' service`, () => {
 
       expect(updatedResult.permissions).toStrictEqual(newPermissions)
     })
+  })
+
+  describe('validate data', () => {
+    const user: User = {
+      lastName: 'fakeLastName',
+      firstName: 'username',
+      email: 'username@insa-cvl.fr',
+      password: '$Azerty1',
+      permissions,
+      yearId: 'data',
+      departmentId: 'data',
+      favoriteSubjectsIds: ['data'],
+      difficultSubjectsIds: ['data'],
+    }
+
+    it('should not create because of an empty request', async () => {
+      expect.assertions(2)
+
+      let error: Error | null = null
+      try {
+        // @ts-ignore
+        await app.service(serviceName).create()
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeInstanceOf(Error)
+      expect(error.message).toBe(
+        `A data object must be provided to the '${serviceName}.create' method`
+      )
+    })
+
+    it.each(Object.keys(user))(
+      'should not create because of the missing field %s',
+      async (key) => {
+        expect.assertions(2)
+
+        const tmpUser: User = Object.assign({}, user)
+        delete tmpUser[key]
+
+        let error: FeathersErrorJSON | null = null
+        try {
+          await app.service(serviceName).create(tmpUser)
+        } catch (e) {
+          error = e
+        }
+
+        expect(error).toBeInstanceOf(BadRequest)
+        expect(error.message).toBe('some data are missing')
+      }
+    )
+
+    it.each(Object.keys(user))(
+      'should not create because of the wrong type of field %s',
+      async (key) => {
+        expect.assertions(2)
+
+        const tmpUser: User = Object.assign({}, user)
+        tmpUser[key] = 1
+
+        let error: FeathersErrorJSON | null = null
+        try {
+          await app.service(serviceName).create(tmpUser)
+        } catch (e) {
+          error = e
+        }
+
+        expect(error).toBeInstanceOf(BadRequest)
+        expect(error.message).toBe('type of data are incorrect')
+      }
+    )
   })
 })

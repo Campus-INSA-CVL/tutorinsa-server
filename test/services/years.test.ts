@@ -4,7 +4,6 @@ import {
   BadRequest,
   FeathersErrorJSON,
 } from '@feathersjs/errors'
-import { Paginated } from '@feathersjs/feathers'
 
 const serviceName = 'years'
 
@@ -34,18 +33,31 @@ describe(`'${serviceName}' service`, () => {
       name: '5a',
     }
 
+    beforeAll(async () => {
+      // Delete all the data from the years collection
+      await app.get('mongooseClient').model(serviceName).find().deleteMany()
+    })
+
     beforeEach(async () => {
-      try {
-        result = (await app.service(serviceName).create(year)) as Year
-      } catch (error) {
-        // tslint:disable-next-line
-        console.error(error)
+      let results: Year[]
+
+      results = (await app.service(serviceName).find({
+        query: { name: year.name.toLowerCase() },
+      })) as Year[]
+
+      result = results[0]
+      if (!result) {
+        try {
+          result = (await app
+            .service(serviceName)
+            .create({ name: year.name })) as Year
+        } catch (error) {
+          // Do nothing, it just means the user already exists and can be tested
+        }
       }
     })
 
     afterEach(async () => {
-      // Delete all the data from the years collection
-      await app.get('mongooseClient').model(serviceName).find().deleteMany()
       result = null
     })
 
@@ -118,6 +130,11 @@ describe(`'${serviceName}' service`, () => {
   })
 
   describe('validate data', () => {
+    beforeAll(async () => {
+      // Delete all the data from the years collection
+      await app.get('mongooseClient').model(serviceName).find().deleteMany()
+    })
+
     afterEach(async () => {
       // Delete all the data from the years collection
       await app.get('mongooseClient').model(serviceName).find().deleteMany()
