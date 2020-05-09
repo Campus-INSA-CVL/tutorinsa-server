@@ -16,6 +16,31 @@ function trimSanitize(value: string): string {
 }
 
 /**
+ * Trim and sanitize data property from a user
+ * @param user a user whose data will sanitize
+ * @returns a user
+ */
+function sanitizeUser(user: User): User {
+  for (const key in user) {
+    if (user.hasOwnProperty(key)) {
+      const element = user[key] as string | string[] | UserPermission[]
+
+      if (typeof element === 'string') {
+        user[key] = trimSanitize(element)
+      } else if (Array.isArray(element)) {
+        const tmp: string[] = []
+        element.forEach((el: string | UserPermission) => {
+          tmp.push(trimSanitize(el))
+        })
+        user[key] = tmp
+      }
+    }
+  }
+
+  return user
+}
+
+/**
  * Validate and sanitize data from the hook context (able to manage many services)
  */
 export default (options = {}): Hook => {
@@ -56,7 +81,7 @@ export default (options = {}): Hook => {
               ) {
                 throw new BadRequest('type of data are incorrect')
               } else {
-                // Valid case
+                ;(context.data as User) = sanitizeUser(data as User)
               }
               break
             case 'patch':

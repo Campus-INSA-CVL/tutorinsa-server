@@ -42,5 +42,7 @@ declare global {
     difficultSubjectsIds: string[]
     createdAt?: string
     updatedAt?: string
+
+    [key: string]: string | string[] | UserPermission[] | undefined | Id
   }
 }

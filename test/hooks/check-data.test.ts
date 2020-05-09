@@ -242,8 +242,8 @@ describe("'check-data' hook", () => {
         permissions: ['eleve'],
         yearId: 'data',
         departmentId: 'data',
-        favoriteSubjectsIds: [],
-        difficultSubjectsIds: [],
+        favoriteSubjectsIds: ['data'],
+        difficultSubjectsIds: ['data'],
       }
 
       beforeEach(() => {
@@ -305,7 +305,39 @@ describe("'check-data' hook", () => {
         }
       )
 
+      it.each(Object.keys(user))(
+        'should trim and sanitize the fied %s',
+        async (key) => {
+          expect.assertions(1)
+
+          const tmp: User = Object.assign({}, user)
+
+          context.data = tmp
+
+          if (typeof tmp[key] === 'string') {
+            tmp[key] = tmp[key] + '/                  '
+          } else if (Array.isArray(tmp[key])) {
+            tmp[key] = [' data/ ']
+          }
+
+          try {
+            result = (await checkData()(context)) as HookContext<User>
+          } catch (e) {
+            error = e
+          }
+
+          if (typeof tmp[key] === 'string') {
+            expect(result.data[key]).toBe(user[key] + '&#x2F;')
+          } else if (Array.isArray(tmp[key])) {
+            expect(result.data[key]).not.toEqual(
+              expect.arrayContaining([' data/ '])
+            )
+          }
+        }
+      )
+
       it.todo('should trim and sanitize the fieds')
+      it.todo('should remove duplucate element from array')
     })
 
     describe('patch', () => {
