@@ -32,7 +32,7 @@ function sanitizeUser(user: User): User {
     if (user.hasOwnProperty(key)) {
       const element = user[key] as string | string[] | UserPermission[]
 
-      if (typeof element === 'string') {
+      if (typeof element === 'string' && key !== 'password') {
         user[key] = trimSanitize(element)
       } else if (Array.isArray(element)) {
         const tmp: string[] = []
@@ -48,11 +48,44 @@ function sanitizeUser(user: User): User {
 }
 
 /**
+ * Check if fields of a user are a string, or an array is the key is inside the arrayFields
+ * @param user a user or a piece of user
+ * @param arrayFields an array of keys whose the typeof user[key] is an array
+ */
+function checkTypeofUserFields(user: User, arrayFields: string[]): void {
+  user = Object.assign({}, user)
+  const keys: string[] = Object.keys(user as User)
+
+  keys.forEach((key) => {
+    // Must be an array
+    if (arrayFields.includes(key)) {
+      // But it's not
+      if (!Array.isArray((user as User)[key])) {
+        throw new BadRequest(`type of '${key}' is incorrect, must be an array`)
+      }
+      // Must be a string
+    } else {
+      // But it's not
+      if (typeof (user as User)[key] !== 'string') {
+        throw new BadRequest(`type of '${key}' is incorrect, must be a string`)
+      }
+    }
+  })
+}
+
+/**
  * Validate and sanitize data from the hook context (able to manage many services)
  */
 export default (options = {}): Hook => {
   return async (context: HookContext<User | Year | Subject | Department>) => {
     const { path, method, data } = context
+
+    // Fields of user which are array
+    const arrayFields: string[] = [
+      'permissions',
+      'favoriteSubjectsIds',
+      'difficultSubjectsIds',
+    ]
 
     if (data) {
       switch (path) {
@@ -74,34 +107,18 @@ export default (options = {}): Hook => {
               ) {
                 throw new BadRequest('some data are missing')
               }
-              if (typeof (data as User).lastName !== 'string')
-                throw new BadRequest("type of 'lastName' is incorrect")
-              if (typeof (data as User).firstName !== 'string')
-                throw new BadRequest("type of 'firstName' is incorrect")
-              if (typeof (data as User).email !== 'string')
-                throw new BadRequest("type of 'email' is incorrect")
-              if (typeof (data as User).password !== 'string')
-                throw new BadRequest("type of 'password' is incorrect")
-              if (typeof (data as User).yearId !== 'string')
-                throw new BadRequest("type of 'yearId' is incorrect")
-              if (typeof (data as User).departmentId !== 'string')
-                throw new BadRequest("type of 'departmentId' is incorrect")
-              if (!Array.isArray((data as User).permissions))
-                throw new BadRequest("type of 'permissions' is incorrect")
-              if (!Array.isArray((data as User).favoriteSubjectsIds))
-                throw new BadRequest(
-                  "type of 'favoriteSubjectsIds' is incorrect"
-                )
-              if (!Array.isArray((data as User).difficultSubjectsIds))
-                throw new BadRequest(
-                  "type of 'difficultSubjectsIds' is incorrect"
-                )
-
-                // Valid case
+              // Here we are sure that all fields are present
+              // Check typeof user fields
+              checkTypeofUserFields(data as User, arrayFields)
+              // Valid case
               ;(context.data as User) = sanitizeUser(data as User)
 
               break
             case 'patch':
+              // Check typeof user fields
+              checkTypeofUserFields(data as User, arrayFields)
+              // Valid case
+              ;(context.data as User) = sanitizeUser(data as User)
               break
             default:
               break

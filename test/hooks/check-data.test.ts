@@ -2,6 +2,7 @@ import checkData from '../../src/hooks/check-data'
 import { HookContext, Application, Service } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
 import { Year, User, Department, Subject } from '../../src/declarations'
+import { contentSecurityPolicy } from 'helmet'
 
 describe("'check-data' hook", () => {
   it('noting should append without data', async () => {
@@ -95,6 +96,7 @@ describe("'check-data' hook", () => {
       expect(result.data.name).toBe('8a&#x2F;')
     })
   })
+
   describe("'subjects'", () => {
     const serviceName = 'subjects'
     let context: HookContext<Subject>
@@ -115,6 +117,7 @@ describe("'check-data' hook", () => {
       result = null
       error = null
     })
+
     it('should request correct fields', async () => {
       expect.assertions(2)
 
@@ -161,6 +164,7 @@ describe("'check-data' hook", () => {
       expect(result.data.name).toBe('CC&#x2F;')
     })
   })
+
   describe("'departments'", () => {
     const serviceName = 'departments'
     let context: HookContext<Department>
@@ -227,6 +231,7 @@ describe("'check-data' hook", () => {
       expect(result.data.name).toBe('sti&#x2F;')
     })
   })
+
   describe("'users'", () => {
     const serviceName = 'users'
     let context: HookContext<User>
@@ -302,14 +307,26 @@ describe("'check-data' hook", () => {
           }
 
           expect(error).toBeInstanceOf(BadRequest)
-          expect(error.message).toBe(`type of '${key}' is incorrect`)
+          if (typeof user[key] === 'string') {
+            expect(error.message).toBe(
+              `type of '${key}' is incorrect, must be a string`
+            )
+          } else {
+            expect(error.message).toBe(
+              `type of '${key}' is incorrect, must be an array`
+            )
+          }
         }
       )
 
       it.each(Object.keys(user))(
         'should trim and sanitize the fied %s',
         async (key) => {
-          expect.assertions(1)
+          if (key !== 'password') {
+            expect.assertions(1)
+          } else {
+            expect.assertions(0)
+          }
 
           const tmp: User = Object.assign({}, user)
 
@@ -327,7 +344,7 @@ describe("'check-data' hook", () => {
             error = e
           }
 
-          if (typeof tmp[key] === 'string') {
+          if (typeof tmp[key] === 'string' && key !== 'password') {
             expect(result.data[key]).toBe(`${user[key]}&#x2F;`)
           } else if (Array.isArray(tmp[key])) {
             expect(result.data[key]).not.toEqual(
@@ -336,9 +353,35 @@ describe("'check-data' hook", () => {
           }
         }
       )
+
+      it('should not trim and sanitize the password field', async () => {
+        expect.assertions(1)
+
+        const tmp: User = Object.assign({}, user)
+
+        tmp.password = tmp.password + '/'
+        context.data = Object.assign({}, tmp)
+
+        try {
+          result = (await checkData()(context)) as HookContext<User>
+        } catch (e) {
+          error = e
+        }
+
+        expect(result.data.password).toBe(user.password + '/')
+      })
     })
 
     describe('patch', () => {
+      // Remove some fields because of patch
+      const user = {
+        lastName: 'LASTNAME',
+        password: '$Azerty1',
+        permissions: ['eleve'],
+        departmentId: 'data',
+        favoriteSubjectsIds: ['data'],
+      }
+
       beforeEach(() => {
         context = {
           app: {} as Application,
@@ -366,9 +409,69 @@ describe("'check-data' hook", () => {
         expect(result).toEqual(context)
       })
 
-      it.todo('should not throw an error if some fields are missing')
-      it.todo('shoud request correct data')
-      it.todo('should trim and sanitize the fieds')
+      it.each([
+        ['lastName', 1, "type of 'lastName' is incorrect, must be a string"],
+        [
+          'permissions',
+          'data',
+          "type of 'permissions' is incorrect, must be an array",
+        ],
+        [
+          'favoriteSubjectsIds',
+          'data',
+          "type of 'favoriteSubjectsIds' is incorrect, must be an array",
+        ],
+      ])('shoud request correct data for %s', async (key, value, expected) => {
+        expect.assertions(1)
+
+        const data = {}
+        data[key] = value
+
+        context.data = data as User
+
+        try {
+          await checkData()(context)
+        } catch (e) {
+          error = e
+        }
+
+        expect(error.message).toBe(expected)
+      })
+
+      it.each(Object.keys(user))(
+        'should trim and sanitize the fied %s',
+        async (key) => {
+          if (key !== 'password') {
+            expect.assertions(1)
+          } else {
+            expect.assertions(0)
+          }
+
+          const tmp: User = Object.assign({}, user) as User
+
+          if (typeof tmp[key] === 'string') {
+            tmp[key] = tmp[key] + '/                  '
+          } else if (Array.isArray(tmp[key])) {
+            tmp[key] = [' data/ ']
+          }
+
+          context.data = Object.assign({}, tmp)
+
+          try {
+            result = (await checkData()(context)) as HookContext<User>
+          } catch (e) {
+            error = e
+          }
+
+          if (typeof tmp[key] === 'string' && key !== 'password') {
+            expect(result.data[key]).toBe(`${user[key]}&#x2F;`)
+          } else if (Array.isArray(tmp[key])) {
+            expect(result.data[key]).not.toEqual(
+              expect.arrayContaining([' data/ '])
+            )
+          }
+        }
+      )
     })
   })
 })
