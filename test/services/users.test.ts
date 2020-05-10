@@ -2,6 +2,12 @@ import { MethodNotAllowed, FeathersErrorJSON } from '@feathersjs/errors'
 import app from '../../src/app'
 import { Paginated } from '@feathersjs/feathers'
 import addDataToUser from '../utils/addDataToUser'
+import {
+  User,
+  UserPermission,
+  Department,
+  Subject,
+} from '../../src/declarations'
 
 const serviceName = 'users'
 

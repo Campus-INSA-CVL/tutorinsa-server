@@ -1,6 +1,7 @@
 import checkData from '../../src/hooks/check-data'
 import { HookContext, Application, Service } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
+import { Year, User, Department, Subject } from '../../src/declarations'
 
 describe("'check-data' hook", () => {
   it('noting should append without data', async () => {
@@ -312,13 +313,13 @@ describe("'check-data' hook", () => {
 
           const tmp: User = Object.assign({}, user)
 
-          context.data = Object.assign({}, tmp)
-
           if (typeof tmp[key] === 'string') {
             tmp[key] = tmp[key] + '/                  '
           } else if (Array.isArray(tmp[key])) {
             tmp[key] = [' data/ ']
           }
+
+          context.data = Object.assign({}, tmp)
 
           try {
             result = (await checkData()(context)) as HookContext<User>
@@ -327,7 +328,7 @@ describe("'check-data' hook", () => {
           }
 
           if (typeof tmp[key] === 'string') {
-            expect(result.data[key]).toBe(user[key] + '&#x2F;')
+            expect(result.data[key]).toBe(`${user[key]}&#x2F;`)
           } else if (Array.isArray(tmp[key])) {
             expect(result.data[key]).not.toEqual(
               expect.arrayContaining([' data/ '])

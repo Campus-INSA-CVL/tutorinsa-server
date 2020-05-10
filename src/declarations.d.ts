@@ -7,42 +7,40 @@ export interface ServiceTypes {}
 // The application instance type that will be used everywhere else
 export type Application = ExpressFeathers<ServiceTypes>
 
-declare global {
-  interface Year {
-    _id?: Id
-    name: string
-    createdAt?: string
-    updatedAt?: string
-  }
+export interface Year {
+  _id?: Id
+  name: string
+  createdAt?: string
+  updatedAt?: string
+}
 
-  interface Subject {
-    _id?: Id
-    name: string
-    createdAt?: string
-    updatedAt?: string
-  }
-  interface Department {
-    _id?: Id
-    name: string
-    createdAt?: string
-    updatedAt?: string
-  }
+export interface Subject {
+  _id?: Id
+  name: string
+  createdAt?: string
+  updatedAt?: string
+}
+export interface Department {
+  _id?: Id
+  name: string
+  createdAt?: string
+  updatedAt?: string
+}
 
-  type UserPermission = 'eleve' | 'tuteur' | 'admin'
-  interface User {
-    _id?: Id
-    lastName: string
-    firstName: string
-    email: string
-    password: string
-    permissions: UserPermission[]
-    yearId: string
-    departmentId: string
-    favoriteSubjectsIds: string[]
-    difficultSubjectsIds: string[]
-    createdAt?: string
-    updatedAt?: string
+export type UserPermission = 'eleve' | 'tuteur' | 'admin'
+export interface User {
+  _id?: Id
+  lastName: string
+  firstName: string
+  email: string
+  password: string
+  permissions: UserPermission[]
+  yearId: string
+  departmentId: string
+  favoriteSubjectsIds: string[]
+  difficultSubjectsIds: string[]
+  createdAt?: string
+  updatedAt?: string
 
-    [key: string]: string | string[] | UserPermission[] | undefined | Id
-  }
+  [key: string]: string | string[] | UserPermission[] | undefined | Id
 }

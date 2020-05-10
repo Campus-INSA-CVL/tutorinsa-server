@@ -1,5 +1,6 @@
 import checkDuplicate from '../../src/hooks/check-duplicate'
 import { HookContext, Application, Service } from '@feathersjs/feathers'
+import { User } from '../../src/declarations'
 
 describe("'check-duplicate' hook", () => {
   const serviceName = 'departments'
@@ -39,7 +40,7 @@ describe("'check-duplicate' hook", () => {
 
     Object.keys(user).forEach((key: string) => {
       if (Array.isArray(user[key])) {
-        tmp[key].push(tmp[key][0])
+        ;(tmp[key] as string[]).push(tmp[key][0])
       }
     })
 

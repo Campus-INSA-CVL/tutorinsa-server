@@ -1,6 +1,7 @@
 import checkPassword from '../../src/hooks/check-password'
 import { HookContext, Service, Application } from '@feathersjs/feathers'
 import { BadRequest, FeathersErrorJSON } from '@feathersjs/errors'
+import { User } from '../../src/declarations'
 
 describe("'check-password' hook", () => {
   // User without strong password

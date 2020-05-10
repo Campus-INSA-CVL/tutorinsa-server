@@ -1,5 +1,6 @@
 import app from '../../src/app'
 import { MethodNotAllowed, FeathersErrorJSON } from '@feathersjs/errors'
+import { Subject } from '../../src/declarations'
 
 const serviceName = 'subjects'
 

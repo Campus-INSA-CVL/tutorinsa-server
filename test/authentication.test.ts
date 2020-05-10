@@ -1,5 +1,6 @@
 import app from '../src/app'
 import addDataToUser from './utils/addDataToUser'
+import { User } from '../src/declarations'
 
 describe('authentication', () => {
   it('registered the authentication service', () => {
