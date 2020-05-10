@@ -3,6 +3,13 @@
 import { Hook, HookContext } from '@feathersjs/feathers'
 import validator from 'validator'
 import { BadRequest } from '@feathersjs/errors'
+import {
+  UserPermission,
+  Year,
+  Subject,
+  Department,
+  User,
+} from '../declarations'
 
 /**
  * Trim and sanitize a string
@@ -67,22 +74,32 @@ export default (options = {}): Hook => {
               ) {
                 throw new BadRequest('some data are missing')
               }
-              // Check the type of the field
-              if (
-                typeof (data as User).lastName !== 'string' ||
-                typeof (data as User).firstName !== 'string' ||
-                typeof (data as User).email !== 'string' ||
-                typeof (data as User).password !== 'string' ||
-                !Array.isArray((data as User).permissions) ||
-                typeof (data as User).yearId !== 'string' ||
-                typeof (data as User).departmentId !== 'string' ||
-                !Array.isArray((data as User).favoriteSubjectsIds) ||
-                !Array.isArray((data as User).difficultSubjectsIds)
-              ) {
-                throw new BadRequest('type of data are incorrect')
-              } else {
-                ;(context.data as User) = sanitizeUser(data as User)
-              }
+              if (typeof (data as User).lastName !== 'string')
+                throw new BadRequest("type of 'lastName' is incorrect")
+              if (typeof (data as User).firstName !== 'string')
+                throw new BadRequest("type of 'firstName' is incorrect")
+              if (typeof (data as User).email !== 'string')
+                throw new BadRequest("type of 'email' is incorrect")
+              if (typeof (data as User).password !== 'string')
+                throw new BadRequest("type of 'password' is incorrect")
+              if (typeof (data as User).yearId !== 'string')
+                throw new BadRequest("type of 'yearId' is incorrect")
+              if (typeof (data as User).departmentId !== 'string')
+                throw new BadRequest("type of 'departmentId' is incorrect")
+              if (!Array.isArray((data as User).permissions))
+                throw new BadRequest("type of 'permissions' is incorrect")
+              if (!Array.isArray((data as User).favoriteSubjectsIds))
+                throw new BadRequest(
+                  "type of 'favoriteSubjectsIds' is incorrect"
+                )
+              if (!Array.isArray((data as User).difficultSubjectsIds))
+                throw new BadRequest(
+                  "type of 'difficultSubjectsIds' is incorrect"
+                )
+
+                // Valid case
+              ;(context.data as User) = sanitizeUser(data as User)
+
               break
             case 'patch':
               break

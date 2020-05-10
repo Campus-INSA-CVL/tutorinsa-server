@@ -7,6 +7,7 @@ import {
   UserPermission,
   Department,
   Subject,
+  Year,
 } from '../../src/declarations'
 
 const serviceName = 'users'

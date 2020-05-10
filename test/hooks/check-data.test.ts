@@ -302,7 +302,7 @@ describe("'check-data' hook", () => {
           }
 
           expect(error).toBeInstanceOf(BadRequest)
-          expect(error.message).toBe('type of data are incorrect')
+          expect(error.message).toBe(`type of '${key}' is incorrect`)
         }
       )
 
@@ -336,9 +336,6 @@ describe("'check-data' hook", () => {
           }
         }
       )
-
-      it.todo('should trim and sanitize the fieds')
-      it.todo('should remove duplucate element from array')
     })
 
     describe('patch', () => {
@@ -355,6 +352,20 @@ describe("'check-data' hook", () => {
         result = null
         error = null
       })
+
+      it('should not throw an error if some data are missing', async () => {
+        expect.assertions(2)
+
+        try {
+          result = (await checkData()(context)) as HookContext<User>
+        } catch (e) {
+          error = e
+        }
+
+        expect(error).toBeNull()
+        expect(result).toEqual(context)
+      })
+
       it.todo('should not throw an error if some fields are missing')
       it.todo('shoud request correct data')
       it.todo('should trim and sanitize the fieds')
