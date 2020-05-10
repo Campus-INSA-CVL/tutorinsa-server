@@ -32,7 +32,11 @@ function sanitizeUser(user: User): User {
     if (user.hasOwnProperty(key)) {
       const element = user[key] as string | string[] | UserPermission[]
 
-      if (typeof element === 'string' && key !== 'password') {
+      if (
+        typeof element === 'string' &&
+        key !== 'password' &&
+        key !== 'email'
+      ) {
         user[key] = trimSanitize(element)
       } else if (Array.isArray(element)) {
         const tmp: string[] = []

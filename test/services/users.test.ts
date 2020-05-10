@@ -164,7 +164,7 @@ describe(`'${serviceName}' service`, () => {
 
       const patchedResult: User = await app
         .service(serviceName)
-        .patch(result._id, { yearId: newYear._id })
+        .patch(result._id, { yearId: newYear._id.toString() })
 
       expect(typeof patchedResult.yearId).toBe('object')
       expect(patchedResult.yearId).toEqual(newYear._id)
@@ -179,7 +179,7 @@ describe(`'${serviceName}' service`, () => {
 
       const patchedResult: User = await app
         .service(serviceName)
-        .patch(result._id, { departmentId: newDepartment._id })
+        .patch(result._id, { departmentId: newDepartment._id.toString() })
 
       expect(typeof patchedResult.departmentId).toBe('object')
       expect(patchedResult.departmentId).toEqual(newDepartment._id)
@@ -194,17 +194,17 @@ describe(`'${serviceName}' service`, () => {
 
       let patchedResult: User
 
-      patchedResult = (await app
-        .service(serviceName)
-        .patch(result._id, { favoriteSubjectsIds: newSubjects._id })) as User
+      patchedResult = (await app.service(serviceName).patch(result._id, {
+        favoriteSubjectsIds: [newSubjects._id.toString()],
+      })) as User
 
       expect(patchedResult.favoriteSubjectsIds).toEqual(
         expect.arrayContaining([newSubjects._id])
       )
 
-      patchedResult = (await app
-        .service(serviceName)
-        .patch(result._id, { difficultSubjectsIds: newSubjects._id })) as User
+      patchedResult = (await app.service(serviceName).patch(result._id, {
+        difficultSubjectsIds: [newSubjects._id.toString()],
+      })) as User
 
       expect(patchedResult.difficultSubjectsIds).toEqual(
         expect.arrayContaining([newSubjects._id])

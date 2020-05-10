@@ -322,7 +322,7 @@ describe("'check-data' hook", () => {
       it.each(Object.keys(user))(
         'should trim and sanitize the fied %s',
         async (key) => {
-          if (key !== 'password') {
+          if (key !== 'password' && key !== 'email') {
             expect.assertions(1)
           } else {
             expect.assertions(0)
@@ -344,7 +344,11 @@ describe("'check-data' hook", () => {
             error = e
           }
 
-          if (typeof tmp[key] === 'string' && key !== 'password') {
+          if (
+            typeof tmp[key] === 'string' &&
+            key !== 'password' &&
+            key !== 'email'
+          ) {
             expect(result.data[key]).toBe(`${user[key]}&#x2F;`)
           } else if (Array.isArray(tmp[key])) {
             expect(result.data[key]).not.toEqual(
@@ -353,6 +357,23 @@ describe("'check-data' hook", () => {
           }
         }
       )
+
+      it('should not trim and sanitize the email field', async () => {
+        expect.assertions(1)
+
+        const tmp: User = Object.assign({}, user)
+
+        tmp.email = tmp.email + '/'
+        context.data = Object.assign({}, tmp)
+
+        try {
+          result = (await checkData()(context)) as HookContext<User>
+        } catch (e) {
+          error = e
+        }
+
+        expect(result.data.email).toBe(user.email + '/')
+      })
 
       it('should not trim and sanitize the password field', async () => {
         expect.assertions(1)
@@ -441,7 +462,7 @@ describe("'check-data' hook", () => {
       it.each(Object.keys(user))(
         'should trim and sanitize the fied %s',
         async (key) => {
-          if (key !== 'password') {
+          if (key !== 'password' && key !== 'email') {
             expect.assertions(1)
           } else {
             expect.assertions(0)
@@ -463,7 +484,11 @@ describe("'check-data' hook", () => {
             error = e
           }
 
-          if (typeof tmp[key] === 'string' && key !== 'password') {
+          if (
+            typeof tmp[key] === 'string' &&
+            key !== 'password' &&
+            key !== 'email'
+          ) {
             expect(result.data[key]).toBe(`${user[key]}&#x2F;`)
           } else if (Array.isArray(tmp[key])) {
             expect(result.data[key]).not.toEqual(
