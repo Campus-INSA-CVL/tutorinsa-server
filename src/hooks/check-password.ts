@@ -2,13 +2,17 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import { Hook, HookContext } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
+import { User } from '../declarations'
 
+/**
+ * Check that the password is strong enougth
+ */
 export default (options = {}): Hook => {
   return async (context: HookContext<User>) => {
     const { data } = context
 
     const regex = new RegExp(
-      '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})'
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/
     )
 
     if (data?.password && !regex.test(data.password))

@@ -3,6 +3,9 @@
 import { Hook, HookContext } from '@feathersjs/feathers'
 import { getUniqueKeys } from '@feathers-plus/batch-loader'
 
+/**
+ * Remove duplicate data from arrays
+ */
 export default (options = {}): Hook => {
   return async (context: HookContext) => {
     const { data } = context

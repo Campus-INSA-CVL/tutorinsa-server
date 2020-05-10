@@ -2,10 +2,9 @@ import checkData from '../../src/hooks/check-data'
 import { HookContext, Application, Service } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
 import { Year, User, Department, Subject } from '../../src/declarations'
-import { contentSecurityPolicy } from 'helmet'
 
 describe("'check-data' hook", () => {
-  it('noting should append without data', async () => {
+  it('nothing should append without data', async () => {
     expect.assertions(2)
     let result: HookContext<any>
     let error: Error | null = null
