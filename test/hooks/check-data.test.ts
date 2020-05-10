@@ -235,7 +235,7 @@ describe("'check-data' hook", () => {
 
     describe('create', () => {
       const user: User = {
-        lastName: 'fakeLastName',
+        lastName: 'LASTNAME',
         firstName: 'username',
         email: 'username@insa-cvl.fr',
         password: '$Azerty1',
@@ -269,7 +269,7 @@ describe("'check-data' hook", () => {
 
           delete tmp[key]
 
-          context.data = tmp
+          context.data = Object.assign({}, tmp)
 
           try {
             await checkData()(context)
@@ -292,7 +292,7 @@ describe("'check-data' hook", () => {
           // @ts-ignore
           tmp[key] = 1
 
-          context.data = tmp
+          context.data = Object.assign({}, tmp)
 
           try {
             await checkData()(context)
@@ -312,7 +312,7 @@ describe("'check-data' hook", () => {
 
           const tmp: User = Object.assign({}, user)
 
-          context.data = tmp
+          context.data = Object.assign({}, tmp)
 
           if (typeof tmp[key] === 'string') {
             tmp[key] = tmp[key] + '/                  '

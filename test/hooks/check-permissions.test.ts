@@ -61,7 +61,7 @@ describe("'check-permissions' hook", () => {
     let result: HookContext<User>
     let error: FeathersErrorJSON | null = null
 
-    context.data = adminUser
+    context.data = Object.assign({}, adminUser)
 
     try {
       result = (await checkPermissions()(context)) as HookContext<User>
@@ -79,7 +79,7 @@ describe("'check-permissions' hook", () => {
     let result: HookContext<User>
     let error: FeathersErrorJSON | null = null
 
-    context.data = user
+    context.data = Object.assign({}, user)
 
     try {
       result = (await checkPermissions()(context)) as HookContext<User>
@@ -95,8 +95,8 @@ describe("'check-permissions' hook", () => {
     let result: HookContext<User>
     let error: FeathersErrorJSON | null = null
 
-    context.data = adminUser
-    context.params.user = adminUser
+    context.data = Object.assign({}, adminUser)
+    context.params.user = Object.assign({}, adminUser)
 
     try {
       result = (await checkPermissions()(context)) as HookContext<User>
