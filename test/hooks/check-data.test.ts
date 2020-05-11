@@ -78,7 +78,9 @@ describe("'check-data' hook", () => {
       }
 
       expect(error).toBeInstanceOf(BadRequest)
-      expect(error.message).toBe('name must be a string')
+      expect(error.message).toBe(
+        "type of 'name' is incorrect, must be a string"
+      )
     })
 
     it('should trim and sanitize data', async () => {
@@ -146,7 +148,9 @@ describe("'check-data' hook", () => {
       }
 
       expect(error).toBeInstanceOf(BadRequest)
-      expect(error.message).toBe('name must be a string')
+      expect(error.message).toBe(
+        "type of 'name' is incorrect, must be a string"
+      )
     })
 
     it('should trim and sanitize data', async () => {
@@ -213,7 +217,9 @@ describe("'check-data' hook", () => {
       }
 
       expect(error).toBeInstanceOf(BadRequest)
-      expect(error.message).toBe('name must be a string')
+      expect(error.message).toBe(
+        "type of 'name' is incorrect, must be a string"
+      )
     })
 
     it('should trim and sanitize data', async () => {

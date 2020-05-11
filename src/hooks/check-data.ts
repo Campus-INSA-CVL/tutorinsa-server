@@ -52,25 +52,25 @@ function sanitizeUser(user: User): User {
 }
 
 /**
- * Check if fields of a user are a string, or an array is the key is inside the arrayFields
- * @param user a user or a piece of user
- * @param arrayFields an array of keys whose the typeof user[key] is an array
+ * Check if fields of an object are a string, or an array is the key is inside the arrayFields
+ * @param data a user or a piece of user
+ * @param arrayFields an array of keys whose the typeof data[key] is an array
  */
-function checkTypeofUserFields(user: User, arrayFields: string[]): void {
-  user = Object.assign({}, user)
-  const keys: string[] = Object.keys(user as User)
+function checkTypeofFields(data: any, arrayFields?: string[]): void {
+  data = Object.assign({}, data)
+  const keys: string[] = Object.keys(data as any)
 
   keys.forEach((key) => {
     // Must be an array
-    if (arrayFields.includes(key)) {
+    if (arrayFields?.includes(key)) {
       // But it's not
-      if (!Array.isArray((user as User)[key])) {
+      if (!Array.isArray((data as any)[key])) {
         throw new BadRequest(`type of '${key}' is incorrect, must be an array`)
       }
       // Must be a string
     } else {
       // But it's not
-      if (typeof (user as User)[key] !== 'string') {
+      if (typeof (data as any)[key] !== 'string') {
         throw new BadRequest(`type of '${key}' is incorrect, must be a string`)
       }
     }
@@ -113,14 +113,14 @@ export default (options = {}): Hook => {
               }
               // Here we are sure that all fields are present
               // Check typeof user fields
-              checkTypeofUserFields(data as User, arrayFields)
+              checkTypeofFields(data as User, arrayFields)
               // Valid case
               ;(context.data as User) = sanitizeUser(data as User)
 
               break
             case 'patch':
               // Check typeof user fields
-              checkTypeofUserFields(data as User, arrayFields)
+              checkTypeofFields(data as User, arrayFields)
               // Valid case
               ;(context.data as User) = sanitizeUser(data as User)
               break
@@ -132,38 +132,33 @@ export default (options = {}): Hook => {
           if (!(data as Year).name) {
             throw new BadRequest('request must contain correct fields')
           }
-          if (typeof (data as Year).name !== 'string') {
-            throw new BadRequest('name must be a string')
-          } else {
-            // Valid case
-            const { name } = data as Year
-            ;(data as Year).name = trimSanitize(name)
-          }
+          // Here we are sure that all fields are present
+          // Check typeof user fields
+          checkTypeofFields(data as Year)
+          // Valid case
+          ;(data as Year).name = trimSanitize((data as Year).name)
+
           break
         case 'departments':
           if (!(data as Department).name) {
             throw new BadRequest('request must contain correct fields')
           }
-          if (typeof (data as Department).name !== 'string') {
-            throw new BadRequest('name must be a string')
-          } else {
-            // Valid case
-            const { name } = data as Department
-            ;(data as Department).name = trimSanitize(name)
-          }
+          // Here we are sure that all fields are present
+          // Check typeof user fields
+          checkTypeofFields(data as Department)
+          // Valid case
+          ;(data as Department).name = trimSanitize((data as Department).name)
+
           break
         case 'subjects':
           if (!(data as Subject).name) {
             throw new BadRequest('request must contain correct fields')
           }
-          if (typeof (data as Subject).name !== 'string') {
-            throw new BadRequest('name must be a string')
-          } else {
-            // Valid case
-            // Trim and sanitize
-            const { name } = data as Subject
-            ;(data as Subject).name = trimSanitize(name)
-          }
+          // Here we are sure that all fields are present
+          // Check typeof user fields
+          checkTypeofFields(data as Subject)
+          // Valid case
+          ;(data as Subject).name = trimSanitize((data as Subject).name)
           break
         default:
           break

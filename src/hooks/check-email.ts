@@ -13,6 +13,8 @@ export default (options = {}): Hook => {
     const { data } = context
 
     if (data?.email) {
+      data.email = data.email.toLowerCase()
+
       if (!validator.isEmail(data.email)) {
         throw new BadRequest('must be a valid email')
       }

@@ -35,7 +35,7 @@ describe("'check-email' hook", () => {
     error = null
   })
 
-  it('nohing should append', async () => {
+  it('nohing should append without data', async () => {
     expect.assertions(2)
 
     try {
@@ -46,6 +46,21 @@ describe("'check-email' hook", () => {
 
     expect(error).toBeNull()
     expect(result).toEqual(context)
+  })
+
+  it('nohing should append with a good email', async () => {
+    expect.assertions(1)
+
+    user.email = 'user.name@insa-cvl.Fr'
+    context.data = Object.assign({}, user)
+
+    try {
+      await checEmail()(context)
+    } catch (e) {
+      error = e
+    }
+
+    expect(error).toBeNull()
   })
 
   it("should throw an error because it's not an email", async () => {
