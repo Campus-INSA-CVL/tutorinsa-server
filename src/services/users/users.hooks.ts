@@ -8,12 +8,11 @@ import checkPassword from '../../hooks/check-password'
 
 import checkData from '../../hooks/check-data'
 
-import checkArray from '../../hooks/check-duplicate'
 import checkDuplicate from '../../hooks/check-duplicate'
 
 import checkEmail from '../../hooks/check-email'
 
-import checkArrayContent from '../../hooks/check-array-content'
+import checkIds from '../../hooks/check-ids'
 
 const { authenticate } = feathersAuthentication.hooks
 const { hashPassword, protect } = local.hooks
@@ -26,7 +25,7 @@ export default {
     create: [
       checkData(),
       checkDuplicate(),
-      checkArrayContent(),
+      checkIds(),
       checkEmail(),
       checkPassword(),
       checkPermissions(),
@@ -36,7 +35,7 @@ export default {
     patch: [
       checkData(),
       checkDuplicate(),
-      checkArrayContent(),
+      checkIds(),
       checkEmail(),
       checkPassword(),
       checkPermissions(),

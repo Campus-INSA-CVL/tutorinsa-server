@@ -6,7 +6,7 @@ import { User } from '../../src/declarations'
 describe("'check-email' hook", () => {
   let context: HookContext<any>
 
-  let error: Error | null
+  let error: Error | null = null
   let result: HookContext<User>
 
   let user: User
@@ -35,7 +35,7 @@ describe("'check-email' hook", () => {
     error = null
   })
 
-  it('nohing should append without data', async () => {
+  it('nothing should append without data', async () => {
     expect.assertions(2)
 
     try {
