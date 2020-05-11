@@ -1,6 +1,6 @@
-import checkDuplicate from '../../src/hooks/check/check-duplicate'
+import checkDuplicate from '../../../src/hooks/check/check-duplicate'
 import { HookContext, Application, Service } from '@feathersjs/feathers'
-import { User } from '../../src/declarations'
+import { User } from '../../../src/declarations'
 
 describe("'check-duplicate' hook", () => {
   const serviceName = 'departments'

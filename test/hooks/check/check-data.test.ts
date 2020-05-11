@@ -1,7 +1,7 @@
-import checkData from '../../src/hooks/check/check-data'
+import checkData from '../../../src/hooks/check/check-data'
 import { HookContext, Application, Service } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
-import { Year, User, Department, Subject } from '../../src/declarations'
+import { Year, User, Department, Subject } from '../../../src/declarations'
 
 describe("'check-data' hook", () => {
   it('nothing should append without data', async () => {
