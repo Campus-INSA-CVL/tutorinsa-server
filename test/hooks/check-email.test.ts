@@ -1,4 +1,4 @@
-import checEmail from '../../src/hooks/check-email'
+import checEmail from '../../src/hooks/check/check-email'
 import { HookContext, Application, Service } from '@feathersjs/feathers'
 import { BadRequest, FeathersErrorJSON } from '@feathersjs/errors'
 import { User } from '../../src/declarations'

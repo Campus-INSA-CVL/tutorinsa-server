@@ -1,4 +1,4 @@
-import checkPermissions from '../../src/hooks/check-permissions'
+import checkPermissions from '../../src/hooks/check/check-permissions'
 import { HookContext, Service, Application } from '@feathersjs/feathers'
 import { FeathersErrorJSON } from '@feathersjs/errors'
 import { User } from '../../src/declarations'

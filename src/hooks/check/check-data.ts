@@ -9,7 +9,7 @@ import {
   Subject,
   Department,
   User,
-} from '../declarations'
+} from '../../declarations'
 
 /**
  * Trim and sanitize a string

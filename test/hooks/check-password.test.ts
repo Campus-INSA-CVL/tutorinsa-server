@@ -1,4 +1,4 @@
-import checkPassword from '../../src/hooks/check-password'
+import checkPassword from '../../src/hooks/check/check-password'
 import { HookContext, Service, Application } from '@feathersjs/feathers'
 import { BadRequest, FeathersErrorJSON } from '@feathersjs/errors'
 import { User } from '../../src/declarations'

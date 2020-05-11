@@ -1,4 +1,4 @@
-import checkData from '../../src/hooks/check-data'
+import checkData from '../../src/hooks/check/check-data'
 import { HookContext, Application, Service } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
 import { Year, User, Department, Subject } from '../../src/declarations'

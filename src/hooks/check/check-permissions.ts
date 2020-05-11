@@ -1,6 +1,7 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import { Hook, HookContext } from '@feathersjs/feathers'
+import { User, UserPermission } from '../../declarations'
 
 /**
  * Remove admin permission from data if user is not already an admin

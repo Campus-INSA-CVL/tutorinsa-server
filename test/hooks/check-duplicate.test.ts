@@ -1,4 +1,4 @@
-import checkDuplicate from '../../src/hooks/check-duplicate'
+import checkDuplicate from '../../src/hooks/check/check-duplicate'
 import { HookContext, Application, Service } from '@feathersjs/feathers'
 import { User } from '../../src/declarations'
 

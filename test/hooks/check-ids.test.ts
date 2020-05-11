@@ -1,4 +1,4 @@
-import checkIds from '../../src/hooks/check-ids'
+import checkIds from '../../src/hooks/check/check-ids'
 import { HookContext, Application, Service } from '@feathersjs/feathers'
 import { User } from '../../src/declarations'
 import { BadRequest } from '@feathersjs/errors'
