@@ -10,7 +10,29 @@ export default function (app: Application) {
   const { Schema } = mongooseClient
   const schema = new Schema(
     {
-      text: { type: String, required: true },
+      campus: {
+        type: String,
+        required: true,
+        lowercase: true,
+      },
+      name: {
+        type: String,
+        required: true,
+        lowercase: true,
+      },
+      day: {
+        type: String,
+        lowarcase: true,
+        required: true,
+      },
+      startAt: {
+        type: Date,
+        required: true,
+      },
+      duration: {
+        type: Number,
+        required: true,
+      },
     },
     {
       timestamps: true,

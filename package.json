@@ -62,6 +62,7 @@
     "feathers-swagger": "^1.2.1",
     "helmet": "^3.22.0",
     "js-yaml": "^3.13.1",
+    "moment": "^2.25.3",
     "mongodb-core": "^3.2.7",
     "mongoose": "^5.9.11",
     "serve-favicon": "^2.5.0",

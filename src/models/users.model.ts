@@ -22,11 +22,12 @@ export default function (app: Application) {
             )
             return regex.test(v)
           },
-          message: (props: any) =>
-            `${props.value} n'est pas une adresse mail insa valide`,
+          message: (props: any) => `${props.value} is not a valid email`,
         },
       },
-      password: { type: String },
+      password: {
+        type: String,
+      },
       permissions: [
         {
           type: String,
