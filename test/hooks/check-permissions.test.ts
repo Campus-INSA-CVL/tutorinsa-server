@@ -75,7 +75,7 @@ describe("'check-permissions' hook", () => {
     )
   })
 
-  it('should a default permission', async () => {
+  it('should set a default permission', async () => {
     expect.assertions(1)
     let result: HookContext<User>
     let error: FeathersErrorJSON | null = null
