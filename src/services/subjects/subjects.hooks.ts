@@ -1,5 +1,5 @@
 import { disallow } from 'feathers-hooks-common'
-import checkData from '../../hooks/check-data'
+import checkData from '../../hooks/check/check-data'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default {

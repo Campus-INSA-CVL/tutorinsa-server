@@ -48,6 +48,7 @@ describe("'check-data' hook", () => {
       result = null
       error = null
     })
+    it.todo('nothing should append with correct data')
 
     it('should request correct fields', async () => {
       expect.assertions(2)
@@ -118,6 +119,7 @@ describe("'check-data' hook", () => {
       result = null
       error = null
     })
+    it.todo('nothing should append with correct data')
 
     it('should request correct fields', async () => {
       expect.assertions(2)
@@ -188,6 +190,8 @@ describe("'check-data' hook", () => {
       result = null
       error = null
     })
+
+    it.todo('nothing should append with correct data')
     it('should request correct fields', async () => {
       expect.assertions(2)
 
@@ -270,6 +274,8 @@ describe("'check-data' hook", () => {
         result = null
         error = null
       })
+
+      it.todo('nothing should append with correct data')
 
       it.each(Object.keys(user))(
         'should request correct fields (%s is missing)',
@@ -422,6 +428,8 @@ describe("'check-data' hook", () => {
         error = null
       })
 
+      it.todo('nothing should append with correct data')
+
       it('should not throw an error if some data are missing', async () => {
         expect.assertions(2)
 
@@ -502,6 +510,24 @@ describe("'check-data' hook", () => {
           }
         }
       )
+    })
+  })
+
+  describe("'rooms'", () => {
+    describe('create', () => {
+      it.todo('nothing should append with correct data')
+
+      it.todo('should request correct fields')
+      it.todo('should request correct data')
+      it.todo('should trim and sanitize data')
+    })
+
+    describe('patch', () => {
+      it.todo('nothing should append with correct data')
+
+      it.todo('should not throw an error if some data are missing')
+      it.todo('should request correct data')
+      it.todo('should trim and sanitize data')
     })
   })
 })

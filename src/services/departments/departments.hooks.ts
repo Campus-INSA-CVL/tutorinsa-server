@@ -1,6 +1,6 @@
 import { disallow } from 'feathers-hooks-common'
 
-import checkData from '../../hooks/check-data'
+import checkData from '../../hooks/check/check-data'
 
 export default {
   before: {

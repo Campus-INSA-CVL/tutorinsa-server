@@ -1,11 +1,12 @@
 import checkPermissions from '../../../src/hooks/check/check-permissions'
 import { HookContext, Service, Application } from '@feathersjs/feathers'
-import { FeathersErrorJSON } from '@feathersjs/errors'
 import { User } from '../../../src/declarations'
 
 describe("'check-permissions' hook", () => {
   let context: HookContext<User>
+  let result: HookContext<User> | null = null
 
+  let error: Error | null = null
   let user: User
   let studentUser: User
   let adminUser: User
@@ -55,12 +56,13 @@ describe("'check-permissions' hook", () => {
       favoriteSubjectsIds: [],
       difficultSubjectsIds: [],
     }
+
+    error = null
+    result = null
   })
 
   it('should remove admin permission from a non-admin user', async () => {
     expect.assertions(1)
-    let result: HookContext<User>
-    let error: FeathersErrorJSON | null = null
 
     context.data = Object.assign({}, adminUser)
 
@@ -77,8 +79,6 @@ describe("'check-permissions' hook", () => {
 
   it('should set a default permission', async () => {
     expect.assertions(1)
-    let result: HookContext<User>
-    let error: FeathersErrorJSON | null = null
 
     context.data = Object.assign({}, user)
 
@@ -93,8 +93,6 @@ describe("'check-permissions' hook", () => {
 
   it('should keep is admin permissionif he is admin', async () => {
     expect.assertions(1)
-    let result: HookContext<User>
-    let error: FeathersErrorJSON | null = null
 
     context.data = Object.assign({}, adminUser)
     context.params.user = Object.assign({}, adminUser)
