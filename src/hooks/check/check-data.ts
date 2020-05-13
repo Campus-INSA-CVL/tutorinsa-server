@@ -46,11 +46,6 @@ function sanitizeStrings(
 }
 
 /**
- * Check if fields of an object are a string, or an array is the key is inside the arrayFields
- * @param data a user or a piece of user
- * @param arrayFields an array of keys whose the typeof data[key] is an array
- */
-/**
  * Check the type of fields, depending of params
  * @param data an object
  * @param arrayFields array key for array fields
@@ -96,7 +91,7 @@ function checkTypeofFields(
 }
 
 /**
- * Validate and sanitize data from the hook context (able to manage many services)
+ * Validate (type) and sanitize data from the hook context (able to manage many services)
  */
 export default (options = {}): Hook => {
   return async (context: HookContext<User | Year | Subject | Department>) => {
