@@ -14,7 +14,7 @@ export default (options = {}): Hook => {
     const { data } = context
 
     if (data?.campus) {
-      if (!campus.includes(data.campus)) {
+      if (!campus.includes(data.campus.toLowerCase() as RoomCampus)) {
         throw new BadRequest(`${data.campus} is unknow`)
       }
     }
