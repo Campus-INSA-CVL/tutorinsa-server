@@ -1,7 +1,14 @@
 import checkData from '../../../src/hooks/check/check-data'
 import { HookContext, Application, Service } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
-import { Year, User, Department, Subject } from '../../../src/declarations'
+import {
+  Year,
+  User,
+  Department,
+  Subject,
+  Room,
+} from '../../../src/declarations'
+import moment from '../../../src/utils/moment'
 
 describe("'check-data' hook", () => {
   it('nothing should append without data', async () => {
@@ -34,6 +41,9 @@ describe("'check-data' hook", () => {
 
     let result: HookContext<Year>
     let error: Error | null
+    const year: Year = {
+      name: '2a',
+    }
 
     beforeEach(() => {
       context = {
@@ -48,7 +58,21 @@ describe("'check-data' hook", () => {
       result = null
       error = null
     })
-    it.todo('nothing should append with correct data')
+
+    it('nothing should append with correct data', async () => {
+      expect.assertions(2)
+
+      context.data = Object.assign({}, year)
+
+      try {
+        result = (await checkData()(context)) as HookContext<Year>
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeNull()
+      expect(result).toEqual(context)
+    })
 
     it('should request correct fields', async () => {
       expect.assertions(2)
@@ -105,6 +129,9 @@ describe("'check-data' hook", () => {
 
     let result: HookContext<Subject>
     let error: Error | null
+    const subject: Subject = {
+      name: 'CC',
+    }
 
     beforeEach(() => {
       context = {
@@ -119,7 +146,21 @@ describe("'check-data' hook", () => {
       result = null
       error = null
     })
-    it.todo('nothing should append with correct data')
+
+    it('nothing should append with correct data', async () => {
+      expect.assertions(2)
+
+      context.data = Object.assign({}, subject)
+
+      try {
+        result = (await checkData()(context)) as HookContext<Subject>
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeNull()
+      expect(result).toEqual(context)
+    })
 
     it('should request correct fields', async () => {
       expect.assertions(2)
@@ -176,6 +217,9 @@ describe("'check-data' hook", () => {
 
     let result: HookContext<Department>
     let error: Error | null
+    const department: Department = {
+      name: 'STI',
+    }
 
     beforeEach(() => {
       context = {
@@ -191,7 +235,21 @@ describe("'check-data' hook", () => {
       error = null
     })
 
-    it.todo('nothing should append with correct data')
+    it('nothing should append with correct data', async () => {
+      expect.assertions(2)
+
+      context.data = Object.assign({}, department)
+
+      try {
+        result = (await checkData()(context)) as HookContext<Department>
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeNull()
+      expect(result).toEqual(context)
+    })
+
     it('should request correct fields', async () => {
       expect.assertions(2)
 
@@ -275,7 +333,20 @@ describe("'check-data' hook", () => {
         error = null
       })
 
-      it.todo('nothing should append with correct data')
+      it('nothing should append with correct data', async () => {
+        expect.assertions(2)
+
+        context.data = Object.assign({}, user)
+
+        try {
+          result = (await checkData()(context)) as HookContext<User>
+        } catch (e) {
+          error = e
+        }
+
+        expect(error).toBeNull()
+        expect(result).toEqual(context)
+      })
 
       it.each(Object.keys(user))(
         'should request correct fields (%s is missing)',
@@ -428,8 +499,6 @@ describe("'check-data' hook", () => {
         error = null
       })
 
-      it.todo('nothing should append with correct data')
-
       it('should not throw an error if some data are missing', async () => {
         expect.assertions(2)
 
@@ -514,20 +583,231 @@ describe("'check-data' hook", () => {
   })
 
   describe("'rooms'", () => {
-    describe('create', () => {
-      it.todo('nothing should append with correct data')
+    const serviceName = 'rooms'
+    let context: HookContext<Room>
+    let result: HookContext<Room>
 
-      it.todo('should request correct fields')
-      it.todo('should request correct data')
-      it.todo('should trim and sanitize data')
+    let error: Error | null
+
+    describe('create', () => {
+      const room: Room = {
+        campus: 'blois',
+        name: 'E.106',
+        day: 'lundi',
+        startAt: 'Tue May 12 2020 20:00:00 GMT+0000',
+        duration: 120,
+      }
+
+      beforeEach(() => {
+        context = {
+          app: {} as Application,
+          service: {} as Service<Room>,
+          method: 'create',
+          params: {},
+          path: serviceName,
+          type: 'before',
+        }
+
+        result = null
+        error = null
+      })
+
+      it('nothing should append with correct data', async () => {
+        expect.assertions(2)
+
+        context.data = Object.assign({}, room)
+
+        try {
+          result = (await checkData()(context)) as HookContext<Room>
+        } catch (e) {
+          error = e
+        }
+
+        expect(error).toBeNull()
+        expect(result).toEqual(context)
+      })
+
+      it.each(Object.keys(room))(
+        'should request correct fields (%s is missing)',
+        async (key) => {
+          expect.assertions(2)
+
+          const tmp: Room = Object.assign({}, room)
+
+          delete tmp[key]
+
+          context.data = Object.assign({}, tmp)
+
+          try {
+            await checkData()(context)
+          } catch (e) {
+            error = e
+          }
+
+          expect(error).toBeInstanceOf(BadRequest)
+          expect(error.message).toBe('some data are missing')
+        }
+      )
+
+      it.each(Object.keys(room))(
+        'shoud request correct data (typeof %s is wrong)',
+        async (key) => {
+          expect.assertions(2)
+
+          const tmp: Room = Object.assign({}, room)
+
+          tmp[key] = 1
+          if (typeof room[key] === 'number') {
+            tmp[key] = 'data'
+          }
+          // @ts-ignore
+
+          context.data = Object.assign({}, tmp)
+
+          try {
+            await checkData()(context)
+          } catch (e) {
+            error = e
+          }
+
+          expect(error).toBeInstanceOf(BadRequest)
+          if (typeof room[key] === 'number') {
+            expect(error.message).toBe(
+              `type of '${key}' is incorrect, must be a number`
+            )
+          } else if (
+            moment(room[key]).isValid() &&
+            typeof room[key] !== 'number' &&
+            key !== 'name'
+          ) {
+            expect(error.message).toBe(
+              `type of '${key}' is incorrect, must be a date`
+            )
+          } else if (typeof room[key] === 'string') {
+            expect(error.message).toBe(
+              `type of '${key}' is incorrect, must be a string`
+            )
+          } else if (Array.isArray(room[key])) {
+            expect(error.message).toBe(
+              `type of '${key}' is incorrect, must be an array`
+            )
+          }
+        }
+      )
+
+      it.each(Object.keys(room))(
+        'should trim and sanitize the field %s',
+        async (key) => {
+          expect.assertions(1)
+
+          const tmp: Room = Object.assign({}, room) as Room
+
+          if (typeof tmp[key] === 'string') {
+            tmp[key] = tmp[key] + '/                  '
+          }
+
+          context.data = Object.assign({}, tmp)
+
+          try {
+            result = (await checkData()(context)) as HookContext<Room>
+          } catch (e) {
+            error = e
+          }
+
+          if (typeof tmp[key] === 'string') {
+            expect(result.data[key]).toBe(`${room[key]}&#x2F;`)
+          } else {
+            expect(result.data[key]).toBe(room[key])
+          }
+        }
+      )
     })
 
     describe('patch', () => {
-      it.todo('nothing should append with correct data')
+      const room = {
+        day: 'lundi',
+        startAt: 'Tue May 12 2020 20:00:00 GMT+0000',
+        duration: 120,
+      }
 
-      it.todo('should not throw an error if some data are missing')
-      it.todo('should request correct data')
-      it.todo('should trim and sanitize data')
+      beforeEach(() => {
+        context = {
+          app: {} as Application,
+          service: {} as Service<Room>,
+          method: 'patch',
+          params: {},
+          path: serviceName,
+          type: 'before',
+        }
+
+        result = null
+        error = null
+      })
+
+      it('should not throw an error if some data are missing', async () => {
+        expect.assertions(2)
+
+        try {
+          result = (await checkData()(context)) as HookContext<Room>
+        } catch (e) {
+          error = e
+        }
+
+        expect(error).toBeNull()
+        expect(result).toEqual(context)
+      })
+
+      it.each([
+        ['campus', 1, "type of 'campus' is incorrect, must be a string"],
+        ['startAt', 'data', "type of 'startAt' is incorrect, must be a date"],
+        [
+          'duration',
+          'data',
+          "type of 'duration' is incorrect, must be a number",
+        ],
+      ])('should request correct data for %s', async (key, value, expected) => {
+        expect.assertions(1)
+
+        const data = {}
+        data[key] = value
+
+        context.data = data as Room
+
+        try {
+          await checkData()(context)
+        } catch (e) {
+          error = e
+        }
+
+        expect(error.message).toBe(expected)
+      })
+
+      it.each(Object.keys(room))(
+        'should trim and sanitize the field %s',
+        async (key) => {
+          expect.assertions(1)
+
+          const tmp: Room = Object.assign({}, room) as Room
+
+          if (typeof tmp[key] === 'string') {
+            tmp[key] = tmp[key] + '/                  '
+          }
+
+          context.data = Object.assign({}, tmp)
+
+          try {
+            result = (await checkData()(context)) as HookContext<Room>
+          } catch (e) {
+            error = e
+          }
+
+          if (typeof tmp[key] === 'string') {
+            expect(result.data[key]).toBe(`${room[key]}&#x2F;`)
+          } else {
+            expect(result.data[key]).toBe(room[key])
+          }
+        }
+      )
     })
   })
 })

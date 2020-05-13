@@ -49,7 +49,7 @@ describe(`'${serviceName}' service`, () => {
             .service(serviceName)
             .create({ name: subject.name })) as Subject
         } catch (error) {
-          // Do nothing, it just means the user already exists and can be tested
+          // Do nothing, it just means the subject already exists and can be tested
         }
       }
       done()
@@ -112,7 +112,7 @@ describe(`'${serviceName}' service`, () => {
       expect(patchedResult).toHaveProperty('updatedAt')
     })
 
-    it('should delete', async () => {
+    it('should remove', async () => {
       expect.assertions(5)
 
       const deleteResult: Subject = await app

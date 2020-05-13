@@ -31,6 +31,7 @@ describe(`'${serviceName}' service`, () => {
 
   describe('internal CRUD', () => {
     let result: User | null = null
+    let error: Error | null = null
 
     // User with admin permission
     const user: User = {
@@ -87,6 +88,29 @@ describe(`'${serviceName}' service`, () => {
 
     afterEach(() => {
       result = null
+      error = null
+    })
+    it('should find', async () => {
+      expect.assertions(4)
+      // Find all documents in the DB using mongoose
+      const dbResults: any = await app
+        .get('mongooseClient')
+        .model(serviceName)
+        .find()
+      const dbLength: number = dbResults.length
+
+      let results: Paginated<User>
+      try {
+        // Find data using the Feathersjs service
+        results = (await app.service(serviceName).find()) as Paginated<User>
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeNull()
+      expect(results).toBeDefined()
+      expect(results).toHaveProperty('total', dbLength)
+      expect(Array.isArray(results.data)).toBeTruthy()
     })
 
     it('should create a user removing admin permission', () => {
@@ -138,7 +162,6 @@ describe(`'${serviceName}' service`, () => {
 
     it('should not update (disallow)', async () => {
       expect.assertions(1)
-      let error: FeathersErrorJSON | null = null
       try {
         await app.service(serviceName).update(result._id, anotherUser)
       } catch (e) {
@@ -209,6 +232,26 @@ describe(`'${serviceName}' service`, () => {
       expect(patchedResult.difficultSubjectsIds).toEqual(
         expect.arrayContaining([newSubjects._id])
       )
+    })
+    it('should remove', async () => {
+      expect.assertions(9)
+
+      const deletedResult: User = await app
+        .service(serviceName)
+        .remove(result._id)
+
+      expect(deletedResult).toBeDefined()
+
+      expect(deletedResult).toHaveProperty('_id', result._id)
+      expect(deletedResult).toHaveProperty('lastName')
+      expect(deletedResult).toHaveProperty('firstName')
+      expect(deletedResult).toHaveProperty('email')
+      expect(deletedResult.password).not.toBe(user.password)
+
+      expect(deletedResult).toHaveProperty('permissions')
+
+      expect(deletedResult).toHaveProperty('createdAt')
+      expect(deletedResult).toHaveProperty('updatedAt')
     })
   })
 })

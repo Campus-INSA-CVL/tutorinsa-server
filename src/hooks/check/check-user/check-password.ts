@@ -2,7 +2,7 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import { Hook, HookContext } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
-import { User } from '../../declarations'
+import { User } from '../../../declarations'
 
 /**
  * Check that the password is strong enougth

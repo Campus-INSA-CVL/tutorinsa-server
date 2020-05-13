@@ -33,7 +33,7 @@ export default function (app: Application) {
         required: true,
         validate: {
           validator: (value: Date) =>
-            /^(0|3)0$/.test(value.getUTCHours().toString()),
+            /^(0|3)?0$/.test(value.getUTCMinutes().toString()),
           message: 'only 00 or 30 for minute is allowed for startAt',
         },
       },

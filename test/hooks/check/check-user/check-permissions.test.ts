@@ -1,6 +1,6 @@
-import checkPermissions from '../../../src/hooks/check/check-permissions'
+import checkPermissions from '../../../../src/hooks/check/check-user/check-permissions'
 import { HookContext, Service, Application } from '@feathersjs/feathers'
-import { User } from '../../../src/declarations'
+import { User } from '../../../../src/declarations'
 
 describe("'check-permissions' hook", () => {
   let context: HookContext<User>

@@ -3,15 +3,7 @@
 import { Hook, HookContext } from '@feathersjs/feathers'
 import validator from 'validator'
 import { BadRequest } from '@feathersjs/errors'
-import {
-  UserPermission,
-  Year,
-  Subject,
-  Department,
-  User,
-  Room,
-  RoomDays,
-} from '../../declarations'
+import { Year, Subject, Department, User, Room } from '../../declarations'
 import moment from '../../utils/moment'
 
 /**
@@ -38,12 +30,7 @@ function sanitizeStrings(
     if (data.hasOwnProperty(key)) {
       const element = data[key]
 
-      if (
-        typeof element === 'string' &&
-        !unwantedFields?.includes(key) &&
-        key !== 'password' &&
-        key !== 'email'
-      ) {
+      if (typeof element === 'string' && !unwantedFields?.includes(key)) {
         data[key] = trimSanitize(element)
       } else if (Array.isArray(element) && !unwantedFields?.includes(key)) {
         const tmp: string[] = []
@@ -94,7 +81,7 @@ function checkTypeofFields(
       }
       // Must be an date
     } else if (dateFields?.includes(key)) {
-      if (!moment(data[key]).isValid()) {
+      if (!moment(data[key]).isValid() || typeof data[key] === 'number') {
         throw new BadRequest(`type of '${key}' is incorrect, must be a date`)
       }
     }
