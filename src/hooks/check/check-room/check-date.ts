@@ -36,7 +36,7 @@ export default (options = {}): Hook => {
       keys.forEach((key) => {
         switch (key) {
           case 'startAt':
-            const minutes = moment(data[key]).minutes()
+            const minutes = moment(new Date(data[key])).minutes()
             if (!correctMinutes(minutes)) {
               throw new BadRequest('minutes must be 00 or 30')
             }

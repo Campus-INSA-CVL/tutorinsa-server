@@ -76,7 +76,10 @@ function checkTypeofFields(
       }
       // Must be an date
     } else if (dateFields?.includes(key)) {
-      if (!moment(data[key]).isValid() || typeof data[key] === 'number') {
+      if (
+        !moment(new Date(data[key])).isValid() ||
+        typeof data[key] === 'number'
+      ) {
         throw new BadRequest(`type of '${key}' is incorrect, must be a date`)
       }
     }
@@ -88,6 +91,14 @@ function checkTypeofFields(
       }
     }
   })
+}
+
+/**
+ * Normalize a date (to UTC)
+ * @param date
+ */
+function normalizeDate(date: string): string {
+  return new Date(date).toUTCString()
 }
 
 /**
@@ -203,10 +214,17 @@ export default (options = {}): Hook => {
               break
           }
 
+          // Sanitize before check type because of Date (can be valid before sanitized but invalid after sanitized)
+          ;(context.data as Room) = sanitizeStrings(data as Room) as Room
           // Check typeof room fields
           checkTypeofFields(data as Room, [], numberFieldsRoom, dateFieldsRoom)
+
           // Valid case
-          ;(context.data as Room) = sanitizeStrings(data as Room) as Room
+          if ((context.data as Room)?.startAt) {
+            ;(context.data as Room).startAt = normalizeDate(
+              (context.data as Room).startAt
+            )
+          }
           break
         default:
           break

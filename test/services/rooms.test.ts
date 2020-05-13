@@ -136,8 +136,8 @@ describe(`'${serviceName}' service`, () => {
 
       expect(error).toBeNull()
       if (key === 'startAt') {
-        expect(new Date(patchedResult[key]).toISOString()).toEqual(
-          new Date(value).toISOString()
+        expect(new Date(patchedResult[key]).toUTCString()).toEqual(
+          new Date(value).toUTCString()
         )
       } else {
         expect(patchedResult[key]).toEqual(value)

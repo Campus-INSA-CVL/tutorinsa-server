@@ -676,7 +676,7 @@ describe("'check-data' hook", () => {
               `type of '${key}' is incorrect, must be a number`
             )
           } else if (
-            moment(room[key]).isValid() &&
+            moment(new Date(room[key])).isValid() &&
             typeof room[key] !== 'number' &&
             key !== 'name'
           ) {
@@ -714,10 +714,12 @@ describe("'check-data' hook", () => {
             error = e
           }
 
-          if (typeof tmp[key] === 'string') {
+          if (typeof tmp[key] === 'string' && key !== 'startAt') {
             expect(result.data[key]).toBe(`${room[key]}&#x2F;`)
-          } else {
+          } else if (key !== 'startAt') {
             expect(result.data[key]).toBe(room[key])
+          } else if (key === 'startAt') {
+            expect(error).toBeInstanceOf(BadRequest)
           }
         }
       )
@@ -801,13 +803,36 @@ describe("'check-data' hook", () => {
             error = e
           }
 
-          if (typeof tmp[key] === 'string') {
+          if (typeof tmp[key] === 'string' && key !== 'startAt') {
             expect(result.data[key]).toBe(`${room[key]}&#x2F;`)
-          } else {
+          } else if (key !== 'startAt') {
             expect(result.data[key]).toBe(room[key])
+          } else if (key === 'startAt') {
+            expect(error).toBeInstanceOf(BadRequest)
           }
         }
       )
+
+      it('should normalize a valid date', async () => {
+        expect.assertions(2)
+
+        const data = {
+          startAt: 'Wed May 13 2020 23:54:46 GMT+0200',
+        }
+
+        context.data = Object.assign({}, data) as Room
+
+        try {
+          result = (await checkData()(context)) as HookContext<Room>
+        } catch (e) {
+          error = e
+        }
+
+        expect(error).toBeNull()
+        expect(result.data.startAt).toEqual(
+          new Date(data.startAt).toUTCString()
+        )
+      })
     })
   })
 })
