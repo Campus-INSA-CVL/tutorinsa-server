@@ -5,6 +5,8 @@
 import { Application } from '../declarations'
 import moment from '../utils/moment'
 
+import { checkMinutes, checkDuration } from './validation/validate'
+
 export default function (app: Application) {
   const modelName = 'rooms'
   const mongooseClient = app.get('mongooseClient')
@@ -31,19 +33,12 @@ export default function (app: Application) {
       startAt: {
         type: Date,
         required: true,
-        validate: {
-          validator: (value: Date) =>
-            /^(0|3)?0$/.test(value.getUTCMinutes().toString()),
-          message: 'only 00 or 30 for minute is allowed for startAt',
-        },
+        validate: checkMinutes,
       },
       duration: {
         type: Number,
         required: true,
-        validate: {
-          validator: (value: number) => !(value % 30),
-          message: 'only 00 or 30 for minute is allowed for duration',
-        },
+        validate: checkDuration,
       },
     },
     {

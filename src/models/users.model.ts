@@ -3,6 +3,7 @@
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 import { Application } from '../declarations'
+import { checkEmail } from './validation/validate'
 
 export default function (app: Application) {
   const modelName = 'users'
@@ -15,15 +16,7 @@ export default function (app: Application) {
         type: String,
         unique: true,
         lowercase: true,
-        validate: {
-          validator: (v: string) => {
-            const regex = new RegExp(
-              /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@insa-cvl\.fr$/
-            )
-            return regex.test(v)
-          },
-          message: (props: any) => `${props.value} is not a valid email`,
-        },
+        validate: checkEmail,
       },
       password: {
         type: String,
