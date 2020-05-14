@@ -14,14 +14,14 @@ import checkEmail from '../../hooks/check/check-user/check-email'
 
 import checkIds from '../../hooks/check/check-ids'
 
-const { authenticate } = feathersAuthentication.hooks
+// const { authenticate } = feathersAuthentication.hooks
 const { hashPassword, protect } = local.hooks
 
 export default {
   before: {
     all: [],
-    find: [authenticate('jwt')],
-    get: [authenticate('jwt')],
+    find: [],
+    get: [],
     create: [
       checkData(),
       checkDuplicate(),
@@ -33,6 +33,7 @@ export default {
     ],
     update: [disallow()],
     patch: [
+      ,
       checkData(),
       checkDuplicate(),
       checkIds(),
@@ -40,9 +41,8 @@ export default {
       checkPassword(),
       checkPermissions(),
       hashPassword('password'),
-      authenticate('jwt'),
     ],
-    remove: [authenticate('jwt')],
+    remove: [],
   },
 
   after: {
