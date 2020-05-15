@@ -4,8 +4,8 @@ import moment from '../../utils/moment'
  * Check that the value have minute equal to 00 or 30
  */
 const checkMinutes = {
-  validator: (value: Date) =>
-    /^(0|3)?0$/.test(value.getUTCMinutes().toString()),
+  validator: (value: string) =>
+    /^(0|3)?0$/.test(moment.utc(value).minutes().toString()),
   message: 'only 00 or 30 for minute is allowed for startAt',
 }
 
