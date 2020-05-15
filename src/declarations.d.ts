@@ -1,7 +1,6 @@
 /* tslint:disable:no-empty-interface */
 import { Application as ExpressFeathers } from '@feathersjs/express'
 import { Id } from '@feathersjs/feathers'
-import moment from './utils/moment'
 
 // A mapping of service names to types. Will be extended in service files.
 export interface ServiceTypes {}
@@ -68,4 +67,25 @@ export interface User {
   updatedAt?: string
 
   [key: string]: string | string[] | UserPermission[] | undefined | Id
+}
+
+export type PostType = 'eleve' | 'tuteur'
+
+export interface Post {
+  _id?: Id
+  comment: string
+  type: PostType
+  startAt: string
+  duration: number
+  studentsCapacity: number
+  tutorsCapacity: number
+  subjectId: string
+  studentsIds: string[]
+  tutorsIds: string[]
+  roomId: string
+  creatorId: string
+  createdAt?: string
+  updatedAt?: string
+
+  [key: string]: string | string[] | number | PostType | undefined | Id
 }

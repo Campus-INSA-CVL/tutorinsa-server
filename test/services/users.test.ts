@@ -1,4 +1,4 @@
-import { MethodNotAllowed, FeathersErrorJSON } from '@feathersjs/errors'
+import { MethodNotAllowed } from '@feathersjs/errors'
 import app from '../../src/app'
 import { Paginated } from '@feathersjs/feathers'
 import addDataToUser from '../utils/addDataToUser'
@@ -196,9 +196,12 @@ describe(`'${serviceName}' service`, () => {
     it('should patch the departmentId', async () => {
       expect.assertions(2)
 
-      const newDepartment: Department = await app
-        .service('departments')
-        .create({ name: 'STI' })
+      let newDepartment: Department
+      try {
+        newDepartment = await app.service('departments').create({ name: 'STI' })
+      } catch (e) {
+        error = e
+      }
 
       const patchedResult: User = await app
         .service(serviceName)
@@ -211,26 +214,29 @@ describe(`'${serviceName}' service`, () => {
     it('should patch subjectsId', async () => {
       expect.assertions(2)
 
-      const newSubjects: Subject = await app
-        .service('subjects')
-        .create({ name: 'CC' })
+      let newSubject: Subject
+      try {
+        newSubject = await app.service('subjects').create({ name: 'CC' })
+      } catch (e) {
+        error = e
+      }
 
       let patchedResult: User
 
       patchedResult = (await app.service(serviceName).patch(result._id, {
-        favoriteSubjectsIds: [newSubjects._id.toString()],
+        favoriteSubjectsIds: [newSubject._id.toString()],
       })) as User
 
       expect(patchedResult.favoriteSubjectsIds).toEqual(
-        expect.arrayContaining([newSubjects._id])
+        expect.arrayContaining([newSubject._id])
       )
 
       patchedResult = (await app.service(serviceName).patch(result._id, {
-        difficultSubjectsIds: [newSubjects._id.toString()],
+        difficultSubjectsIds: [newSubject._id.toString()],
       })) as User
 
       expect(patchedResult.difficultSubjectsIds).toEqual(
-        expect.arrayContaining([newSubjects._id])
+        expect.arrayContaining([newSubject._id])
       )
     })
     it('should remove', async () => {

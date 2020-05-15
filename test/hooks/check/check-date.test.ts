@@ -1,6 +1,6 @@
-import checkDate from '../../../../src/hooks/check/check-room/check-date'
+import checkDate from '../../../src/hooks/check/check-date'
 import { HookContext, Application, Service } from '@feathersjs/feathers'
-import { Room } from '../../../../src/declarations'
+import { Room } from '../../../src/declarations'
 import { BadRequest } from '@feathersjs/errors'
 
 describe("'check-date' hook", () => {

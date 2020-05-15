@@ -835,4 +835,19 @@ describe("'check-data' hook", () => {
       })
     })
   })
+
+  describe("'posts'", () => {
+    describe('create', () => {
+      it.todo('nothing should append with correct data')
+      it.todo('should request correct fields (%s is missing)')
+      it.todo('shoud request correct data (typeof %s is wrong)')
+      it.todo('should trim and sanitize the field %s')
+    })
+    describe('patch', () => {
+      it.todo('should not throw an error if some data are missing')
+      it.todo('should request correct data for %s')
+      it.todo('should trim and sanitize the field %s')
+      it.todo('should normalize a valid date')
+    })
+  })
 })

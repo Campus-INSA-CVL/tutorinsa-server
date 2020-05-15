@@ -18,10 +18,10 @@ const checkDuration = {
 }
 
 /**
- * Check that the Date is after today
+ * Check that the value is after today
  */
 const checkDate = {
-  validator: (value: Date) => moment().diff(value) < 0,
+  validator: (value: string) => moment().diff(value) < 0,
   message: "can't register with a date in the past",
 }
 

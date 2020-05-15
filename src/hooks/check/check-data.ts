@@ -3,7 +3,15 @@
 import { Hook, HookContext } from '@feathersjs/feathers'
 import validator from 'validator'
 import { BadRequest } from '@feathersjs/errors'
-import { Year, Subject, Department, User, Room } from '../../declarations'
+import {
+  Year,
+  Subject,
+  Department,
+  User,
+  Room,
+  Post,
+  PostType,
+} from '../../declarations'
 import moment from '../../utils/moment'
 
 /**
@@ -23,9 +31,9 @@ function trimSanitize(value: string): string {
  * @returns the sanitized object
  */
 function sanitizeStrings(
-  data: User | Room,
+  data: User | Room | Post,
   unwantedFields?: string[]
-): User | Room {
+): User | Room | Post {
   for (const key in data) {
     if (data.hasOwnProperty(key)) {
       const element = data[key]
@@ -105,8 +113,14 @@ function normalizeDate(date: string): string {
  * Validate (type) and sanitize data from the hook context (able to manage many services)
  */
 export default (options = {}): Hook => {
-  return async (context: HookContext<User | Year | Subject | Department>) => {
+  return async (
+    context: HookContext<User | Year | Subject | Department | Post>
+  ) => {
     const { path, method, data } = context
+
+    /**
+     * USER
+     */
 
     // Fields of user which are array
     const arrayFieldsUser = [
@@ -118,11 +132,32 @@ export default (options = {}): Hook => {
     // Fields of user which will be not sanitize
     const unwantedFieldsUser = ['password', 'email']
 
+    /**
+     * ROOM
+     */
+
     // Fields of room which are number
     const numberFieldsRoom = ['duration']
 
     // Fields of room which are date
     const dateFieldsRoom = ['startAt']
+
+    /**
+     * POST
+     */
+
+    // Fields of post which are array
+    const arrayFieldsPost = ['studentsIds', 'tutorsIds']
+
+    // Fields of post which are number
+    const numberFieldsPost = ['duration', 'studentsCapacity', 'tutorsCapacity']
+
+    // Fields of post which are date
+    const dateFieldsPost = ['startAt']
+
+    /**
+     * CHECK
+     */
 
     if (data) {
       switch (path) {
@@ -223,6 +258,44 @@ export default (options = {}): Hook => {
           if ((context.data as Room)?.startAt) {
             ;(context.data as Room).startAt = normalizeDate(
               (context.data as Room).startAt
+            )
+          }
+          break
+        case 'posts':
+          switch (method) {
+            case 'create':
+              if (
+                !(data as Post).comment ||
+                !(data as Post).type ||
+                !(data as Post).startAt ||
+                !(data as Post).duration ||
+                !(data as Post).studentsCapacity ||
+                !(data as Post).tutorsCapacity ||
+                !(data as Post).subjectId ||
+                !(data as Post).roomId
+              ) {
+                throw new BadRequest('some data are missing')
+              }
+              // Here we are sure that all fields are present
+              break
+            case 'patch':
+              break
+          }
+
+          // Sanitize before check type because of Date (can be valid before sanitized but invalid after sanitized)
+          ;(context.data as Post) = sanitizeStrings(data as Post) as Post
+          // Check typeof post fields
+          checkTypeofFields(
+            data as Post,
+            arrayFieldsPost,
+            numberFieldsPost,
+            dateFieldsPost
+          )
+
+          // Valid case
+          if ((context.data as Post)?.startAt) {
+            ;(context.data as Post).startAt = normalizeDate(
+              (context.data as Post).startAt
             )
           }
           break

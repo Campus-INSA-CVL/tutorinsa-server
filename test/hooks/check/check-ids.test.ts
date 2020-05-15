@@ -4,10 +4,10 @@ import { User } from '../../../src/declarations'
 import { BadRequest } from '@feathersjs/errors'
 
 describe("'check-array-content' hook", () => {
-  let context: HookContext<User>
+  let context: HookContext<any>
 
   let error: Error | null
-  let result: HookContext<User>
+  let result: HookContext<any>
 
   let user: User
 
@@ -39,7 +39,7 @@ describe("'check-array-content' hook", () => {
     expect.assertions(2)
 
     try {
-      result = (await checkIds()(context)) as HookContext<User>
+      result = (await checkIds()(context)) as HookContext<any>
     } catch (e) {
       error = e
     }
