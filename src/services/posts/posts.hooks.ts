@@ -19,6 +19,8 @@ import checkCapacity from '../../hooks/check/check-post/check-capacity'
 import removeUnwantedFields from '../../hooks/remove-unwanted-fields'
 import { Options } from '../../declarations'
 
+import normalizeDate from '../../hooks/normalize-date'
+
 const checkDataOptions: Options = {
   fields: [
     'comment',
@@ -51,6 +53,7 @@ export default {
       checkType(),
       checkLength(),
       checkCapacity(),
+      normalizeDate(['startAt']),
       removeUnwantedFields(unwantedFields),
     ],
     update: [disallow()],
@@ -63,6 +66,7 @@ export default {
       checkTime(),
       checkLength(),
       checkCapacity(),
+      normalizeDate(['startAt']),
       iff(isProvider('external'), removeUnwantedFields(unwantedFields)),
     ],
     remove: [],

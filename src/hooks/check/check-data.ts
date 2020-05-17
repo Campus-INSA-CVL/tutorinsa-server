@@ -61,20 +61,12 @@ function sanitizeStrings(
 }
 
 /**
- * Normalize a date (to UTC)
- * @param date
- */
-function normalizeDate(date: string): string {
-  return new Date(date).toUTCString()
-}
-
-/**
  * Check the type of fields, depending of params
  * @param data
  * @param options
  */
 function checkTypeofFields(
-  data: User | Year | Subject | Department | Post,
+  data: User | Year | Subject | Department | Post | Room,
   options: Options
 ): void {
   data = Object.assign({}, data)
@@ -118,7 +110,7 @@ function checkTypeofFields(
  * @param fields
  */
 function checkMissingFields(
-  data: User | Year | Subject | Department | Post,
+  data: User | Year | Subject | Department | Post | Room,
   fields: Options['fields']
 ) {
   // All keys from the data
@@ -136,48 +128,17 @@ function checkMissingFields(
  */
 export default (options: Options): Hook => {
   return async (
-    context: HookContext<User | Year | Subject | Department | Post>
+    context: HookContext<User | Year | Subject | Department | Post | Room>
   ) => {
-    const { path, method, data } = context
+    const { method, data } = context
 
     if (data) {
-      switch (method) {
-        case 'create':
-          checkMissingFields(data, options.fields)
-          break
-        default:
-          break
+      if (method === 'create') {
+        checkMissingFields(data, options.fields)
       }
       // Sanitize before check type because of Date (can be valid before sanitized but invalid after sanitized)
       context.data = sanitizeStrings(data, options)
       checkTypeofFields(data, options)
-
-      switch (path) {
-        case 'users':
-          break
-        case 'years':
-          break
-        case 'departments':
-          break
-        case 'subjects':
-          break
-        case 'rooms':
-          if ((context.data as Room)?.startAt) {
-            ;(context.data as Room).startAt = normalizeDate(
-              (context.data as Room).startAt
-            )
-          }
-          break
-        case 'posts':
-          if ((context.data as Post)?.startAt) {
-            ;(context.data as Post).startAt = normalizeDate(
-              (context.data as Post).startAt
-            )
-          }
-          break
-        default:
-          break
-      }
     }
 
     return context

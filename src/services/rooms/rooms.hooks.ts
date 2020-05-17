@@ -4,6 +4,7 @@ import checkDate from '../../hooks/check/check-date'
 import checkCampus from '../../hooks/check/check-room/check-campus'
 import checkDay from '../../hooks/check/check-room/check-day'
 import { Options } from '../../declarations'
+import normalizeDate from '../../hooks/normalize-date'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const checkDataOptions: Options = {
@@ -22,6 +23,7 @@ export default {
       checkDate(),
       checkCampus(),
       checkDay(),
+      normalizeDate(['startAt']),
     ],
     update: [disallow()],
     patch: [
@@ -29,6 +31,7 @@ export default {
       checkDate(),
       checkCampus(),
       checkDay(),
+      normalizeDate(['startAt']),
     ],
     remove: [],
   },

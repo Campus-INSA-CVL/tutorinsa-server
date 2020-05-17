@@ -12,7 +12,7 @@ function getUserId(params: Params): Id {
   if (!user) {
     throw new NotAuthenticated('must be authenticated to create a post')
   } else if (!(user as User)._id) {
-    throw new GeneralError("can't access to the uid")
+    throw new GeneralError("can't access to the user id")
   } else {
     return (user as User)._id!
   }
