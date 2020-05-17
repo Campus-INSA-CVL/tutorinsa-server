@@ -3,16 +3,33 @@ import checkData from '../../hooks/check/check-data'
 import checkDate from '../../hooks/check/check-date'
 import checkCampus from '../../hooks/check/check-room/check-campus'
 import checkDay from '../../hooks/check/check-room/check-day'
+import { Options } from '../../declarations'
 // Don't remove this comment. It's needed to format import lines nicely.
+
+const checkDataOptions: Options = {
+  fields: ['campus', 'name', 'day', 'startAt', 'duration'],
+  numberFields: ['duration'],
+  dateFields: ['startAt'],
+}
 
 export default {
   before: {
     all: [],
     find: [],
     get: [],
-    create: [checkData(), checkDate(), checkCampus(), checkDay()],
+    create: [
+      checkData(checkDataOptions),
+      checkDate(),
+      checkCampus(),
+      checkDay(),
+    ],
     update: [disallow()],
-    patch: [checkData(), checkDate(), checkCampus(), checkDay()],
+    patch: [
+      checkData(checkDataOptions),
+      checkDate(),
+      checkCampus(),
+      checkDay(),
+    ],
     remove: [],
   },
 

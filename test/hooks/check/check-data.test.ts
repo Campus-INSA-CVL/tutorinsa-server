@@ -7,6 +7,7 @@ import {
   Department,
   Subject,
   Room,
+  Options,
 } from '../../../src/declarations'
 import moment from '../../../src/utils/moment'
 
@@ -26,7 +27,7 @@ describe("'check-data' hook", () => {
     }
 
     try {
-      result = (await checkData()(context)) as HookContext<any>
+      result = (await checkData({} as Options)(context)) as HookContext<any>
     } catch (e) {
       error = e
     }
@@ -43,6 +44,10 @@ describe("'check-data' hook", () => {
     let error: Error | null
     const year: Year = {
       name: '2a',
+    }
+
+    const checkDataOptions: Options = {
+      fields: ['name'],
     }
 
     beforeEach(() => {
@@ -65,7 +70,9 @@ describe("'check-data' hook", () => {
       context.data = Object.assign({}, year)
 
       try {
-        result = (await checkData()(context)) as HookContext<Year>
+        result = (await checkData(checkDataOptions)(context)) as HookContext<
+          Year
+        >
       } catch (e) {
         error = e
       }
@@ -81,13 +88,15 @@ describe("'check-data' hook", () => {
       context.data = {}
 
       try {
-        result = (await checkData()(context)) as HookContext<Year>
+        result = (await checkData(checkDataOptions)(context)) as HookContext<
+          Year
+        >
       } catch (e) {
         error = e
       }
 
       expect(error).toBeInstanceOf(BadRequest)
-      expect(error.message).toBe('request must contain correct fields')
+      expect(error.message).toBe(`'name' is missing`)
     })
 
     it('shoud request correct data', async () => {
@@ -97,7 +106,9 @@ describe("'check-data' hook", () => {
       context.data = { name: 1 }
 
       try {
-        result = (await checkData()(context)) as HookContext<Year>
+        result = (await checkData(checkDataOptions)(context)) as HookContext<
+          Year
+        >
       } catch (e) {
         error = e
       }
@@ -114,7 +125,9 @@ describe("'check-data' hook", () => {
       context.data = { name: '   8a/  ' }
 
       try {
-        result = (await checkData()(context)) as HookContext<Year>
+        result = (await checkData(checkDataOptions)(context)) as HookContext<
+          Year
+        >
       } catch (e) {
         error = e
       }
@@ -131,6 +144,10 @@ describe("'check-data' hook", () => {
     let error: Error | null
     const subject: Subject = {
       name: 'CC',
+    }
+
+    const checkDataOptions: Options = {
+      fields: ['name'],
     }
 
     beforeEach(() => {
@@ -153,7 +170,9 @@ describe("'check-data' hook", () => {
       context.data = Object.assign({}, subject)
 
       try {
-        result = (await checkData()(context)) as HookContext<Subject>
+        result = (await checkData(checkDataOptions)(context)) as HookContext<
+          Subject
+        >
       } catch (e) {
         error = e
       }
@@ -169,13 +188,15 @@ describe("'check-data' hook", () => {
       context.data = {}
 
       try {
-        result = (await checkData()(context)) as HookContext<Subject>
+        result = (await checkData(checkDataOptions)(context)) as HookContext<
+          Subject
+        >
       } catch (e) {
         error = e
       }
 
       expect(error).toBeInstanceOf(BadRequest)
-      expect(error.message).toBe('request must contain correct fields')
+      expect(error.message).toBe(`'name' is missing`)
     })
 
     it('shoud request correct data', async () => {
@@ -185,7 +206,9 @@ describe("'check-data' hook", () => {
       context.data = { name: 1 }
 
       try {
-        result = (await checkData()(context)) as HookContext<Subject>
+        result = (await checkData(checkDataOptions)(context)) as HookContext<
+          Subject
+        >
       } catch (e) {
         error = e
       }
@@ -202,7 +225,9 @@ describe("'check-data' hook", () => {
       context.data = { name: '   CC/  ' }
 
       try {
-        result = (await checkData()(context)) as HookContext<Subject>
+        result = (await checkData(checkDataOptions)(context)) as HookContext<
+          Subject
+        >
       } catch (e) {
         error = e
       }
@@ -219,6 +244,10 @@ describe("'check-data' hook", () => {
     let error: Error | null
     const department: Department = {
       name: 'STI',
+    }
+
+    const checkDataOptions: Options = {
+      fields: ['name'],
     }
 
     beforeEach(() => {
@@ -241,7 +270,9 @@ describe("'check-data' hook", () => {
       context.data = Object.assign({}, department)
 
       try {
-        result = (await checkData()(context)) as HookContext<Department>
+        result = (await checkData(checkDataOptions)(context)) as HookContext<
+          Department
+        >
       } catch (e) {
         error = e
       }
@@ -257,13 +288,15 @@ describe("'check-data' hook", () => {
       context.data = {}
 
       try {
-        result = (await checkData()(context)) as HookContext<Department>
+        result = (await checkData(checkDataOptions)(context)) as HookContext<
+          Department
+        >
       } catch (e) {
         error = e
       }
 
       expect(error).toBeInstanceOf(BadRequest)
-      expect(error.message).toBe('request must contain correct fields')
+      expect(error.message).toBe(`'name' is missing`)
     })
 
     it('shoud request correct data', async () => {
@@ -273,7 +306,9 @@ describe("'check-data' hook", () => {
       context.data = { name: 1 }
 
       try {
-        result = (await checkData()(context)) as HookContext<Department>
+        result = (await checkData(checkDataOptions)(context)) as HookContext<
+          Department
+        >
       } catch (e) {
         error = e
       }
@@ -290,7 +325,9 @@ describe("'check-data' hook", () => {
       context.data = { name: '   sti/  ' }
 
       try {
-        result = (await checkData()(context)) as HookContext<Department>
+        result = (await checkData(checkDataOptions)(context)) as HookContext<
+          Department
+        >
       } catch (e) {
         error = e
       }
@@ -305,6 +342,26 @@ describe("'check-data' hook", () => {
 
     let result: HookContext<User>
     let error: Error | null
+
+    const checkDataOptions: Options = {
+      fields: [
+        'lastName',
+        'firstName',
+        'email',
+        'password',
+        'permissions',
+        'yearId',
+        'departmentId',
+        'favoriteSubjectsIds',
+        'difficultSubjectsIds',
+      ],
+      arrayFields: [
+        'permissions',
+        'favoriteSubjectsIds',
+        'difficultSubjectsIds',
+      ],
+      unwantedFields: ['password', 'email'],
+    }
 
     describe('create', () => {
       const user: User = {
@@ -339,7 +396,9 @@ describe("'check-data' hook", () => {
         context.data = Object.assign({}, user)
 
         try {
-          result = (await checkData()(context)) as HookContext<User>
+          result = (await checkData(checkDataOptions)(context)) as HookContext<
+            User
+          >
         } catch (e) {
           error = e
         }
@@ -360,13 +419,13 @@ describe("'check-data' hook", () => {
           context.data = Object.assign({}, tmp)
 
           try {
-            await checkData()(context)
+            await checkData(checkDataOptions)(context)
           } catch (e) {
             error = e
           }
 
           expect(error).toBeInstanceOf(BadRequest)
-          expect(error.message).toBe('some data are missing')
+          expect(error.message).toBe(`'${key}' is missing`)
         }
       )
 
@@ -383,7 +442,7 @@ describe("'check-data' hook", () => {
           context.data = Object.assign({}, tmp)
 
           try {
-            await checkData()(context)
+            await checkData(checkDataOptions)(context)
           } catch (e) {
             error = e
           }
@@ -421,7 +480,9 @@ describe("'check-data' hook", () => {
           context.data = Object.assign({}, tmp)
 
           try {
-            result = (await checkData()(context)) as HookContext<User>
+            result = (await checkData(checkDataOptions)(
+              context
+            )) as HookContext<User>
           } catch (e) {
             error = e
           }
@@ -449,7 +510,9 @@ describe("'check-data' hook", () => {
         context.data = Object.assign({}, tmp)
 
         try {
-          result = (await checkData()(context)) as HookContext<User>
+          result = (await checkData(checkDataOptions)(context)) as HookContext<
+            User
+          >
         } catch (e) {
           error = e
         }
@@ -466,7 +529,9 @@ describe("'check-data' hook", () => {
         context.data = Object.assign({}, tmp)
 
         try {
-          result = (await checkData()(context)) as HookContext<User>
+          result = (await checkData(checkDataOptions)(context)) as HookContext<
+            User
+          >
         } catch (e) {
           error = e
         }
@@ -503,7 +568,9 @@ describe("'check-data' hook", () => {
         expect.assertions(2)
 
         try {
-          result = (await checkData()(context)) as HookContext<User>
+          result = (await checkData(checkDataOptions)(context)) as HookContext<
+            User
+          >
         } catch (e) {
           error = e
         }
@@ -533,7 +600,7 @@ describe("'check-data' hook", () => {
         context.data = data as User
 
         try {
-          await checkData()(context)
+          await checkData(checkDataOptions)(context)
         } catch (e) {
           error = e
         }
@@ -561,7 +628,9 @@ describe("'check-data' hook", () => {
           context.data = Object.assign({}, tmp)
 
           try {
-            result = (await checkData()(context)) as HookContext<User>
+            result = (await checkData(checkDataOptions)(
+              context
+            )) as HookContext<User>
           } catch (e) {
             error = e
           }
@@ -588,6 +657,12 @@ describe("'check-data' hook", () => {
     let result: HookContext<Room>
 
     let error: Error | null
+
+    const checkDataOptions: Options = {
+      fields: ['campus', 'name', 'day', 'startAt', 'duration'],
+      numberFields: ['duration'],
+      dateFields: ['startAt'],
+    }
 
     describe('create', () => {
       const room: Room = {
@@ -618,7 +693,9 @@ describe("'check-data' hook", () => {
         context.data = Object.assign({}, room)
 
         try {
-          result = (await checkData()(context)) as HookContext<Room>
+          result = (await checkData(checkDataOptions)(context)) as HookContext<
+            Room
+          >
         } catch (e) {
           error = e
         }
@@ -639,13 +716,13 @@ describe("'check-data' hook", () => {
           context.data = Object.assign({}, tmp)
 
           try {
-            await checkData()(context)
+            await checkData(checkDataOptions)(context)
           } catch (e) {
             error = e
           }
 
           expect(error).toBeInstanceOf(BadRequest)
-          expect(error.message).toBe('some data are missing')
+          expect(error.message).toBe(`'${key}' is missing`)
         }
       )
 
@@ -665,7 +742,7 @@ describe("'check-data' hook", () => {
           context.data = Object.assign({}, tmp)
 
           try {
-            await checkData()(context)
+            await checkData(checkDataOptions)(context)
           } catch (e) {
             error = e
           }
@@ -709,7 +786,9 @@ describe("'check-data' hook", () => {
           context.data = Object.assign({}, tmp)
 
           try {
-            result = (await checkData()(context)) as HookContext<Room>
+            result = (await checkData(checkDataOptions)(
+              context
+            )) as HookContext<Room>
           } catch (e) {
             error = e
           }
@@ -750,7 +829,9 @@ describe("'check-data' hook", () => {
         expect.assertions(2)
 
         try {
-          result = (await checkData()(context)) as HookContext<Room>
+          result = (await checkData(checkDataOptions)(context)) as HookContext<
+            Room
+          >
         } catch (e) {
           error = e
         }
@@ -776,7 +857,7 @@ describe("'check-data' hook", () => {
         context.data = data as Room
 
         try {
-          await checkData()(context)
+          await checkData(checkDataOptions)(context)
         } catch (e) {
           error = e
         }
@@ -798,7 +879,9 @@ describe("'check-data' hook", () => {
           context.data = Object.assign({}, tmp)
 
           try {
-            result = (await checkData()(context)) as HookContext<Room>
+            result = (await checkData(checkDataOptions)(
+              context
+            )) as HookContext<Room>
           } catch (e) {
             error = e
           }
@@ -823,7 +906,9 @@ describe("'check-data' hook", () => {
         context.data = Object.assign({}, data) as Room
 
         try {
-          result = (await checkData()(context)) as HookContext<Room>
+          result = (await checkData(checkDataOptions)(context)) as HookContext<
+            Room
+          >
         } catch (e) {
           error = e
         }

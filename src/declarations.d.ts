@@ -7,6 +7,13 @@ export interface ServiceTypes {}
 // The application instance type that will be used everywhere else
 export type Application = ExpressFeathers<ServiceTypes>
 
+export interface Options {
+  fields: string[]
+  arrayFields?: string[]
+  numberFields?: string[]
+  dateFields?: string[]
+  unwantedFields?: string[]
+}
 export interface Year {
   _id?: Id
   name: string
@@ -59,14 +66,14 @@ export interface User {
   email: string
   password: string
   permissions: UserPermission[]
-  yearId: string
-  departmentId: string
-  favoriteSubjectsIds: string[]
-  difficultSubjectsIds: string[]
+  yearId: Id
+  departmentId: Id
+  favoriteSubjectsIds: Id[]
+  difficultSubjectsIds: Id[]
   createdAt?: string
   updatedAt?: string
 
-  [key: string]: string | string[] | UserPermission[] | undefined | Id
+  [key: string]: string | string[] | UserPermission[] | undefined | Id | Id[]
 }
 
 export type PostType = 'eleve' | 'tuteur'
@@ -79,13 +86,13 @@ export interface Post {
   duration: number
   studentsCapacity: number
   tutorsCapacity: number
-  subjectId: string
-  studentsIds: string[]
-  tutorsIds: string[]
-  roomId: string
-  creatorId: string
+  subjectId: Id
+  studentsIds: Id[]
+  tutorsIds: Id[]
+  roomId: Id
+  creatorId: Id
   createdAt?: string
   updatedAt?: string
 
-  [key: string]: string | string[] | number | PostType | undefined | Id
+  [key: string]: string | string[] | number | PostType | undefined | Id | Id[]
 }

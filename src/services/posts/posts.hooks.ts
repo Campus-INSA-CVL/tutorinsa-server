@@ -17,6 +17,23 @@ import checkLength from '../../hooks/check/check-post/check-length'
 import checkCapacity from '../../hooks/check/check-post/check-capacity'
 
 import removeUnwantedFields from '../../hooks/remove-unwanted-fields'
+import { Options } from '../../declarations'
+
+const checkDataOptions: Options = {
+  fields: [
+    'comment',
+    'type',
+    'startAt',
+    'duration',
+    'studentsCapacity',
+    'tutorsCapacity',
+    'subjectId',
+    'roomId',
+  ],
+  arrayFields: ['studentsIds', 'tutorsIds'],
+  numberFields: ['duration', 'studentsCapacity', 'tutorsCapacity'],
+  dateFields: ['startAt'],
+}
 
 const unwantedFields = ['studentsIds', 'tutorsIds', 'creatorId']
 
@@ -26,7 +43,7 @@ export default {
     find: [],
     get: [],
     create: [
-      checkData(),
+      checkData(checkDataOptions),
       checkDuplicate(),
       checkIds(),
       checkTime(),

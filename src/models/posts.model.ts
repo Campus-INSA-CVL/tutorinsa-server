@@ -54,6 +54,7 @@ export default function (app: Application) {
           type: mongooseClient.Schema.Types.ObjectId,
           ref: 'users',
           required: true,
+          default: [],
         },
       ],
       tutorsIds: [
@@ -61,6 +62,7 @@ export default function (app: Application) {
           type: mongooseClient.Schema.Types.ObjectId,
           ref: 'users',
           required: true,
+          default: [],
         },
       ],
       roomId: {

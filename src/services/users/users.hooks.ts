@@ -13,9 +13,26 @@ import checkEmail from '../../hooks/check/check-user/check-email'
 import checkPassword from '../../hooks/check/check-user/check-password'
 
 import checkPermissions from '../../hooks/check/check-user/check-permissions'
+import { Options } from '../../declarations'
 
 // const { authenticate } = feathersAuthentication.hooks
 const { hashPassword, protect } = local.hooks
+
+const checkDataOptions: Options = {
+  fields: [
+    'lastName',
+    'firstName',
+    'email',
+    'password',
+    'permissions',
+    'yearId',
+    'departmentId',
+    'favoriteSubjectsIds',
+    'difficultSubjectsIds',
+  ],
+  arrayFields: ['permissions', 'favoriteSubjectsIds', 'difficultSubjectsIds'],
+  unwantedFields: ['password', 'email'],
+}
 
 export default {
   before: {
@@ -23,7 +40,7 @@ export default {
     find: [],
     get: [],
     create: [
-      checkData(),
+      checkData(checkDataOptions),
       checkDuplicate(),
       checkIds(),
       checkEmail(),
@@ -33,7 +50,7 @@ export default {
     ],
     update: [disallow()],
     patch: [
-      checkData(),
+      checkData(checkDataOptions),
       checkDuplicate(),
       checkIds(),
       checkEmail(),

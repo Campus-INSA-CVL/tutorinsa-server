@@ -1,15 +1,20 @@
 import { disallow } from 'feathers-hooks-common'
 import checkData from '../../hooks/check/check-data'
+import { Options } from '../../declarations'
 // Don't remove this comment. It's needed to format import lines nicely.
+
+const checkDataOptions: Options = {
+  fields: ['name'],
+}
 
 export default {
   before: {
     all: [],
     find: [],
     get: [],
-    create: [checkData()],
+    create: [checkData(checkDataOptions)],
     update: [disallow()],
-    patch: [checkData()],
+    patch: [checkData(checkDataOptions)],
     remove: [],
   },
 
