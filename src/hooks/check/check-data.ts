@@ -32,9 +32,9 @@ function trimSanitize(value: string): string {
  * @returns the sanitized object
  */
 function sanitizeStrings(
-  data: User | Room | Post,
+  data: User | Year | Subject | Department | Post,
   options: Options
-): User | Room | Post {
+): User | Year | Subject | Department | Post {
   for (const key in data) {
     if (data.hasOwnProperty(key)) {
       const element = data[key]
@@ -142,42 +142,20 @@ export default (options: Options): Hook => {
         default:
           break
       }
+      // Sanitize before check type because of Date (can be valid before sanitized but invalid after sanitized)
+      context.data = sanitizeStrings(data, options)
+      checkTypeofFields(data, options)
+
       switch (path) {
         case 'users':
-          // Check typeof user fields
-          checkTypeofFields(data as User, options)
-          // Valid case
-          ;(context.data as User) = sanitizeStrings(
-            data as User,
-            options
-          ) as User
           break
         case 'years':
-          checkTypeofFields(data as Year, options)
-          // Valid case
-          ;(data as Year).name = trimSanitize((data as Year).name)
-
           break
         case 'departments':
-          checkTypeofFields(data as Department, options)
-          // Valid case
-          ;(data as Department).name = trimSanitize((data as Department).name)
-
           break
         case 'subjects':
-          checkTypeofFields(data as Subject, options)
-          // Valid case
-          ;(data as Subject).name = trimSanitize((data as Subject).name)
           break
         case 'rooms':
-          // Sanitize before check type because of Date (can be valid before sanitized but invalid after sanitized)
-          ;(context.data as Room) = sanitizeStrings(
-            data as Room,
-            options
-          ) as Room
-          // Check typeof room fields
-          checkTypeofFields(data as Room, options)
-
           // Valid case
           if ((context.data as Room)?.startAt) {
             ;(context.data as Room).startAt = normalizeDate(
@@ -186,14 +164,6 @@ export default (options: Options): Hook => {
           }
           break
         case 'posts':
-          // Sanitize before check type because of Date (can be valid before sanitized but invalid after sanitized)
-          ;(context.data as Post) = sanitizeStrings(
-            data as Post,
-            options
-          ) as Post
-          // Check typeof post fields
-          checkTypeofFields(data as Post, options)
-
           // Valid case
           if ((context.data as Post)?.startAt) {
             ;(context.data as Post).startAt = normalizeDate(

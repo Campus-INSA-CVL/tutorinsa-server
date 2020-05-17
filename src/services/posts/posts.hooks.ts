@@ -55,7 +55,7 @@ export default {
     ],
     update: [disallow()],
     patch: [
-      checkData(),
+      checkData(checkDataOptions),
       checkDuplicate(),
       checkIds(),
       checkDate(),

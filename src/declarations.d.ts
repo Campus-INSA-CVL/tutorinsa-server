@@ -19,6 +19,8 @@ export interface Year {
   name: string
   createdAt?: string
   updatedAt?: string
+
+  [key: string]: Id | string | undefined
 }
 
 export interface Subject {
@@ -26,12 +28,16 @@ export interface Subject {
   name: string
   createdAt?: string
   updatedAt?: string
+
+  [key: string]: Id | string | undefined
 }
 export interface Department {
   _id?: Id
   name: string
   createdAt?: string
   updatedAt?: string
+
+  [key: string]: Id | string | undefined
 }
 
 export type RoomCampus = 'blois' | 'bourges'
