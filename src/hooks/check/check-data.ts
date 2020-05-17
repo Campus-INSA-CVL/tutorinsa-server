@@ -73,27 +73,30 @@ function normalizeDate(date: string): string {
  * @param data
  * @param options
  */
-function checkTypeofFields(data: any, options: Options): void {
+function checkTypeofFields(
+  data: User | Year | Subject | Department | Post,
+  options: Options
+): void {
   data = Object.assign({}, data)
-  const keys: string[] = Object.keys(data as any)
+  const keys: string[] = Object.keys(data)
 
   keys.forEach((key) => {
     // Must be an array
     if (options.arrayFields?.includes(key)) {
       // But it's not
-      if (!Array.isArray((data as any)[key])) {
+      if (!Array.isArray(data[key])) {
         throw new BadRequest(`type of '${key}' is incorrect, must be an array`)
       }
       // Must be an number
     } else if (options.numberFields?.includes(key)) {
       // But it's not
-      if (typeof (data as any)[key] !== 'number') {
+      if (typeof data[key] !== 'number') {
         throw new BadRequest(`type of '${key}' is incorrect, must be a number`)
       }
       // Must be an date
     } else if (options.dateFields?.includes(key)) {
       if (
-        !moment(new Date(data[key])).isValid() ||
+        !moment(new Date(data[key] as string)).isValid() ||
         typeof data[key] === 'number'
       ) {
         throw new BadRequest(`type of '${key}' is incorrect, must be a date`)
@@ -102,7 +105,7 @@ function checkTypeofFields(data: any, options: Options): void {
     // So, it's a string !
     else {
       // But it's not
-      if (typeof (data as any)[key] !== 'string') {
+      if (typeof data[key] !== 'string') {
         throw new BadRequest(`type of '${key}' is incorrect, must be a string`)
       }
     }
@@ -114,7 +117,10 @@ function checkTypeofFields(data: any, options: Options): void {
  * @param data
  * @param fields
  */
-function checkMissingFields(data: any, fields: Options['fields']) {
+function checkMissingFields(
+  data: User | Year | Subject | Department | Post,
+  fields: Options['fields']
+) {
   // All keys from the data
   const keys = Object.keys(data)
   // Compare data keys and wanted keys
@@ -156,7 +162,6 @@ export default (options: Options): Hook => {
         case 'subjects':
           break
         case 'rooms':
-          // Valid case
           if ((context.data as Room)?.startAt) {
             ;(context.data as Room).startAt = normalizeDate(
               (context.data as Room).startAt
@@ -164,7 +169,6 @@ export default (options: Options): Hook => {
           }
           break
         case 'posts':
-          // Valid case
           if ((context.data as Post)?.startAt) {
             ;(context.data as Post).startAt = normalizeDate(
               (context.data as Post).startAt
