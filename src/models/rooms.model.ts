@@ -2,7 +2,7 @@
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-import { Application } from '../declarations'
+import { Application, Room } from '../declarations'
 import moment from '../utils/moment'
 
 import { checkMinutes, checkDuration } from './validation/validate'
@@ -45,6 +45,20 @@ export default function (app: Application) {
       timestamps: true,
     }
   )
+
+  /**
+   * Set startAt to a 1970'date
+   */
+  schema.pre('save', function (this: Room, next: () => void) {
+    const date = new Date(0)
+
+    date.setHours(new Date(this.startAt).getHours())
+    date.setMinutes(new Date(this.startAt).getMinutes())
+
+    this.startAt = date.toISOString()
+
+    next()
+  })
 
   // This is necessary to avoid model compilation errors in watch mode
   // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel
