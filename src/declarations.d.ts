@@ -102,3 +102,15 @@ export interface Post {
 
   [key: string]: string | string[] | number | PostType | undefined | Id | Id[]
 }
+
+export interface Slot {
+  postId: Id
+  startAt: string
+  occupied: boolean
+}
+
+export interface Calendar {
+  startAt: string
+  roomId: Id
+  slots: Slot[]
+}
