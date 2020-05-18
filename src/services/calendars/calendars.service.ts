@@ -1,14 +1,16 @@
 // Initializes the `calendar` service on path `/calendar`
 import { ServiceAddons } from '@feathersjs/feathers'
 import { Application } from '../../declarations'
-import { Calendar } from './calendar.class'
-import createModel from '../../models/calendar.model'
-import hooks from './calendar.hooks'
+import { Calendars } from './calendars.class'
+import createModel from '../../models/calendars.model'
+import hooks from './calendars.hooks'
+
+import yml from '../../docs/utils/yamlLoader'
 
 // Add this service to the service type index
 declare module '../../declarations' {
   interface ServiceTypes {
-    calendar: Calendar & ServiceAddons<any>
+    calendars: Calendars & ServiceAddons<any> & { docs: object }
   }
 }
 
@@ -18,11 +20,18 @@ export default function (app: Application) {
     paginate: app.get('paginate'),
   }
 
+  let calendars: Calendars & { docs?: object }
+  // Create service with any options it requires
+  calendars = new Calendars(options, app)
+
+  // Create documentation
+  calendars.docs = yml('calendars.doc.yml')
+
   // Initialize our service with any options it requires
-  app.use('/calendar', new Calendar(options, app))
+  app.use('/calendars', calendars)
 
   // Get our initialized service so that we can register hooks
-  const service = app.service('calendar')
+  const service = app.service('calendars')
 
   service.hooks(hooks)
 }

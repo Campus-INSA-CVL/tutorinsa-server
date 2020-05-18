@@ -26,13 +26,7 @@ export default {
       normalizeDate(['startAt']),
     ],
     update: [disallow()],
-    patch: [
-      checkData(checkDataOptions),
-      checkDate(),
-      checkCampus(),
-      checkDay(),
-      normalizeDate(['startAt']),
-    ],
+    patch: [disallow()],
     remove: [],
   },
 

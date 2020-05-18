@@ -16,10 +16,13 @@ import checkLength from '../../hooks/check/check-post/check-length'
 
 import checkCapacity from '../../hooks/check/check-post/check-capacity'
 
+import checkCalendars from '../../hooks/check/check-post/check-calendars'
+
 import removeUnwantedFields from '../../hooks/remove-unwanted-fields'
-import { Options } from '../../declarations'
 
 import normalizeDate from '../../hooks/normalize-date'
+
+import { Options } from '../../declarations'
 
 const checkDataOptions: Options = {
   fields: [
@@ -53,6 +56,7 @@ export default {
       checkType(),
       checkLength(),
       checkCapacity(),
+      checkCalendars(),
       normalizeDate(['startAt']),
       removeUnwantedFields(unwantedFields),
     ],
@@ -66,6 +70,7 @@ export default {
       checkTime(),
       checkLength(),
       checkCapacity(),
+      checkCalendars(),
       normalizeDate(['startAt']),
       iff(isProvider('external'), removeUnwantedFields(unwantedFields)),
     ],

@@ -5,7 +5,7 @@
 import { Application } from '../declarations'
 
 export default function (app: Application) {
-  const modelName = 'calendar'
+  const modelName = 'calendars'
   const mongooseClient = app.get('mongooseClient')
   const { Schema } = mongooseClient
   const schema = new Schema(
