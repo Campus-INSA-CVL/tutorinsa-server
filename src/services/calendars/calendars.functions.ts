@@ -16,19 +16,13 @@ function createSlots(start: string, duration: number, postId: Id = ''): Slot[] {
   const split = duration / 30
 
   for (let index = 0; index < split; index++) {
-    const startAt = new Date(start)
-    // Full hour
-    if (index % 2 === 0) {
-      startAt.setHours(startAt.getHours() + index / 2)
-      // Half hour
-    } else {
-      startAt.setHours(startAt.getHours() + (index - 1) / 2)
-      startAt.setMinutes(startAt.getMinutes() + 30)
-    }
+    const startAt = moment(start)
+      .add(duration * index, 'minutes')
+      .toISOString()
     // Add the slot
     slots.push({
       postId,
-      startAt: startAt.toISOString(),
+      startAt,
       occupied: true,
     })
   }
@@ -62,16 +56,16 @@ function createConcatDate(startAtPost: string, startAtRoom: string): string {
  * @param date
  * @returns string
  */
-function createUTCTime(date: string): string {
-  if (!moment(date).isValid()) {
+function createUTCStartTime(date: string): string {
+  if (!moment(new Date(date)).isValid()) {
     throw new Error(`'${date}' is not a valide date`)
   }
 
   const newDate = new Date(0)
-  newDate.setHours(new Date(date).getUTCHours())
-  newDate.setMinutes(new Date(date).getMinutes())
+  newDate.setUTCHours(new Date(date).getUTCHours())
+  newDate.setUTCMinutes(new Date(date).getUTCMinutes())
 
   return newDate.toISOString()
 }
 
-export { createSlots, createUTCTime, createConcatDate }
+export { createSlots, createUTCStartTime, createConcatDate }
