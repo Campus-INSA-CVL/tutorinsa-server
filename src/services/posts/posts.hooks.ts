@@ -1,4 +1,5 @@
 import { disallow, iff, isProvider } from 'feathers-hooks-common'
+import { Options } from '../../declarations'
 // Don't remove this comment. It's needed to format import lines nicely.
 import checkData from '../../hooks/check/check-data'
 
@@ -16,13 +17,17 @@ import checkLength from '../../hooks/check/check-post/check-length'
 
 import checkCapacity from '../../hooks/check/check-post/check-capacity'
 
+import normalizeDate from '../../hooks/normalize-date'
+
+import addRoom from '../../hooks/add-room'
+
+import checkConcordanceDay from '../../hooks/check/check-post/check-concordance-day'
+
+import checkTimeCompaibility from '../../hooks/check/check-post/check-time-compatibility'
+
 import checkCalendars from '../../hooks/check/check-post/check-calendars'
 
 import removeUnwantedFields from '../../hooks/remove-unwanted-fields'
-
-import normalizeDate from '../../hooks/normalize-date'
-
-import { Options } from '../../declarations'
 
 const checkDataOptions: Options = {
   fields: [
@@ -42,6 +47,7 @@ const checkDataOptions: Options = {
 
 const unwantedFields = ['studentsIds', 'tutorsIds', 'creatorId']
 
+// Order matters
 export default {
   before: {
     all: [],
@@ -56,8 +62,11 @@ export default {
       checkType(),
       checkLength(),
       checkCapacity(),
-      checkCalendars(),
       normalizeDate(['startAt']),
+      addRoom(),
+      checkConcordanceDay(),
+      checkTimeCompaibility(),
+      checkCalendars(),
       removeUnwantedFields(unwantedFields),
     ],
     update: [disallow()],
@@ -70,8 +79,11 @@ export default {
       checkTime(),
       checkLength(),
       checkCapacity(),
-      checkCalendars(),
       normalizeDate(['startAt']),
+      addRoom(),
+      checkConcordanceDay(),
+      checkTimeCompaibility(),
+      checkCalendars(),
       iff(isProvider('external'), removeUnwantedFields(unwantedFields)),
     ],
     remove: [],

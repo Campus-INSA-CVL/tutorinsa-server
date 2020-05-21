@@ -3,6 +3,7 @@
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 import { Application, Room } from '../declarations'
+import mongooseLeanVirtuals from 'mongoose-lean-virtuals'
 import moment from '../utils/moment'
 
 import { checkMinutes, checkDuration } from './validation/validate'
@@ -43,6 +44,10 @@ export default function (app: Application) {
     },
     {
       timestamps: true,
+      id: false,
+      toJSON: {
+        virtuals: true,
+      },
     }
   )
 
@@ -59,6 +64,17 @@ export default function (app: Application) {
 
     next()
   })
+
+  /**
+   * Add a endAt field
+   */
+  schema.virtual('endAt').get(function (this: Room) {
+    return moment(this.startAt)
+      .add(moment.duration(this.duration, 'minutes'))
+      .toISOString()
+  })
+
+  schema.plugin(mongooseLeanVirtuals)
 
   // This is necessary to avoid model compilation errors in watch mode
   // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel

@@ -22,7 +22,7 @@ describe("'check-type' hook", () => {
     error = null
   })
 
-  it('nothing should append without data', async () => {
+  it('nothing should happends without data', async () => {
     expect.assertions(2)
 
     try {
@@ -34,8 +34,9 @@ describe("'check-type' hook", () => {
     expect(error).toBeNull()
     expect(result).toEqual(context)
   })
+
   it.each(['eleve', 'tuteur'])(
-    'nothing should append with correct data (%s)',
+    'nothing should happends with correct data (%s)',
     async (value) => {
       expect.assertions(2)
 
@@ -52,6 +53,7 @@ describe("'check-type' hook", () => {
       expect(result).toEqual(context)
     }
   )
+
   it('should thow an error because of incorrect field', async () => {
     expect.assertions(2)
 

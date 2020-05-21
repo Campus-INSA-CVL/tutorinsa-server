@@ -70,6 +70,7 @@ describe(`'${serviceName}' service`, () => {
       result = null
       error = null
     })
+
     it('should find', async () => {
       expect.assertions(4)
       // Find all documents in the DB using mongoose
@@ -105,6 +106,7 @@ describe(`'${serviceName}' service`, () => {
       expect(result).toHaveProperty('createdAt')
       expect(result).toHaveProperty('updatedAt')
     })
+
     it('should not update (disallow)', async () => {
       expect.assertions(1)
       try {
@@ -114,35 +116,47 @@ describe(`'${serviceName}' service`, () => {
       }
       expect(error).toBeInstanceOf(MethodNotAllowed)
     })
-    it.each([
-      ['campus', 'bourges'],
-      ['name', 'a.10'],
-      ['day', 'mercredi'],
-      ['startAt', 'Tue May 12 2020 19:00:00 GMT+0000'],
-      ['duration', 30],
-    ])('should patch %s', async (key, value) => {
-      const patch = {}
-      patch[key] = value
 
-      let patchedResult: Room
-
+    it('should not patch (disallow)', async () => {
+      expect.assertions(1)
       try {
-        patchedResult = (await app
-          .service(serviceName)
-          .patch(result._id, patch)) as Room
+        await app.service(serviceName).patch(result._id, { name: 'data' })
       } catch (e) {
         error = e
       }
-
-      expect(error).toBeNull()
-      if (key === 'startAt') {
-        expect(new Date(patchedResult[key]).toUTCString()).toEqual(
-          new Date(value).toUTCString()
-        )
-      } else {
-        expect(patchedResult[key]).toEqual(value)
-      }
+      expect(error).toBeInstanceOf(MethodNotAllowed)
     })
+
+    // it.each([
+    //   ['campus', 'bourges'],
+    //   ['name', 'a.10'],
+    //   ['day', 'mercredi'],
+    //   ['startAt', 'Tue May 12 2020 19:00:00 GMT+0000'],
+    //   ['duration', 30],
+    // ])('should patch %s', async (key, value) => {
+    //   const patch = {}
+    //   patch[key] = value
+
+    //   let patchedResult: Room
+
+    //   try {
+    //     patchedResult = (await app
+    //       .service(serviceName)
+    //       .patch(result._id, patch)) as Room
+    //   } catch (e) {
+    //     error = e
+    //   }
+
+    //   expect(error).toBeNull()
+    //   if (key === 'startAt') {
+    //     expect(new Date(patchedResult[key]).toUTCString()).toEqual(
+    //       new Date(value).toUTCString()
+    //     )
+    //   } else {
+    //     expect(patchedResult[key]).toEqual(value)
+    //   }
+    // })
+
     it('should remove', async () => {
       expect.assertions(9)
 

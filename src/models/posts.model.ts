@@ -2,7 +2,9 @@
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-import { Application } from '../declarations'
+import { Application, Post } from '../declarations'
+import mongooseLeanVirtuals from 'mongoose-lean-virtuals'
+import moment from '../utils/moment'
 
 import { checkMinutes, checkDate, checkDuration } from './validation/validate'
 
@@ -80,6 +82,14 @@ export default function (app: Application) {
       timestamps: true,
     }
   )
+
+  schema.virtual('endAt').get(function (this: Post) {
+    return moment(this.startAt)
+      .add(moment.duration(this.duration, 'minutes'))
+      .toISOString()
+  })
+
+  schema.plugin(mongooseLeanVirtuals)
 
   // This is necessary to avoid model compilation errors in watch mode
   // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel

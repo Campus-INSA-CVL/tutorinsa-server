@@ -1,6 +1,10 @@
 import { Service, MongooseServiceOptions } from 'feathers-mongoose'
 import { Application, Calendar, Room, Post } from '../../declarations'
-import { createSlots, createUTCTime } from './calendars.functions'
+import {
+  createSlots,
+  createUTCTime,
+  createConcatDate,
+} from './calendars.functions'
 import { Params, Id } from '@feathersjs/feathers'
 
 export class Calendars extends Service {
@@ -16,7 +20,10 @@ export class Calendars extends Service {
       data.post._id as string
     )
 
-    const startAtCalendar = createUTCTime(data.room.startAt)
+    const startAtCalendar = createConcatDate(
+      data.post.startAt,
+      data.room.startAt
+    )
 
     const calendarData: Calendar = {
       startAt: startAtCalendar,

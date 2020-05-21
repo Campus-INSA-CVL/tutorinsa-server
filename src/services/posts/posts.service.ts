@@ -16,9 +16,11 @@ export default function (app: Application) {
   const options = {
     Model: createModel(app),
     paginate: app.get('paginate'),
+    lean: { virtuals: true },
   }
 
   // Initialize our service with any options it requires
+  // @ts-ignore
   app.use('/posts', new Posts(options, app))
 
   // Get our initialized service so that we can register hooks

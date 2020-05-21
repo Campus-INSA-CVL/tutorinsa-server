@@ -58,6 +58,9 @@ export interface Room {
   day: RoomDays
   startAt: string
   duration: number
+
+  endAt?: string
+
   createdAt?: string
   updatedAt?: string
 
@@ -110,7 +113,8 @@ export interface Slot {
 }
 
 export interface Calendar {
+  _id?: Id
   startAt: string
   roomId: Id
-  slots: Slot[]
+  slots?: Slot[]
 }

@@ -10,7 +10,7 @@ export default {
     get: [],
     create: [disallow('external'), checkDate(), addRoom()],
     update: [disallow()],
-    patch: [disallow(), checkDate(), addRoom()],
+    patch: [disallow()],
     remove: [disallow('external')],
   },
 
