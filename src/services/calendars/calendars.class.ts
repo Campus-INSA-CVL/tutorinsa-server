@@ -1,10 +1,6 @@
 import { Service, MongooseServiceOptions } from 'feathers-mongoose'
 import { Application, Calendar, Room, Post } from '../../declarations'
-import {
-  createSlots,
-  createUTCTime,
-  createConcatDate,
-} from './calendars.functions'
+import { createSlots, createConcatDate } from './calendars.functions'
 import { Params, Id } from '@feathersjs/feathers'
 
 export class Calendars extends Service {
