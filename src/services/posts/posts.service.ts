@@ -5,10 +5,12 @@ import { Posts } from './posts.class'
 import createModel from '../../models/posts.model'
 import hooks from './posts.hooks'
 
+import yml from '../../docs/utils/yamlLoader'
+
 // Add this service to the service type index
 declare module '../../declarations' {
   interface ServiceTypes {
-    posts: Posts & ServiceAddons<any>
+    posts: Posts & ServiceAddons<any> & { docs: object }
   }
 }
 
@@ -19,9 +21,16 @@ export default function (app: Application) {
     lean: { virtuals: true },
   }
 
-  // Initialize our service with any options it requires
+  let posts: Posts & { docs?: object }
+  // Create service with any options it requires
   // @ts-ignore
-  app.use('/posts', new Posts(options, app))
+  posts = new Posts(options, app)
+
+  // Create documentation
+  posts.docs = yml('posts.doc.yml')
+
+  // Initialize our service with any options it requires
+  app.use('/posts', posts)
 
   // Get our initialized service so that we can register hooks
   const service = app.service('posts')

@@ -52,10 +52,12 @@ export default function (app: Application) {
    * Set startAt to a 1970'date
    */
   schema.pre('save', function (this: Room, next: () => void) {
-    const date = new Date(0)
-
-    date.setHours(new Date(this.startAt).getHours())
-    date.setMinutes(new Date(this.startAt).getMinutes())
+    const date = moment.utc(this.startAt)
+    this.startAt = moment
+      .utc(0)
+      .hours(date.hours())
+      .minutes(date.minutes())
+      .toISOString()
 
     this.startAt = date.toISOString()
 
