@@ -10,7 +10,7 @@ import {
   User,
   Room,
   Post,
-  Options,
+  CheckDataOptions,
 } from '../../declarations'
 import moment from '../../utils/moment'
 
@@ -33,7 +33,7 @@ function trimSanitize(value: string): string {
  */
 function sanitizeStrings(
   data: User | Year | Subject | Department | Post,
-  options: Options
+  options: CheckDataOptions
 ): User | Year | Subject | Department | Post {
   for (const key in data) {
     if (data.hasOwnProperty(key)) {
@@ -67,7 +67,7 @@ function sanitizeStrings(
  */
 function checkTypeofFields(
   data: User | Year | Subject | Department | Post | Room,
-  options: Options
+  options: CheckDataOptions
 ): void {
   data = Object.assign({}, data)
   const keys: string[] = Object.keys(data)
@@ -111,7 +111,7 @@ function checkTypeofFields(
  */
 function checkMissingFields(
   data: User | Year | Subject | Department | Post | Room,
-  fields: Options['fields']
+  fields: CheckDataOptions['fields']
 ) {
   // All keys from the data
   const keys = Object.keys(data)
@@ -126,7 +126,7 @@ function checkMissingFields(
 /**
  * Validate (type) and sanitize data from the hook context (able to manage many services)
  */
-export default (options: Options): Hook => {
+export default (options: CheckDataOptions): Hook => {
   return async (
     context: HookContext<User | Year | Subject | Department | Post | Room>
   ) => {

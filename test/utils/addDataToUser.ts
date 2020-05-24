@@ -1,4 +1,5 @@
 import app from '../../src/app'
+import { User, Year, Department, Subject } from '../../src/declarations'
 import { Paginated } from '@feathersjs/feathers'
 
 /**

@@ -1,5 +1,5 @@
 import { disallow, iff, isProvider } from 'feathers-hooks-common'
-import { Options } from '../../declarations'
+import { PostCore, CheckDataOptions } from '../../declarations'
 // Don't remove this comment. It's needed to format import lines nicely.
 import checkData from '../../hooks/check/check-data'
 
@@ -31,7 +31,7 @@ import removeUnwantedFields from '../../hooks/remove-unwanted-fields'
 
 import updateUser from '../../hooks/update-user'
 
-const checkDataOptions: Options = {
+const checkDataOptions: CheckDataOptions<PostCore> = {
   fields: [
     'comment',
     'type',
@@ -95,7 +95,7 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [updateUser([['createdPostId', '_id']])],
+    create: [updateUser([['createdPostsIds', '_id', 'array']])],
     update: [],
     patch: [],
     remove: [],

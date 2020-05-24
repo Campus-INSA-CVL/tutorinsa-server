@@ -1,6 +1,6 @@
 import checkPermissions from '../../../../src/hooks/check/check-user/check-permissions'
 import { HookContext, Service, Application } from '@feathersjs/feathers'
-import { User } from '../../../../src/declarations'
+import { User, CheckPermissionsOptions } from '../../../../src/declarations'
 
 describe("'check-permissions' hook", () => {
   let context: HookContext<User>
@@ -10,6 +10,12 @@ describe("'check-permissions' hook", () => {
   let user: User
   let studentUser: User
   let adminUser: User
+
+  const permissionsOptions: CheckPermissionsOptions = {
+    permissions: ['admin', 'eleve', 'tuteur'],
+    admin: 'admin',
+    default: 'eleve',
+  }
 
   beforeEach(() => {
     context = {
@@ -31,6 +37,7 @@ describe("'check-permissions' hook", () => {
       departmentId: '',
       favoriteSubjectsIds: [],
       difficultSubjectsIds: [],
+      createdPostsIds: [],
     }
     // Student
     studentUser = {
@@ -43,6 +50,7 @@ describe("'check-permissions' hook", () => {
       departmentId: '',
       favoriteSubjectsIds: [],
       difficultSubjectsIds: [],
+      createdPostsIds: [],
     }
     // Admin
     adminUser = {
@@ -55,6 +63,7 @@ describe("'check-permissions' hook", () => {
       departmentId: '',
       favoriteSubjectsIds: [],
       difficultSubjectsIds: [],
+      createdPostsIds: [],
     }
 
     error = null
@@ -67,7 +76,9 @@ describe("'check-permissions' hook", () => {
     context.data = Object.assign({}, adminUser)
 
     try {
-      result = (await checkPermissions()(context)) as HookContext<User>
+      result = (await checkPermissions(permissionsOptions)(
+        context
+      )) as HookContext<User>
     } catch (e) {
       error = e
     }
@@ -83,7 +94,9 @@ describe("'check-permissions' hook", () => {
     context.data = Object.assign({}, user)
 
     try {
-      result = (await checkPermissions()(context)) as HookContext<User>
+      result = (await checkPermissions(permissionsOptions)(
+        context
+      )) as HookContext<User>
     } catch (e) {
       error = e
     }
@@ -98,11 +111,15 @@ describe("'check-permissions' hook", () => {
     context.params.user = Object.assign({}, adminUser)
 
     try {
-      result = (await checkPermissions()(context)) as HookContext<User>
+      result = (await checkPermissions(permissionsOptions)(
+        context
+      )) as HookContext<User>
     } catch (e) {
       error = e
     }
 
     expect(result.data.permissions).toEqual(expect.arrayContaining(['admin']))
   })
+
+  it.todo('should remove the unknow permission')
 })

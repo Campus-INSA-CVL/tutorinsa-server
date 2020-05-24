@@ -1,7 +1,9 @@
 import app from '../../../src/app'
-import { Post, Room } from '../../../src/declarations'
-import { Paginated } from '@feathersjs/feathers'
+import { Post, Room, User } from '../../../src/declarations'
 import moment from '../../../src/utils/moment'
+import addDataToUser from '../../utils/addDataToUser'
+
+import { Paginated } from '@feathersjs/feathers'
 import { MethodNotAllowed } from '@feathersjs/errors'
 
 const serviceName = 'posts'
@@ -27,11 +29,7 @@ describe("'posts' service", () => {
 
     let post: Post | null = null
 
-    const params = {
-      user: {
-        _id: '4ccaeb250db44157d84e8c89',
-      },
-    }
+    const params = { user: { _id: '' } }
 
     const dataRoom: Room = {
       campus: 'blois',
@@ -41,7 +39,21 @@ describe("'posts' service", () => {
       duration: 120,
     }
 
+    const dataUser: User = {
+      lastName: 'fakeLastName',
+      firstName: 'username',
+      email: 'username@insa-cvl.fr',
+      password: '$Azerty1',
+      permissions: ['eleve'],
+      yearId: '',
+      departmentId: '',
+      favoriteSubjectsIds: [],
+      difficultSubjectsIds: [],
+      createdPostsIds: [],
+    }
+
     let room: Room
+    let user: User
 
     /**
      * Create the perfecte date for the post
@@ -56,6 +68,7 @@ describe("'posts' service", () => {
       // Delete all the data from the rooms collection
       await app.get('mongooseClient').model(serviceName).find().deleteMany()
       await app.get('mongooseClient').model('rooms').find().deleteMany()
+      await app.get('mongooseClient').model('users').find().deleteMany()
       await app.get('mongooseClient').model('calendars').find().deleteMany()
 
       try {
@@ -63,6 +76,13 @@ describe("'posts' service", () => {
       } catch (e) {
         // Error
       }
+      try {
+        await addDataToUser(dataUser)
+        user = await app.service('users').create(dataUser)
+      } catch (e) {
+        // Error
+      }
+      params.user._id = user._id.toString()
     })
 
     beforeEach(async (done) => {
@@ -126,6 +146,8 @@ describe("'posts' service", () => {
       expect(results).toHaveProperty('total', dbLength)
       expect(Array.isArray(results.data)).toBeTruthy()
     })
+
+    it.todo('should patch the user after create a post')
 
     it('should create', () => {
       expect(result).toBeDefined()

@@ -52,6 +52,12 @@ export default function (app: Application) {
           required: true,
         },
       ],
+      createdPostsIds: [
+        {
+          type: mongooseClient.Schema.Types.ObjectId,
+          ref: 'posts',
+        },
+      ],
     },
     {
       timestamps: true,

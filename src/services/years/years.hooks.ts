@@ -1,9 +1,9 @@
 import { disallow } from 'feathers-hooks-common'
 import checkData from '../../hooks/check/check-data'
-import { Options } from '../../declarations'
+import { CheckDataOptions, YearCore } from '../../declarations'
 // Don't remove this comment. It's needed to format import lines nicely.
 
-const checkDataOptions: Options = {
+const checkDataOptions: CheckDataOptions<YearCore> = {
   fields: ['name'],
 }
 

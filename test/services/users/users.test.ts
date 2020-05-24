@@ -1,14 +1,14 @@
 import { MethodNotAllowed } from '@feathersjs/errors'
-import app from '../../src/app'
+import app from '../../../src/app'
 import { Paginated } from '@feathersjs/feathers'
-import addDataToUser from '../utils/addDataToUser'
+import addDataToUser from '../../utils/addDataToUser'
 import {
   User,
   UserPermission,
   Department,
   Subject,
   Year,
-} from '../../src/declarations'
+} from '../../../src/declarations'
 
 const serviceName = 'users'
 
@@ -44,6 +44,7 @@ describe(`'${serviceName}' service`, () => {
       departmentId: '',
       favoriteSubjectsIds: [],
       difficultSubjectsIds: [],
+      createdPostsIds: [],
     }
 
     // User without permissions
@@ -58,6 +59,7 @@ describe(`'${serviceName}' service`, () => {
       departmentId: '',
       favoriteSubjectsIds: [],
       difficultSubjectsIds: [],
+      createdPostsIds: [],
     }
 
     beforeAll(async () => {

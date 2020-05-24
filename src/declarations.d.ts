@@ -7,36 +7,46 @@ export interface ServiceTypes {}
 // The application instance type that will be used everywhere else
 export type Application = ExpressFeathers<ServiceTypes>
 
-export interface Options {
-  fields: string[]
-  arrayFields?: string[]
-  numberFields?: string[]
-  dateFields?: string[]
-  unwantedFields?: string[]
+export interface CheckDataOptions<T> {
+  fields: (keyof T)[]
+  arrayFields?: (keyof T)[]
+  numberFields?: (keyof T)[]
+  dateFields?: (keyof T)[]
+  unwantedFields?: (keyof T)[]
 }
-export interface Year {
+
+export interface CheckPermissionsOptions {
+  permissions: UserPermission[]
+  admin: UserPermission
+  default: UserPermission
+}
+
+export interface YearCore {
   _id?: Id
   name: string
   createdAt?: string
   updatedAt?: string
-
+}
+export type Year = YearCore & {
   [key: string]: Id | string | undefined
 }
 
-export interface Subject {
+export interface SubjectCore {
   _id?: Id
   name: string
   createdAt?: string
   updatedAt?: string
-
+}
+export type Subject = SubjectCore & {
   [key: string]: Id | string | undefined
 }
-export interface Department {
+export interface DepartmentCore {
   _id?: Id
   name: string
   createdAt?: string
   updatedAt?: string
-
+}
+export type Department = DepartmentCore & {
   [key: string]: Id | string | undefined
 }
 
@@ -51,7 +61,7 @@ export type RoomDays =
   | 'samedi'
   | 'dimanche'
 
-export interface Room {
+export interface RoomCore {
   _id?: Id
   campus: RoomCampus
   name: string
@@ -63,12 +73,14 @@ export interface Room {
 
   createdAt?: string
   updatedAt?: string
+}
 
+export type Room = RoomCore & {
   [key: string]: string | number | RoomCampus | RoomDays | undefined | Id
 }
 
 export type UserPermission = 'eleve' | 'tuteur' | 'admin'
-export interface User {
+export interface UserCore {
   _id?: Id
   lastName: string
   firstName: string
@@ -79,15 +91,18 @@ export interface User {
   departmentId: Id
   favoriteSubjectsIds: Id[]
   difficultSubjectsIds: Id[]
+  createdPostsIds: Id[]
   createdAt?: string
   updatedAt?: string
+}
 
+export type User = UserCore & {
   [key: string]: string | string[] | UserPermission[] | undefined | Id | Id[]
 }
 
 export type PostType = 'eleve' | 'tuteur'
 
-export interface Post {
+export interface PostCore {
   _id?: Id
   comment: string
   type: PostType
@@ -102,7 +117,9 @@ export interface Post {
   creatorId: Id
   createdAt?: string
   updatedAt?: string
+}
 
+export type Post = PostCore & {
   [key: string]: string | string[] | number | PostType | undefined | Id | Id[]
 }
 
@@ -112,9 +129,10 @@ export interface Slot {
   occupied: boolean
 }
 
-export interface Calendar {
+export interface CalendarCore {
   _id?: Id
   startAt: string
   roomId: Id
   slots?: Slot[]
 }
+export type Calendar = CalendarCore

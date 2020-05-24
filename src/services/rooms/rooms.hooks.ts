@@ -3,11 +3,11 @@ import checkData from '../../hooks/check/check-data'
 import checkDate from '../../hooks/check/check-date'
 import checkCampus from '../../hooks/check/check-room/check-campus'
 import checkDay from '../../hooks/check/check-room/check-day'
-import { Options } from '../../declarations'
+import { CheckDataOptions, RoomCore } from '../../declarations'
 import normalizeDate from '../../hooks/normalize-date'
 // Don't remove this comment. It's needed to format import lines nicely.
 
-const checkDataOptions: Options = {
+const checkDataOptions: CheckDataOptions<RoomCore> = {
   fields: ['campus', 'name', 'day', 'startAt', 'duration'],
   numberFields: ['duration'],
   dateFields: ['startAt'],

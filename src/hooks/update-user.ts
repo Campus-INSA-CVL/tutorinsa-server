@@ -1,7 +1,7 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
-import { Hook, HookContext, Application } from '@feathersjs/feathers'
-import { Post, User } from '../declarations'
+import { Hook, HookContext, Id } from '@feathersjs/feathers'
+import { Post, User, Application, UserCore, PostCore } from '../declarations'
 import { GeneralError, NotAuthenticated } from '@feathersjs/errors'
 
 /**
@@ -17,7 +17,15 @@ function createData(options: string[][], result: Post): Partial<User> {
       throw new GeneralError("can't find this field on the result")
     }
 
-    data[option[0]] = result[option[1]]
+    if (option[2] === 'array') {
+      if (Array.isArray(result[option[1]])) {
+        data[option[0]] = [...(result[option[1]] as string[])]
+      } else {
+        data[option[0]] = [result[option[1]] as string]
+      }
+    } else if (option[2] === 'string') {
+      data[option[0]] = result[option[1]]
+    }
   })
   return data
 }
@@ -30,7 +38,7 @@ function createData(options: string[][], result: Post): Partial<User> {
  */
 async function patchUser(app: Application, user: User, data: Partial<User>) {
   try {
-    await app.service('users').patch((user as User)._id, data)
+    await app.service('users').patch((user as User)._id!, data, {})
   } catch (e) {
     throw new GeneralError('an error occured when the user was updated')
   }
@@ -40,12 +48,14 @@ async function patchUser(app: Application, user: User, data: Partial<User>) {
 /**
  * Update the auth user, using the array passed in options and the result
  */
-export default (options: string[][]): Hook => {
+export default (
+  options: [keyof UserCore, keyof PostCore, 'array' | 'string'][]
+): Hook => {
   return async (context: HookContext<Post>) => {
     const { app, params, result } = context
     const { user } = params
 
-    if (!user) {
+    if (!user?._id) {
       throw new NotAuthenticated(
         'a user must be authenticated to patch his data'
       )
@@ -59,7 +69,7 @@ export default (options: string[][]): Hook => {
 
     const data = createData(options, result)
 
-    await patchUser(app, user, data)
+    await patchUser(app as Application, user, data)
 
     return context
   }

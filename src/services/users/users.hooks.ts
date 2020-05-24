@@ -1,6 +1,6 @@
 import * as feathersAuthentication from '@feathersjs/authentication'
 import * as local from '@feathersjs/authentication-local'
-import { disallow } from 'feathers-hooks-common'
+import { disallow, iff, isProvider } from 'feathers-hooks-common'
 // Don't remove this comment. It's needed to format import lines nicely.
 import checkData from '../../hooks/check/check-data'
 
@@ -13,12 +13,19 @@ import checkEmail from '../../hooks/check/check-user/check-email'
 import checkPassword from '../../hooks/check/check-user/check-password'
 
 import checkPermissions from '../../hooks/check/check-user/check-permissions'
-import { Options } from '../../declarations'
+
+import removeUnwantedFields from '../../hooks/remove-unwanted-fields'
+
+import {
+  CheckPermissionsOptions,
+  CheckDataOptions,
+  UserCore,
+} from '../../declarations'
 
 // const { authenticate } = feathersAuthentication.hooks
 const { hashPassword, protect } = local.hooks
 
-const checkDataOptions: Options = {
+const checkDataOptions: CheckDataOptions<UserCore> = {
   fields: [
     'lastName',
     'firstName',
@@ -30,8 +37,21 @@ const checkDataOptions: Options = {
     'favoriteSubjectsIds',
     'difficultSubjectsIds',
   ],
-  arrayFields: ['permissions', 'favoriteSubjectsIds', 'difficultSubjectsIds'],
-  unwantedFields: ['password', 'email'],
+  arrayFields: [
+    'permissions',
+    'favoriteSubjectsIds',
+    'difficultSubjectsIds',
+    'createdPostsIds',
+  ],
+  unwantedFields: ['permissions', 'email'],
+}
+
+const unwantedFields = ['createdPostsIds']
+
+const permissionsOptions: CheckPermissionsOptions = {
+  permissions: ['admin', 'eleve', 'tuteur'],
+  admin: 'admin',
+  default: 'eleve',
 }
 
 export default {
@@ -45,7 +65,8 @@ export default {
       checkIds(),
       checkEmail(),
       checkPassword(),
-      checkPermissions(),
+      checkPermissions(permissionsOptions),
+      removeUnwantedFields(unwantedFields),
       hashPassword('password'),
     ],
     update: [disallow()],
@@ -55,7 +76,8 @@ export default {
       checkIds(),
       checkEmail(),
       checkPassword(),
-      checkPermissions(),
+      checkPermissions(permissionsOptions),
+      iff(isProvider('external'), removeUnwantedFields(unwantedFields)),
       hashPassword('password'),
     ],
     remove: [],
