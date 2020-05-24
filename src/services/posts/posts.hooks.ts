@@ -29,6 +29,8 @@ import checkCalendars from '../../hooks/check/check-post/check-calendars'
 
 import removeUnwantedFields from '../../hooks/remove-unwanted-fields'
 
+import updateUser from '../../hooks/update-user'
+
 const checkDataOptions: Options = {
   fields: [
     'comment',
@@ -93,7 +95,7 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [updateUser([['createdPostId', '_id']])],
     update: [],
     patch: [],
     remove: [],
