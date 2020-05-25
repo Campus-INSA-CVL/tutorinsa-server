@@ -102,10 +102,12 @@ export default {
     create: [
       updateUser([['createdPostsIds', '_id', 'array']]),
       createCalendar(),
+      updateCalendar(),
     ],
     update: [],
     patch: [
       updateUser([['createdPostsIds', '_id', 'array']]),
+      createCalendar(),
       updateCalendar(),
     ],
     remove: [],
