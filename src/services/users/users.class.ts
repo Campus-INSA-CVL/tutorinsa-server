@@ -11,7 +11,7 @@ export class Users extends Service {
   async patch(id: NullableId, data: Partial<User>, params?: Params) {
     if (params?.user) {
       const { user } = params
-      updateCreatedPostsIds(data, user)
+      data = updateCreatedPostsIds(data, user)
     }
     return super.patch(id, data, {})
   }

@@ -241,6 +241,9 @@ describe(`'${serviceName}' service`, () => {
         expect.arrayContaining([newSubject._id])
       )
     })
+
+    it.todo("should patch 'createdPostsIds' %s (add and remove)")
+
     it('should remove', async () => {
       expect.assertions(9)
 
@@ -261,5 +264,9 @@ describe(`'${serviceName}' service`, () => {
       expect(deletedResult).toHaveProperty('createdAt')
       expect(deletedResult).toHaveProperty('updatedAt')
     })
+  })
+
+  describe('external CRUD', () => {
+    it.todo("should not patch 'createdPostsIds'")
   })
 })

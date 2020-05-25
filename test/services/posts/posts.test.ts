@@ -214,5 +214,7 @@ describe("'posts' service", () => {
       expect(deleteResult).toHaveProperty('createdAt')
       expect(deleteResult).toHaveProperty('updatedAt')
     })
+
+    it.todo("should test 'endAt'")
   })
 })

@@ -5,6 +5,9 @@
     "outDir": "./lib",
     "rootDir": "./src",
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "removeComments": true,
     "esModuleInterop": true
   },
   "exclude": ["test"]
