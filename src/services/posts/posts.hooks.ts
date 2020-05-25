@@ -31,6 +31,10 @@ import removeUnwantedFields from '../../hooks/remove-unwanted-fields'
 
 import updateUser from '../../hooks/update-user'
 
+import createCalendar from '../../hooks/create-calendar'
+
+import updateCalendar from '../../hooks/update-calendar'
+
 const checkDataOptions: CheckDataOptions<PostCore> = {
   fields: [
     'comment',
@@ -95,9 +99,15 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [updateUser([['createdPostsIds', '_id', 'array']])],
+    create: [
+      updateUser([['createdPostsIds', '_id', 'array']]),
+      createCalendar(),
+    ],
     update: [],
-    patch: [],
+    patch: [
+      updateUser([['createdPostsIds', '_id', 'array']]),
+      updateCalendar(),
+    ],
     remove: [],
   },
 
