@@ -9,10 +9,10 @@ import { GeneralError } from '@feathersjs/errors'
  * @param {Application} app the application
  * @param {Post} data used to the service to create the application
  */
-async function createCalendar(app: Application, post: Post) {
+async function createCalendar(app: Application, post: Post, room: Room) {
   try {
-    await app.service('calendars').create({ post })
-  } catch (error) {
+    await app.service('calendars').create({ post, room })
+  } catch (e) {
     throw new GeneralError("the calendar can't be created")
   }
 }
@@ -28,7 +28,7 @@ export default (options = {}): Hook => {
 
     if (data) {
       if (!data.calendar) {
-        await createCalendar(app as Application, result as Post)
+        await createCalendar(app as Application, result as Post, data.room!)
       }
     }
 

@@ -8,9 +8,9 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [disallow('external'), checkDate(), addRoom()],
+    create: [disallow('external'), checkDate()],
     update: [disallow()],
-    patch: [disallow()],
+    patch: [disallow('external')],
     remove: [disallow('external')],
   },
 

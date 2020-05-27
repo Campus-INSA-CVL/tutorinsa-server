@@ -12,7 +12,7 @@ import { BadRequest } from '@feathersjs/errors'
  * @returns boolean
  */
 function isBetween(inf: number, sup: number, value: number): boolean {
-  return value > inf && value < sup
+  return value > inf && value <= sup
 }
 
 /**

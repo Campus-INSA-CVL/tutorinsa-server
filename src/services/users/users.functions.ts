@@ -42,13 +42,17 @@ function updateCreatedPostsIds(data: Partial<User>, user: User): Partial<User> {
       throw new GeneralError('only one post id can be provided to patch a user')
     }
 
-    if (user.createdPostsIds.includes(data.createdPostsIds.toString())) {
+    if (
+      user.createdPostsIds.find(
+        (createdPostId) =>
+          createdPostId.toString() === data.createdPostsIds!.toString()
+      )
+    ) {
       data.createdPostsIds = removePostId(data.createdPostsIds[0], user)
     } else {
       data.createdPostsIds = addPostId(data.createdPostsIds[0], user)
     }
   }
-
   return data
 }
 

@@ -17,7 +17,7 @@ function createSlots(start: string, duration: number, postId: Id = ''): Slot[] {
 
   for (let index = 0; index < split; index++) {
     const startAt = moment(start)
-      .add(duration * index, 'minutes')
+      .add(30 * index, 'minutes')
       .toISOString()
     // Add the slot
     slots.push({

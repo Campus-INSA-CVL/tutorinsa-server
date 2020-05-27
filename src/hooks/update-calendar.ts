@@ -21,8 +21,8 @@ async function patchCalendar(
     await app
       .service('calendars')
       .patch(calendar._id!, { post, calendar }, { from: method })
-  } catch (error) {
-    throw new GeneralError("the calendar can't be created")
+  } catch (e) {
+    throw new GeneralError("the calendar can't be patched")
   }
 }
 
@@ -33,7 +33,7 @@ export default (options: HookContext['method']): Hook => {
   return async (
     context: HookContext<Post & { calendar?: Calendar; room?: Room }>
   ) => {
-    const { app, data, result } = context
+    const { app, data, result, method } = context
 
     if (data?.calendar?._id) {
       await patchCalendar(app as Application, result!, data.calendar, options)

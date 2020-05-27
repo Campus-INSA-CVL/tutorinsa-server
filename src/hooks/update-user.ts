@@ -1,6 +1,7 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
-import { Hook, HookContext, Id } from '@feathersjs/feathers'
+import { Hook, HookContext } from '@feathersjs/feathers'
+import { callingParams } from 'feathers-hooks-common'
 import { Post, User, Application, UserCore, PostCore } from '../declarations'
 import { GeneralError, NotAuthenticated } from '@feathersjs/errors'
 
@@ -21,10 +22,10 @@ function createData(options: string[][], result: Post): Partial<User> {
       if (Array.isArray(result[option[1]])) {
         data[option[0]] = [...(result[option[1]] as string[])]
       } else {
-        data[option[0]] = [result[option[1]] as string]
+        data[option[0]] = [result[option[1].toString()] as string]
       }
     } else if (option[2] === 'string') {
-      data[option[0]] = result[option[1]]
+      data[option[0]] = result[option[1]]?.toString()
     }
   })
   return data
@@ -36,9 +37,21 @@ function createData(options: string[][], result: Post): Partial<User> {
  * @param {User} user
  * @param {Partial<User>} data
  */
-async function patchUser(app: Application, user: User, data: Partial<User>) {
+async function patchUser(
+  app: Application,
+  user: User,
+  data: Partial<User>,
+  context: HookContext
+) {
   try {
-    await app.service('users').patch((user as User)._id!, data, {})
+    await app.service('users').patch(
+      (user as User)._id!,
+      { createdPostsIds: data.createdPostsIds },
+      callingParams({
+        propNames: ['user'],
+        newProps: { provider: undefined },
+      })(context)
+    )
   } catch (e) {
     throw new GeneralError('an error occured when the user was updated')
   }
@@ -68,8 +81,7 @@ export default (
     }
 
     const data = createData(options, result)
-
-    await patchUser(app as Application, user, data)
+    await patchUser(app as Application, user, data, context)
 
     return context
   }

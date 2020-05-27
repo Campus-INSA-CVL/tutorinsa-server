@@ -1,4 +1,5 @@
-import { disallow, iff, isProvider } from 'feathers-hooks-common'
+import * as feathersAuthentication from '@feathersjs/authentication'
+import { disallow } from 'feathers-hooks-common'
 import { PostCore, CheckDataOptions } from '../../declarations'
 // Don't remove this comment. It's needed to format import lines nicely.
 import checkData from '../../hooks/check/check-data'
@@ -55,6 +56,8 @@ const checkDataOptions: CheckDataOptions<PostCore> = {
 
 const unwantedFields = ['studentsIds', 'tutorsIds', 'creatorId']
 
+const { authenticate } = feathersAuthentication.hooks
+
 // Order matters
 export default {
   before: {
@@ -62,6 +65,7 @@ export default {
     find: [],
     get: [],
     create: [
+      authenticate('jwt'),
       checkData(checkDataOptions),
       checkDuplicate(),
       checkIds(),
@@ -101,7 +105,7 @@ export default {
       // checkCalendars(),
       // ,
     ],
-    remove: [addRoom(), addCalendar()],
+    remove: [authenticate('jwt'), addRoom(), addCalendar()],
   },
 
   after: {

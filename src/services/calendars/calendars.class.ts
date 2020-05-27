@@ -14,7 +14,7 @@ export class Calendars extends Service {
     super(options)
     this.app = app
   }
-  async create(data: { post: Post; room?: Room }, params?: Params) {
+  async create(data: { post: Post; room: Room }, params?: Params) {
     const slots = createSlots(
       data.post.startAt,
       data.post.duration,
@@ -57,6 +57,6 @@ export class Calendars extends Service {
         throw new Error(`'${params.from}' is not valid, unknow source`)
     }
 
-    return super.patch(id, slots, params)
+    return super.patch(id, { slots }, params)
   }
 }

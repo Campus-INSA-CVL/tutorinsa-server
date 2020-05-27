@@ -45,14 +45,15 @@ export default (options = {}): Hook => {
 
     if (data?.roomId) {
       data.room = await getRoom(app, data.roomId)
-    } /* else if (method === 'patch') {
+    } else if (method === 'remove') {
       if (!id) {
         throw new BadRequest('an id is required to add a room')
       }
       const post = await getPost(app, id)
-      if (data.duration) data.startAt = post.startAt
-      data.room = await getRoom(app, post.roomId)
-    } */
+      context.data = {}
+      context.data.startAt = post.startAt
+      context.data.room = await getRoom(app, post.roomId)
+    }
     return context
   }
 }

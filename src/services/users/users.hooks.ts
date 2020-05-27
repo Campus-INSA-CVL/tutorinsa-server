@@ -22,7 +22,7 @@ import {
   UserCore,
 } from '../../declarations'
 
-// const { authenticate } = feathersAuthentication.hooks
+const { authenticate } = feathersAuthentication.hooks
 const { hashPassword, protect } = local.hooks
 
 const checkDataOptions: CheckDataOptions<UserCore> = {

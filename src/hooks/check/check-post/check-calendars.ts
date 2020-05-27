@@ -54,10 +54,6 @@ export default (options = {}): Hook => {
         throw new GeneralError('no room provided to check calendars')
       }
 
-      if (!data.calendar) {
-        throw new GeneralError('no calendar provided to check')
-      }
-
       if (data.calendar) {
         switch (method) {
           case 'create':
@@ -66,8 +62,8 @@ export default (options = {}): Hook => {
             checkAvaibilitySlots(data.calendar, postSlots)
 
             break
-          case 'patch':
-            break
+          // case 'patch':
+          //   break
 
           default:
             break
