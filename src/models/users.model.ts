@@ -56,6 +56,7 @@ export default function (app: Application) {
         {
           type: mongooseClient.Schema.Types.ObjectId,
           ref: 'posts',
+          default: [],
         },
       ],
     },

@@ -1,9 +1,9 @@
 import app from '../../../src/app'
 import { Post, Room, User } from '../../../src/declarations'
-import moment from '../../../src/utils/moment'
 import addDataToUser from '../../utils/addDataToUser'
+import createDate from '../../utils/createDate'
 
-import { Paginated } from '@feathersjs/feathers'
+import { Paginated, Params } from '@feathersjs/feathers'
 import { MethodNotAllowed } from '@feathersjs/errors'
 
 const serviceName = 'posts'
@@ -29,7 +29,7 @@ describe("'posts' service", () => {
 
     let post: Post | null = null
 
-    const params = { user: { _id: '' } }
+    const params: Params = {}
 
     const dataRoom: Room = {
       campus: 'blois',
@@ -55,15 +55,6 @@ describe("'posts' service", () => {
     let room: Room
     let user: User
 
-    /**
-     * Create the perfecte date for the post
-     * @returns {string}
-     */
-    function createDate(): string {
-      const date = moment.utc().day('lundi').weekday(7).hour(20).minutes(0)
-      return date.toISOString()
-    }
-
     beforeAll(async () => {
       // Delete all the data from the rooms collection
       await app.get('mongooseClient').model(serviceName).find().deleteMany()
@@ -82,14 +73,14 @@ describe("'posts' service", () => {
       } catch (e) {
         // Error
       }
-      params.user._id = user._id.toString()
+      params.user = user
     })
 
     beforeEach(async (done) => {
       let results: Paginated<Post>
 
       post = {
-        comment: 'hello there',
+        comment: 'hello post',
         type: 'eleve',
         startAt: createDate(),
         duration: 60,
@@ -102,10 +93,8 @@ describe("'posts' service", () => {
         creatorId: '5ccaea940db44157d84e8c93',
       }
 
-      // anotherPost = {}
-
       results = (await app.service(serviceName).find({
-        query: { name: post.comment },
+        query: { comment: post.comment },
       })) as Paginated<Post>
 
       result = results.data[0]
@@ -164,9 +153,9 @@ describe("'posts' service", () => {
       expect(result).toHaveProperty('studentsIds')
       expect(result.studentsIds.length).toBeFalsy()
       expect(result).toHaveProperty('tutorsIds')
-      expect(result.tutorsIds[0].toString()).toBe(params.user._id)
+      expect(result.tutorsIds[0].toString()).toBe(params.user._id.toString())
       expect(result.roomId.toString()).toBe(post.roomId)
-      expect(result.creatorId.toString()).toBe(params.user._id)
+      expect(result.creatorId.toString()).toBe(params.user._id.toString())
 
       expect(result).toHaveProperty('createdAt')
       expect(result).toHaveProperty('updatedAt')
@@ -189,7 +178,7 @@ describe("'posts' service", () => {
 
       const deleteResult: Post = await app
         .service(serviceName)
-        .remove(result._id)
+        .remove(result._id, params)
 
       expect(deleteResult).toBeDefined()
       expect(deleteResult).toHaveProperty('_id')
@@ -209,7 +198,7 @@ describe("'posts' service", () => {
       expect(deleteResult).toHaveProperty('studentsIds')
       expect(deleteResult).toHaveProperty('tutorsIds')
       expect(deleteResult).toHaveProperty('roomId', result.roomId)
-      expect(deleteResult.creatorId.toString()).toBe(params.user._id)
+      expect(deleteResult.creatorId.toString()).toBe(params.user._id.toString())
 
       expect(deleteResult).toHaveProperty('createdAt')
       expect(deleteResult).toHaveProperty('updatedAt')

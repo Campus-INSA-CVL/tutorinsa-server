@@ -64,35 +64,7 @@ describe("'check-calendars' hook", () => {
     expect(error.message).toBe('no room provided to check calendars')
   })
 
-  it("should throw an error if find a calendar doesn't work", async () => {
-    expect.assertions(2)
-
-    const data: unknown = {
-      room: {
-        _id: 'data',
-        startAt: '1970-01-01T19:00:00.000Z',
-      },
-      startAt: '2020-05-21T19:00:00.000Z',
-    }
-
-    context.data = Object.assign({}, data) as Post & {
-      room: Room
-      calendar: Calendar | undefined
-    }
-
-    try {
-      result = (await checkCalendars()(context)) as HookContext<
-        Post & { room: Room; calendar: Calendar | undefined }
-      >
-    } catch (e) {
-      error = e
-    }
-
-    expect(error).toBeInstanceOf(GeneralError)
-    expect(error.message).toBe('find calendars encountered an error')
-  })
-
-  it('should return if no calendar is find', async () => {
+  it('should return if no calendar is provided', async () => {
     expect.assertions(2)
 
     const data: unknown = {
@@ -118,57 +90,6 @@ describe("'check-calendars' hook", () => {
 
     expect(result).toEqual(context)
     expect(error).toBeNull()
-  })
-
-  it('should find the correct calendar', async () => {
-    expect.assertions(2)
-
-    const data = {
-      post: {
-        _id: '5e28944c60e9be0d88bb897e',
-        startAt: '2020-05-21T19:00:00.000Z',
-        duration: 30,
-      },
-      room: {
-        _id: '5e28944c60e9be0d88bb897f',
-        startAt: '1970-01-01T19:00:00.000Z',
-      },
-    }
-
-    const calendar: Calendar = await app
-      .service('calendars')
-      .create(data as { post: Post; room: Room }, {})
-
-    data.post.startAt = '2020-05-23T19:00:00.000Z'
-    const anotherCalendar: Calendar = await app
-      .service('calendars')
-      .create(data as { post: Post; room: Room }, {})
-
-    context.data = Object.assign({}, {
-      startAt: '2020-05-21T19:30:00.000Z',
-      duration: 60,
-      room: {
-        startAt: '1970-01-01T19:00:00.000Z',
-        _id: '5e28944c60e9be0d88bb897f',
-      },
-    } as unknown) as Post & {
-      room: Room
-      calendar: Calendar | undefined
-    }
-
-    try {
-      result = (await checkCalendars()(context)) as HookContext<
-        Post & { room: Room; calendar: Calendar | undefined }
-      >
-    } catch (e) {
-      error = e
-    }
-
-    await app.service('calendars').remove(calendar._id)
-    await app.service('calendars').remove(anotherCalendar._id)
-
-    expect(error).toBeNull()
-    expect(result.data.calendar._id.toString()).toBe(calendar._id.toString())
   })
 
   describe("'create' method", () => {
@@ -220,6 +141,7 @@ describe("'check-calendars' hook", () => {
           startAt: '1970-01-01T19:00:00.000Z',
           _id: '5e28944c60e9be0d88bb897f',
         },
+        calendar,
       } as unknown) as Post & {
         room: Room
         calendar: Calendar | undefined
@@ -247,6 +169,7 @@ describe("'check-calendars' hook", () => {
           startAt: '1970-01-01T19:00:00.000Z',
           _id: '5e28944c60e9be0d88bb897f',
         },
+        calendar,
       } as unknown) as Post & {
         room: Room
         calendar: Calendar | undefined

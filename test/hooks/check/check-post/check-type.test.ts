@@ -1,5 +1,5 @@
 import checkType from '../../../../src/hooks/check/check-post/check-type'
-import { Post } from '../../../../src/declarations'
+import { Post, PostType } from '../../../../src/declarations'
 import { HookContext, Application, Service } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
 
@@ -8,6 +8,8 @@ describe("'check-type' hook", () => {
 
   let error: Error | null
   let result: HookContext<Post>
+
+  const typesOptions: PostType[] = ['eleve', 'tuteur']
 
   beforeEach(() => {
     context = {
@@ -26,7 +28,7 @@ describe("'check-type' hook", () => {
     expect.assertions(2)
 
     try {
-      result = (await checkType()(context)) as HookContext<Post>
+      result = (await checkType(typesOptions)(context)) as HookContext<Post>
     } catch (e) {
       error = e
     }
@@ -44,7 +46,7 @@ describe("'check-type' hook", () => {
 
       context.data = Object.assign({}, data) as Post
       try {
-        result = (await checkType()(context)) as HookContext<Post>
+        result = (await checkType(typesOptions)(context)) as HookContext<Post>
       } catch (e) {
         error = e
       }
@@ -61,7 +63,7 @@ describe("'check-type' hook", () => {
 
     context.data = Object.assign({}, data) as Post
     try {
-      result = (await checkType()(context)) as HookContext<Post>
+      result = (await checkType(typesOptions)(context)) as HookContext<Post>
     } catch (e) {
       error = e
     }

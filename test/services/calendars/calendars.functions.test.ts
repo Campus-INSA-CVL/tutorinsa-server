@@ -21,7 +21,7 @@ describe("'calendar.functions'", () => {
         expect(element).toHaveProperty(
           'startAt',
           moment(start)
-            .add(duration * index, 'minutes')
+            .add(30 * index, 'minutes')
             .toISOString()
         )
         expect(element).toHaveProperty('occupied', true)

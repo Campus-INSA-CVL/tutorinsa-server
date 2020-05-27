@@ -1,4 +1,4 @@
-import app from '../../../src/app'
+/* import app from '../../../src/app'
 import { MethodNotAllowed, FeathersErrorJSON } from '@feathersjs/errors'
 import { Calendar, Room, Post } from '../../../src/declarations'
 import { Paginated } from '@feathersjs/feathers'
@@ -240,3 +240,4 @@ describe(`'${serviceName}' service`, () => {
     })
   })
 })
+ */
