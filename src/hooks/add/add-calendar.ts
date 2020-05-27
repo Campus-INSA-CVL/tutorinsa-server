@@ -9,8 +9,8 @@ import {
 } from '@feathersjs/feathers'
 import { GeneralError } from '@feathersjs/errors'
 
-import { Calendar, Post, Room } from '../declarations'
-import { createConcatDate } from '../services/calendars/calendars.functions'
+import { Calendar, Post, Room } from '../../declarations'
+import { createConcatDate } from '../../services/calendars/calendars.functions'
 
 /**
  * Get a calendar using the roomId and a specific date

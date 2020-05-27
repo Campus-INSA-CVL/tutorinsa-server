@@ -1,10 +1,10 @@
 import addRoom from '../../src/hooks/add-room'
-import app from '../../src/app'
+import app from '../../../src/app'
 
 import { HookContext, Service, Paginated } from '@feathersjs/feathers'
 import { GeneralError } from '@feathersjs/errors'
 
-import { Room } from '../../src/declarations'
+import { Room } from '../../../src/declarations'
 
 describe("'add-room' hook", () => {
   let context: HookContext<Room>

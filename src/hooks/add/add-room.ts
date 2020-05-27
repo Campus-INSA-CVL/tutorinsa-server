@@ -1,7 +1,7 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import { Hook, HookContext, Application, Id } from '@feathersjs/feathers'
-import { Room, Post } from '../declarations'
+import { Room, Post } from '../../declarations'
 import { GeneralError, BadRequest } from '@feathersjs/errors'
 
 /**

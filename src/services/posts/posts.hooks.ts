@@ -1,6 +1,6 @@
 import * as feathersAuthentication from '@feathersjs/authentication'
 import { disallow } from 'feathers-hooks-common'
-import { PostCore, CheckDataOptions } from '../../declarations'
+import { PostCore, CheckDataOptions, PostType } from '../../declarations'
 // Don't remove this comment. It's needed to format import lines nicely.
 import checkData from '../../hooks/check/check-data'
 
@@ -20,7 +20,7 @@ import checkCapacity from '../../hooks/check/check-post/check-capacity'
 
 import normalizeDate from '../../hooks/normalize-date'
 
-import addRoom from '../../hooks/add-room'
+import addRoom from '../../hooks/add/add-room'
 
 import checkConcordanceDay from '../../hooks/check/check-post/check-concordance-day'
 
@@ -30,13 +30,13 @@ import checkCalendars from '../../hooks/check/check-post/check-calendars'
 
 import removeUnwantedFields from '../../hooks/remove-unwanted-fields'
 
-import updateUser from '../../hooks/update-user'
+import updateUser from '../../hooks/user/update-user'
 
-import createCalendar from '../../hooks/create-calendar'
+import createCalendar from '../../hooks/calendar/create-calendar'
 
-import updateCalendar from '../../hooks/update-calendar'
+import updateCalendar from '../../hooks/calendar/update-calendar'
 
-import addCalendar from '../../hooks/add-calendar'
+import addCalendar from '../../hooks/add/add-calendar'
 
 const checkDataOptions: CheckDataOptions<PostCore> = {
   fields: [
@@ -56,6 +56,8 @@ const checkDataOptions: CheckDataOptions<PostCore> = {
 
 const unwantedFields = ['studentsIds', 'tutorsIds', 'creatorId']
 
+const typesOptions: PostType[] = ['eleve', 'tuteur']
+
 const { authenticate } = feathersAuthentication.hooks
 
 // Order matters
@@ -71,7 +73,7 @@ export default {
       checkIds(),
       checkTime(),
       checkDate(),
-      checkType(),
+      checkType(typesOptions),
       checkLength(),
       checkCapacity(),
       normalizeDate(['startAt']),

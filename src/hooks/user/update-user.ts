@@ -2,7 +2,7 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import { Hook, HookContext } from '@feathersjs/feathers'
 import { callingParams } from 'feathers-hooks-common'
-import { Post, User, Application, UserCore, PostCore } from '../declarations'
+import { Post, User, Application, UserCore, PostCore } from '../../declarations'
 import { GeneralError, NotAuthenticated } from '@feathersjs/errors'
 
 /**
