@@ -41,7 +41,9 @@ export class Calendars extends Service {
     let slots: Slot[] = []
     switch (params.from) {
       case 'create':
-        slots = patchSlots(data.calendar, data.post)
+        if (data.calendar.slots) {
+          slots = patchSlots(data.calendar, data.post)
+        }
         break
       case 'patch':
         if (data.calendar.slots) {

@@ -35,6 +35,8 @@ import createCalendar from '../../hooks/create-calendar'
 
 import updateCalendar from '../../hooks/update-calendar'
 
+import addCalendar from '../../hooks/add-calendar'
+
 const checkDataOptions: CheckDataOptions<PostCore> = {
   fields: [
     'comment',
@@ -70,6 +72,7 @@ export default {
       checkCapacity(),
       normalizeDate(['startAt']),
       addRoom(),
+      addCalendar(),
       checkConcordanceDay(),
       checkTimeCompaibility(),
       checkCalendars(),
@@ -77,22 +80,28 @@ export default {
     ],
     update: [disallow()],
     patch: [
-      checkData(checkDataOptions),
-      checkDuplicate(),
-      checkIds(),
-      checkDate(),
-      checkType(),
-      checkTime(),
-      checkLength(),
-      checkCapacity(),
-      normalizeDate(['startAt']),
-      addRoom(),
-      checkConcordanceDay(),
-      checkTimeCompaibility(),
-      checkCalendars(),
-      iff(isProvider('external'), removeUnwantedFields(unwantedFields)),
+      disallow(),
+      // iff(
+      //   isProvider('external'),
+      //   removeUnwantedFields(['startAt', ...unwantedFields])
+      // ),
+      // checkData(checkDataOptions),
+      // checkDuplicate(),
+      // checkIds(),
+      // checkDate(),
+      // checkType(),
+      // checkTime(),
+      // checkLength(),
+      // checkCapacity(),
+      // normalizeDate(['startAt']),
+      // addRoom(),
+      // addCalendar(),
+      // checkConcordanceDay(),
+      // checkTimeCompaibility(),
+      // checkCalendars(),
+      // ,
     ],
-    remove: [],
+    remove: [addRoom(), addCalendar()],
   },
 
   after: {
@@ -102,15 +111,18 @@ export default {
     create: [
       updateUser([['createdPostsIds', '_id', 'array']]),
       createCalendar(),
-      updateCalendar(),
+      updateCalendar('create'),
     ],
     update: [],
     patch: [
-      updateUser([['createdPostsIds', '_id', 'array']]),
-      createCalendar(),
-      updateCalendar(),
+      // updateUser([['createdPostsIds', '_id', 'array']]),
+      // createCalendar(),
+      // updateCalendar('patch'),
     ],
-    remove: [],
+    remove: [
+      updateUser([['createdPostsIds', '_id', 'array']]),
+      updateCalendar('remove'),
+    ],
   },
 
   error: {

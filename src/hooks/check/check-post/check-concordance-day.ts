@@ -22,7 +22,7 @@ export default (options = {}): Hook => {
   return async (context: HookContext<Post & { room: Room }>) => {
     const { data } = context
 
-    if (data?.room) {
+    if (data?.room && data?.startAt) {
       if (!isSameDay(data.startAt, data.room.day)) {
         throw new BadRequest(
           `day of post (${new Date(data.startAt).getUTCDay()}) and the room (${

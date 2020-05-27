@@ -9,34 +9,7 @@ import {
 } from '@feathersjs/feathers'
 import { Post, Room, Calendar, Slot } from '../../../declarations'
 import { GeneralError, BadRequest } from '@feathersjs/errors'
-import {
-  createSlots,
-  createConcatDate,
-} from '../../../services/calendars/calendars.functions'
-
-/**
- * Get a calendar using the roomId and a specific date
- * @param {Id} roomId
- * @param {string} date
- * @param {Application} app
- * @returns {Promise<Calendar>} A calendar
- */
-async function getCalendar(
-  roomId: Id,
-  startAt: string,
-  app: Application
-): Promise<Calendar> {
-  let calendars: Paginated<Calendar>
-  try {
-    calendars = await app.service('calendars').find({
-      query: { roomId, startAt: { $gte: startAt } },
-    })
-  } catch (e) {
-    throw new GeneralError('find calendars encountered an error')
-  }
-
-  return calendars.data[0]
-}
+import { createSlots } from '../../../services/calendars/calendars.functions'
 
 /**
  * Check that slots wanted by a post are availbe in the calendar
@@ -72,18 +45,18 @@ function checkAvaibilitySlots(calendar: Calendar, postSlots: Slot[]) {
  */
 export default (options = {}): Hook => {
   return async (
-    context: HookContext<Post & { room: Room; calendar: Calendar | undefined }>
+    context: HookContext<Post & { room: Room; calendar: Calendar }>
   ) => {
-    const { data, app, method } = context
+    const { data, method } = context
 
     if (data) {
       if (!data.room) {
         throw new GeneralError('no room provided to check calendars')
       }
 
-      const concateDate = createConcatDate(data.startAt, data.room.startAt)
-
-      data.calendar = await getCalendar(data.room._id!, concateDate, app)
+      if (!data.calendar) {
+        throw new GeneralError('no calendar provided to check')
+      }
 
       if (data.calendar) {
         switch (method) {

@@ -104,8 +104,6 @@ export default (options = {}): Hook => {
           checkEndTime(time)
 
           break
-        case 'patch':
-          break
         default:
           break
       }

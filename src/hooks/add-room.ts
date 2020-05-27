@@ -1,13 +1,13 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import { Hook, HookContext, Application, Id } from '@feathersjs/feathers'
-import { Room } from '../declarations'
-import { GeneralError } from '@feathersjs/errors'
+import { Room, Post } from '../declarations'
+import { GeneralError, BadRequest } from '@feathersjs/errors'
 
 /**
  * Get the room using the roomId
  * @param {Application} app
- * @param {any} data
+ * @param {Id} roomId
  * @returns The room
  */
 async function getRoom(app: Application, roomId: Id): Promise<Room> {
@@ -21,15 +21,38 @@ async function getRoom(app: Application, roomId: Id): Promise<Room> {
 }
 
 /**
+ * Get a post using the id
+ * @param {Application} app
+ * @param {Id} postId
+ * @returns The post
+ */
+async function getPost(app: Application, postId: Id): Promise<Post> {
+  let post: Post
+  try {
+    post = (await app.service('posts').get(postId)) as Post
+  } catch (error) {
+    throw new GeneralError('impossible to get post')
+  }
+  return post
+}
+
+/**
  * Add a room to the data using the room id
  */
 export default (options = {}): Hook => {
   return async (context: HookContext) => {
-    const { app, data } = context
+    const { app, data, method, id } = context
 
     if (data?.roomId) {
-      context.data.room = await getRoom(app, data.roomId)
-    }
+      data.room = await getRoom(app, data.roomId)
+    } /* else if (method === 'patch') {
+      if (!id) {
+        throw new BadRequest('an id is required to add a room')
+      }
+      const post = await getPost(app, id)
+      if (data.duration) data.startAt = post.startAt
+      data.room = await getRoom(app, post.roomId)
+    } */
     return context
   }
 }
