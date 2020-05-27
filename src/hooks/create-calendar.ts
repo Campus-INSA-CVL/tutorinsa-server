@@ -7,14 +7,14 @@ import { GeneralError } from '@feathersjs/errors'
 /**
  * Create a calendar
  * @param {Application} app the application
- * @param {{ post: Post; room: Room }} data used to the service to create the application
- * @returns {Promise<Calendar>}
+ * @param {Post} data used to the service to create the application
  */
-async function createCalendar(
-  app: Application,
-  data: { post: Post; room: Room }
-): Promise<Calendar> {
-  return await app.service('calendars').create(data, {})
+async function createCalendar(app: Application, post: Post) {
+  try {
+    await app.service('calendars').create({ post })
+  } catch (error) {
+    throw new GeneralError("the calendar can't be created")
+  }
 }
 
 /**
@@ -27,15 +27,8 @@ export default (options = {}): Hook => {
     const { app, data, result } = context
 
     if (data) {
-      if (!data.room) {
-        throw new GeneralError('no room found to create a calendar')
-      }
-
       if (!data.calendar) {
-        await createCalendar(app as Application, {
-          post: result as Post,
-          room: data.room,
-        })
+        await createCalendar(app as Application, result as Post)
       }
     }
 

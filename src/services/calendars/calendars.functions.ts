@@ -1,4 +1,4 @@
-import { Calendar, Slot } from '../../declarations'
+import { Calendar, Slot, Post } from '../../declarations'
 import { Id } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
 import moment from '../../utils/moment'
@@ -68,4 +68,42 @@ function createUTCStartTime(date: string): string {
   return newDate.toISOString()
 }
 
-export { createSlots, createUTCStartTime, createConcatDate }
+/**
+ * Return slots from the calendar without the slots from the post
+ * @param {Calendar} calendar
+ * @param {Post} post
+ * @returns {Slot[]}
+ */
+function removeSlots(calendar: Calendar, post: Post): Slot[] {
+  if (!calendar.slots) {
+    return []
+  }
+
+  const slots = calendar.slots.filter(
+    (slot) => slot.postId.toString() !== post._id?.toString()
+  )
+
+  return slots
+}
+
+/**
+ * Return slots with the new duration of the post
+ * @param calendar
+ * @param {Calendar} calendar
+ * @param {Post} post
+ * @returns {Slot[]}
+ */
+function patchSlots(calendar: Calendar, post: Post): Slot[] {
+  const previousSlots = removeSlots(calendar, post)
+  const newSlots = createSlots(post.startAt, post.duration, post._id)
+
+  return [...previousSlots, ...newSlots]
+}
+
+export {
+  createSlots,
+  createUTCStartTime,
+  createConcatDate,
+  patchSlots,
+  removeSlots,
+}

@@ -1,7 +1,12 @@
 import { Service, MongooseServiceOptions } from 'feathers-mongoose'
-import { Application, Calendar, Room, Post } from '../../declarations'
-import { createSlots, createConcatDate } from './calendars.functions'
-import { Params, Id } from '@feathersjs/feathers'
+import { Application, Calendar, Room, Post, Slot } from '../../declarations'
+import {
+  createSlots,
+  createConcatDate,
+  patchSlots,
+  removeSlots,
+} from './calendars.functions'
+import { Params, Id, HookContext } from '@feathersjs/feathers'
 
 export class Calendars extends Service {
   app: Application
@@ -9,7 +14,7 @@ export class Calendars extends Service {
     super(options)
     this.app = app
   }
-  async create(data: { post: Post; room: Room }, params: Params) {
+  async create(data: { post: Post; room?: Room }, params?: Params) {
     const slots = createSlots(
       data.post.startAt,
       data.post.duration,
@@ -18,14 +23,38 @@ export class Calendars extends Service {
 
     const startAtCalendar = createConcatDate(
       data.post.startAt,
-      data.room.startAt
+      data.room!.startAt
     )
 
     const calendarData: Calendar = {
       startAt: startAtCalendar,
-      roomId: data.room._id as string,
+      roomId: data.room!._id as string,
       slots,
     }
     return super.create(calendarData, params)
+  }
+  async patch(
+    id: Id,
+    data: { post: Post; calendar: Calendar },
+    params: Params & { from: HookContext['method'] }
+  ) {
+    let slots: Slot[] = []
+    switch (params.from) {
+      case 'create':
+        slots = patchSlots(data.calendar, data.post)
+        break
+      case 'patch':
+        if (data.calendar.slots) {
+          slots = patchSlots(data.calendar, data.post)
+        }
+        break
+      case 'remove':
+        slots = removeSlots(data.calendar, data.post)
+        break
+      default:
+        throw new Error(`'${params.from}' is not valid, unknow source`)
+    }
+
+    return super.patch(id, slots, params)
   }
 }

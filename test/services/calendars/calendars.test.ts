@@ -125,12 +125,18 @@ describe(`'${serviceName}' service`, () => {
     it('should not patch (disallow)', async () => {
       expect.assertions(1)
       try {
-        await app.service(serviceName).patch(result._id, {})
+        await app
+          .service(serviceName)
+          .patch(result._id, {} as { post: Post; calendar: Calendar }, {
+            from: 'patch',
+          })
       } catch (e) {
         error = e
       }
       expect(error).toBeInstanceOf(MethodNotAllowed)
     })
+
+    it.todo('should patch %s (add et remove)')
 
     it('should delete', async () => {
       expect.assertions(7)

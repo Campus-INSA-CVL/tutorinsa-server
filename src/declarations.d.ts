@@ -123,10 +123,14 @@ export type Post = PostCore & {
   [key: string]: string | string[] | number | PostType | undefined | Id | Id[]
 }
 
-export interface Slot {
+export interface SlotCore {
   postId: Id
   startAt: string
   occupied: boolean
+}
+
+export type Slot = SlotCore & {
+  [key: string]: string | undefined | Id | boolean
 }
 
 export interface CalendarCore {
@@ -135,4 +139,7 @@ export interface CalendarCore {
   roomId: Id
   slots?: Slot[]
 }
-export type Calendar = CalendarCore
+
+export type Calendar = CalendarCore & {
+  [key: string]: string | undefined | Id | Slot[]
+}

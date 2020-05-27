@@ -58,4 +58,11 @@ describe("'calendar.functions'", () => {
       expect(result).toBe('1970-01-01T20:00:00.000Z')
     })
   })
+
+  describe("'remove-slots' function", () => {
+    it.todo('should create an new array removing the unwanted slots')
+  })
+  describe("'patch-slots' function", () => {
+    it.todo('should create an new array using the new duration')
+  })
 })
