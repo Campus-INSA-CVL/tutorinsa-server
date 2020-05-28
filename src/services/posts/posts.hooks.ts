@@ -34,7 +34,7 @@ import updateUser from '../../hooks/user/update-user'
 
 import createCalendar from '../../hooks/calendar/create-calendar'
 
-import updateCalendar from '../../hooks/calendar/update-calendar'
+import patchCalendar from '../../hooks/calendar/patch-calendar'
 
 import addCalendar from '../../hooks/add/add-calendar'
 
@@ -117,17 +117,17 @@ export default {
     create: [
       updateUser([['createdPostsIds', '_id', 'array']]),
       createCalendar(),
-      updateCalendar('create'),
+      patchCalendar('create'),
     ],
     update: [],
     patch: [
       // updateUser([['createdPostsIds', '_id', 'array']]),
       // createCalendar(),
-      // updateCalendar('patch'),
+      // patchCalendar('patch'),
     ],
     remove: [
       updateUser([['createdPostsIds', '_id', 'array']]),
-      updateCalendar('remove'),
+      patchCalendar('remove'),
     ],
   },
 

@@ -1,13 +1,19 @@
-import createCalendar from '../../../src/hooks/calendar/create-calendar'
+import patchCalendar from '../../../src/hooks/calendar/patch-calendar'
 import app from '../../../src/app'
-import { Post, Room, Calendar, User } from '../../../src/declarations'
+import {
+  Post,
+  Room,
+  Calendar,
+  User,
+  CalendarCore,
+} from '../../../src/declarations'
 import addDataToUser from '../../utils/addDataToUser'
 import createDate from '../../utils/createDate'
 
 import { HookContext, Service, Params, Paginated } from '@feathersjs/feathers'
 import { GeneralError } from '@feathersjs/errors'
 
-describe("'create-calendar' hook", () => {
+describe("'patch-calendar' hook", () => {
   let context: HookContext<
     Post & {
       room: Room
@@ -24,8 +30,11 @@ describe("'create-calendar' hook", () => {
 
   let room: Room
   let post: Post
+  let anotherPost: Post
   let user: User
   let error: Error | null
+
+  let calendars: Paginated<Calendar>
 
   const params: Params = {}
 
@@ -73,7 +82,7 @@ describe("'create-calendar' hook", () => {
       comment: 'hello there',
       type: 'eleve',
       startAt: createDate(),
-      duration: 60,
+      duration: 30,
       studentsCapacity: 15,
       tutorsCapacity: 2,
       subjectId: '5ccaea940db44157d84e8c93',
@@ -81,6 +90,18 @@ describe("'create-calendar' hook", () => {
       studentsIds: [],
       tutorsIds: [],
       creatorId: '5ccaea940db44157d84e8c93',
+    }
+
+    try {
+      post = await app.service('posts').create(post, params)
+    } catch (error) {
+      // An error?
+    }
+
+    try {
+      calendars = (await app.service('calendars').find()) as Paginated<Calendar>
+    } catch (e) {
+      //
     }
   })
 
@@ -101,7 +122,7 @@ describe("'create-calendar' hook", () => {
   it('nothing should happend without data', async () => {
     expect.assertions(2)
     try {
-      result = (await createCalendar()(context)) as HookContext
+      result = (await patchCalendar('create')(context)) as HookContext
     } catch (e) {
       error = e
     }
@@ -111,11 +132,27 @@ describe("'create-calendar' hook", () => {
   })
 
   it('should work with correct data', async () => {
-    expect.assertions(5)
+    expect.assertions(6)
+
+    anotherPost = {
+      comment: 'hello there',
+      type: 'eleve',
+      startAt: createDate(30),
+      duration: 30,
+      studentsCapacity: 15,
+      tutorsCapacity: 2,
+      subjectId: '5ccaea940db44157d84e8c93',
+      roomId: room._id.toString(),
+      studentsIds: [],
+      tutorsIds: [],
+      creatorId: '5ccaea940db44157d84e8c93',
+    }
+    anotherPost._id = '5ccaea940db44157d84e8c93'
 
     const data = {
-      ...post,
+      ...anotherPost,
       room,
+      calendar: calendars.data[0],
     }
 
     context.data = Object.assign({}, data) as Post & {
@@ -123,17 +160,15 @@ describe("'create-calendar' hook", () => {
       room: Room
     }
 
-    post._id = '5ccaea940db44157d84e8c93'
     // @ts-ignore
-    context.result = Object.assign({}, post)
+    context.result = Object.assign({}, anotherPost)
 
     try {
-      result = (await createCalendar()(context)) as HookContext
+      result = (await patchCalendar('create')(context)) as HookContext
     } catch (e) {
       error = e
     }
 
-    let calendars: Paginated<Calendar>
     try {
       calendars = (await app.service('calendars').find()) as Paginated<Calendar>
     } catch (e) {
@@ -146,22 +181,10 @@ describe("'create-calendar' hook", () => {
     expect(calendars.data[0].slots[0].postId.toString()).toBe(
       post._id.toString()
     )
+    expect(calendars.data[0].slots[1].postId.toString()).toBe(
+      anotherPost._id.toString()
+    )
+    expect(calendars.data[0].slots[1]).toHaveProperty('startAt')
     expect(result).toEqual(context)
-  })
-
-  it('should throw an error if no room is provided', async () => {
-    expect.assertions(2)
-
-    // @ts-ignore
-    context.data = Object.assign({}, { key: 'value' })
-
-    try {
-      result = (await createCalendar()(context)) as HookContext
-    } catch (e) {
-      error = e
-    }
-
-    expect(error).toBeInstanceOf(GeneralError)
-    expect(error.message).toEqual('no room provided')
   })
 })

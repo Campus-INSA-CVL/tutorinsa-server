@@ -33,7 +33,7 @@ export default (options: HookContext['method']): Hook => {
   return async (
     context: HookContext<Post & { calendar?: Calendar; room?: Room }>
   ) => {
-    const { app, data, result, method } = context
+    const { app, data, result } = context
 
     if (data?.calendar?._id) {
       await patchCalendar(app as Application, result!, data.calendar, options)
