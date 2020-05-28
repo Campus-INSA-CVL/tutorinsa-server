@@ -1,10 +1,10 @@
 import addCalendar from '../../../src/hooks/add/add-calendar'
 import app from '../../../src/app'
 import { Post, Room, Calendar, User } from '../../../src/declarations'
-import { HookContext, Service, Params } from '@feathersjs/feathers'
-import { GeneralError } from '@feathersjs/errors'
 import addDataToUser from '../../utils/addDataToUser'
 import createDate from '../../utils/createDate'
+import { HookContext, Service, Params } from '@feathersjs/feathers'
+import { GeneralError } from '@feathersjs/errors'
 
 describe("'add-calendar' hook", () => {
   let context: HookContext<

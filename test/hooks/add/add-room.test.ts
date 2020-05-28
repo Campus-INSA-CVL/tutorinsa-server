@@ -1,4 +1,4 @@
-import addRoom from '../../src/hooks/add-room'
+import addRoom from '../../../src/hooks/add/add-room'
 import app from '../../../src/app'
 
 import { HookContext, Service, Paginated } from '@feathersjs/feathers'

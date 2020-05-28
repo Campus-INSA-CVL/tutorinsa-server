@@ -22,13 +22,16 @@ async function createCalendar(app: Application, post: Post, room: Room) {
  */
 export default (options = {}): Hook => {
   return async (
-    context: HookContext<Post & { calendar?: Calendar; room?: Room }>
+    context: HookContext<Post & { calendar?: Calendar; room: Room }>
   ) => {
     const { app, data, result } = context
 
     if (data) {
       if (!data.calendar) {
-        await createCalendar(app as Application, result as Post, data.room!)
+        if (!data.room) {
+          throw new GeneralError('no room provided')
+        }
+        await createCalendar(app as Application, result as Post, data.room)
       }
     }
 
