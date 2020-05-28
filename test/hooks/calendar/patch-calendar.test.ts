@@ -132,7 +132,7 @@ describe("'patch-calendar' hook", () => {
   })
 
   it('should work with correct data', async () => {
-    expect.assertions(6)
+    expect.assertions(7)
 
     anotherPost = {
       comment: 'hello there',
