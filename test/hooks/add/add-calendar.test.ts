@@ -129,6 +129,25 @@ describe("'add-calendar' hook", () => {
     expect(error.message).toEqual('no room provided to add a calendar')
   })
 
+  // it('should thow a error if find failed', async () => {
+  //   expect.assertions(2)
+
+  // use a spy
+
+  //   context.data = Object.assign({}, { ...post, room }) as Post & {
+  //     room: Room
+  //   }
+
+  //   try {
+  //     result = (await addCalendar()(context)) as HookContext
+  //   } catch (e) {
+  //     error = e
+  //   }
+
+  //   expect(error).toBeInstanceOf(GeneralError)
+  //   expect(error.message).toEqual('find calendars encountered an error')
+  // })
+
   it('should add the calendar to the context', async () => {
     expect.assertions(2)
 

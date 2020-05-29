@@ -15,7 +15,9 @@ function createData(options: string[][], result: Post): Partial<User> {
   const data: Partial<User> = {}
   options.forEach((option) => {
     if (!result[option[1]]) {
-      throw new GeneralError("can't find this field on the result")
+      throw new GeneralError(
+        `can't find this field (${option[1]}) on the result`
+      )
     }
 
     if (option[2] === 'array') {
@@ -57,7 +59,6 @@ async function patchUser(
   }
 }
 
-// check if it's possible in typescript to us to have keyof User despite of indexable type
 /**
  * Update the auth user, using the array passed in options and the result
  */

@@ -30,7 +30,7 @@ import checkCalendars from '../../hooks/check/check-post/check-calendars'
 
 import removeUnwantedFields from '../../hooks/remove-unwanted-fields'
 
-import updateUser from '../../hooks/user/update-user'
+import patchUser from '../../hooks/user/patch-user'
 
 import createCalendar from '../../hooks/calendar/create-calendar'
 
@@ -115,18 +115,18 @@ export default {
     find: [],
     get: [],
     create: [
-      updateUser([['createdPostsIds', '_id', 'array']]),
+      patchUser([['createdPostsIds', '_id', 'array']]),
       createCalendar(),
       patchCalendar('create'),
     ],
     update: [],
     patch: [
-      // updateUser([['createdPostsIds', '_id', 'array']]),
+      // patchUser([['createdPostsIds', '_id', 'array']]),
       // createCalendar(),
       // patchCalendar('patch'),
     ],
     remove: [
-      updateUser([['createdPostsIds', '_id', 'array']]),
+      patchUser([['createdPostsIds', '_id', 'array']]),
       patchCalendar('remove'),
     ],
   },
