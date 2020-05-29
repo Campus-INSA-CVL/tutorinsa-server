@@ -67,6 +67,10 @@ describe("'custom validation' for fields", () => {
       expect(result).toBe(false)
     })
 
-    it.todo('should return the correct message')
+    it('should return the correct message', () => {
+      const message = checkEmail.message({ value: 'data' })
+
+      expect(message).toBe(`'data' is not a valid email`)
+    })
   })
 })

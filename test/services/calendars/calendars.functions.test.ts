@@ -2,8 +2,11 @@ import {
   createSlots,
   createUTCStartTime,
   createConcatDate,
+  removeSlots,
+  patchSlots,
 } from '../../../src/services/calendars/calendars.functions'
 import moment from '../../../src/utils/moment'
+import { Calendar, Post } from '../../../src/declarations'
 
 describe("'calendar.functions'", () => {
   describe("'create-slots' function", () => {
@@ -60,9 +63,58 @@ describe("'calendar.functions'", () => {
   })
 
   describe("'remove-slots' function", () => {
-    it.todo('should create an new array removing the unwanted slots')
+    it('should return an empty array if there is no slots', () => {
+      const result = removeSlots({} as Calendar, {} as Post)
+
+      expect(result.length).toBe(0)
+    })
+    it('should create an new array removing the unwanted slots', () => {
+      const result = removeSlots(
+        {
+          slots: [
+            {
+              postId: 'data1',
+            },
+            {
+              postId: 'data1',
+            },
+            {
+              postId: 'data2',
+            },
+          ],
+        } as Calendar,
+        { _id: 'data1' } as Post
+      )
+      expect(result.length).toBe(1)
+    })
   })
+
   describe("'patch-slots' function", () => {
-    it.todo('should create an new array using the new duration')
+    it('should create an new array using the new duration', () => {
+      const result = patchSlots(
+        {
+          slots: [
+            {
+              postId: 'data1',
+            },
+            {
+              postId: '5ec1913f47bff53528e4b6fc',
+            },
+          ],
+        } as Calendar,
+        {
+          startAt: '2020-06-01T17:30:00.000+00:00',
+          duration: 60,
+          _id: '5ec1913f47bff53528e4b6fc',
+        } as Post
+      )
+
+      expect(result.length).toBe(3)
+      expect(
+        result.filter(
+          (slot) => slot.postId.toString() === '5ec1913f47bff53528e4b6fc'
+        ).length
+      ).toBe(2)
+    })
   })
 })

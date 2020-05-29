@@ -34,7 +34,7 @@ const checkEmail = {
       value
     )
   },
-  message: (props: any) => `${props.value} is not a valid email`,
+  message: (props: any) => `'${props.value}' is not a valid email`,
 }
 
 export { checkMinutes, checkDuration, checkDate, checkEmail }

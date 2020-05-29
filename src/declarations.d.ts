@@ -117,6 +117,8 @@ export interface PostCore {
   creatorId: Id
   createdAt?: string
   updatedAt?: string
+
+  endAt?: string
 }
 
 export type Post = PostCore & {

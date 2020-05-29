@@ -1,6 +1,6 @@
 import { MethodNotAllowed } from '@feathersjs/errors'
 import app from '../../../src/app'
-import { Paginated } from '@feathersjs/feathers'
+import { Paginated, Params } from '@feathersjs/feathers'
 import addDataToUser from '../../utils/addDataToUser'
 import {
   User,
@@ -32,6 +32,8 @@ describe(`'${serviceName}' service`, () => {
   describe('internal CRUD', () => {
     let result: User | null = null
     let error: Error | null = null
+
+    const params: Params = {}
 
     // User with admin permission
     const user: User = {
@@ -242,7 +244,33 @@ describe(`'${serviceName}' service`, () => {
       )
     })
 
-    it.todo("should patch 'createdPostsIds' %s (add and remove)")
+    it.each(['add', 'remove'])(
+      "should patch 'createdPostsIds' (%s))",
+      async (arg) => {
+        params.user = result
+
+        let patchedResult: User
+        try {
+          patchedResult = await app.service(serviceName).patch(
+            result._id,
+            // @ts-ignore
+            { createdPostsIds: ['5ccaea940db44157d84e8c93'] },
+            params
+          )
+        } catch (e) {
+          error = e
+        }
+
+        if (arg === 'add') {
+          expect(patchedResult.createdPostsIds.length).toBe(1)
+          expect(patchedResult.createdPostsIds[0].toString()).toBe(
+            '5ccaea940db44157d84e8c93'
+          )
+        } else if (arg === 'remove') {
+          expect(patchedResult.createdPostsIds.length).toBe(0)
+        }
+      }
+    )
 
     it('should remove', async () => {
       expect.assertions(9)
@@ -267,6 +295,60 @@ describe(`'${serviceName}' service`, () => {
   })
 
   describe('external CRUD', () => {
-    it.todo("should not patch 'createdPostsIds'")
+    let result: User | null = null
+    let error: Error | null = null
+
+    let user: User
+    let params: Params
+
+    const dataUser: User = {
+      lastName: 'fakeLastName',
+      firstName: 'username',
+      email: 'username@insa-cvl.fr',
+      password: '$Azerty1',
+      permissions: ['eleve'],
+      yearId: '',
+      departmentId: '',
+      favoriteSubjectsIds: [],
+      difficultSubjectsIds: [],
+      createdPostsIds: [],
+    }
+
+    beforeAll(async () => {
+      // Delete all the data from the rooms collection
+      await app.get('mongooseClient').model(serviceName).find().deleteMany()
+
+      try {
+        await addDataToUser(dataUser)
+        user = await app.service('users').create(dataUser)
+      } catch (e) {
+        // Error
+      }
+    })
+
+    beforeEach(() => {
+      params = { provider: 'external' }
+    })
+
+    afterEach(() => {
+      result = null
+      error = null
+    })
+    it("should not patch 'createdPostsIds'", async () => {
+      params.user = user
+
+      try {
+        result = await app.service(serviceName).patch(
+          user._id,
+          // @ts-ignore
+          { createdPostsIds: ['5ccaea940db44157d84e8c93'] },
+          params
+        )
+      } catch (e) {
+        error = e
+      }
+
+      expect(result.createdPostsIds.length).toBe(0)
+    })
   })
 })

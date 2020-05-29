@@ -136,7 +136,17 @@ describe("'posts' service", () => {
       expect(Array.isArray(results.data)).toBeTruthy()
     })
 
-    it.todo('should patch the user after create a post')
+    it('should patch the user after create a post', async () => {
+      let users: Paginated<User>
+      try {
+        users = (await app.service('users').find()) as Paginated<User>
+      } catch (e) {
+        error = e
+      }
+      const userFinded = users.data[0]
+
+      expect(userFinded.createdPostsIds.toString()).toBe(result._id.toString())
+    })
 
     it('should create', () => {
       expect(result).toBeDefined()
@@ -161,6 +171,10 @@ describe("'posts' service", () => {
       expect(result).toHaveProperty('updatedAt')
     })
 
+    it("should have an 'endAt' property", () => {
+      expect(result.endAt).toBe('2020-06-01T21:00:00.000Z')
+    })
+
     it('should not update (disallow)', async () => {
       expect.assertions(1)
       try {
@@ -171,7 +185,7 @@ describe("'posts' service", () => {
       expect(error).toBeInstanceOf(MethodNotAllowed)
     })
 
-    it.todo('should patch somes fields %s (the field)')
+    // it.todo('should patch the comment')
 
     it('should delete', async () => {
       expect.assertions(15)
@@ -203,7 +217,5 @@ describe("'posts' service", () => {
       expect(deleteResult).toHaveProperty('createdAt')
       expect(deleteResult).toHaveProperty('updatedAt')
     })
-
-    it.todo("should test 'endAt'")
   })
 })
