@@ -1,8 +1,6 @@
 import { disallow } from 'feathers-hooks-common'
 import checkDate from '../../hooks/check/check-date'
 
-import addRoom from '../../hooks/add/add-room'
-
 export default {
   before: {
     all: [],

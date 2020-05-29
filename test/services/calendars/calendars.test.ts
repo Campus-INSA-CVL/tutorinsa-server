@@ -1,7 +1,7 @@
-/* import app from '../../../src/app'
-import { MethodNotAllowed, FeathersErrorJSON } from '@feathersjs/errors'
+import app from '../../../src/app'
+import { MethodNotAllowed } from '@feathersjs/errors'
 import { Calendar, Room, Post } from '../../../src/declarations'
-import { Paginated } from '@feathersjs/feathers'
+import { Paginated, Params, HookContext } from '@feathersjs/feathers'
 
 const serviceName = 'calendars'
 
@@ -25,10 +25,10 @@ describe(`'${serviceName}' service`, () => {
     let error: Error | null = null
 
     const dataCalendars: any = {
-      roomId: '',
+      room: {},
       post: {
         startAt: '2020-05-18T20:00:00.000Z',
-        duration: 60,
+        duration: 30,
         _id: '5e7baba8e9af1629a471468d',
       },
     }
@@ -50,7 +50,7 @@ describe(`'${serviceName}' service`, () => {
 
       try {
         room = await app.service('rooms').create(dataRoom)
-        dataCalendars.roomId = room._id.toString()
+        dataCalendars.room = room
       } catch (e) {
         // Error
       }
@@ -81,6 +81,7 @@ describe(`'${serviceName}' service`, () => {
 
     afterEach(() => {
       result = null
+      error = null
     })
     it('should find', async () => {
       expect.assertions(3)
@@ -122,21 +123,112 @@ describe(`'${serviceName}' service`, () => {
       expect(error).toBeInstanceOf(MethodNotAllowed)
     })
 
-    it('should not patch (disallow)', async () => {
-      expect.assertions(1)
+    it('should patch (create)', async () => {
+      expect.assertions(3)
+
+      const params: Params & { from: HookContext['method'] } = {
+        from: 'create',
+      }
+
+      const data: { post: Post; calendar: Calendar } = {
+        post: {
+          startAt: '2020-05-18T20:30:00.000Z',
+          duration: 30,
+          _id: '6b8aaba8e9af1629a471468a',
+        } as Post,
+
+        calendar: result,
+      }
+
+      let calendar: Calendar
       try {
-        await app
+        calendar = await app
           .service(serviceName)
-          .patch(result._id, {} as { post: Post; calendar: Calendar }, {
-            from: 'patch',
-          })
+          .patch(result._id, data, params)
       } catch (e) {
         error = e
       }
-      expect(error).toBeInstanceOf(MethodNotAllowed)
+
+      expect(error).toBeNull()
+      expect(calendar.slots.length).toBe(2)
+      expect(calendar.slots[1].postId.toString()).toBe(data.post._id)
     })
 
-    it.todo('should patch %s (add et remove)')
+    it('should patch (patch)', async () => {
+      expect.assertions(3)
+
+      const params: Params & { from: HookContext['method'] } = {
+        from: 'patch',
+      }
+
+      const data: { post: Post; calendar: Calendar } = {
+        post: {
+          startAt: '2020-05-18T20:30:00.000Z',
+          duration: 30,
+          _id: '6b8aaba8e9af1629a471468a',
+        } as Post,
+
+        calendar: result,
+      }
+
+      let calendar: Calendar
+      try {
+        calendar = await app
+          .service(serviceName)
+          .patch(result._id, data, params)
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeNull()
+      expect(calendar.slots.length).toBe(2)
+      expect(calendar.slots[1].postId.toString()).toBe(data.post._id)
+    })
+
+    it('should patch (remove)', async () => {
+      expect.assertions(2)
+
+      const params: Params & { from: HookContext['method'] } = {
+        from: 'remove',
+      }
+
+      const data: { post: Post; calendar: Calendar } = {
+        post: dataCalendars.post as Post,
+        calendar: result,
+      }
+
+      let calendar: Calendar
+      try {
+        calendar = await app
+          .service(serviceName)
+          .patch(result._id, data, params)
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeNull()
+      expect(calendar.slots.length).toBe(0)
+    })
+
+    it('should thow an error if from is not provided', async () => {
+      expect.assertions(2)
+
+      const params = {
+        from: 'somewhere',
+      }
+
+      try {
+        await app
+          .service(serviceName)
+          // @ts-ignore
+          .patch(result._id, {} as { post: Post; calendar: Calendar }, params)
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeInstanceOf(Error)
+      expect(error.message).toBe(`'${params.from}' is not valid, unknow source`)
+    })
 
     it('should delete', async () => {
       expect.assertions(7)
@@ -164,7 +256,7 @@ describe(`'${serviceName}' service`, () => {
       roomId: '',
       post: {
         startAt: '2020-05-18T20:00:00.000Z',
-        duration: 60,
+        duration: 30,
         _id: '5e7baba8e9af1629a471468d',
       },
     }
@@ -188,7 +280,7 @@ describe(`'${serviceName}' service`, () => {
 
       try {
         room = await app.service('rooms').create(dataRoom)
-        dataCalendars.roomId = room._id.toString()
+        dataCalendars.room = room
       } catch (e) {
         // Error
       }
@@ -240,4 +332,3 @@ describe(`'${serviceName}' service`, () => {
     })
   })
 })
- */
