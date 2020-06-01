@@ -1,5 +1,5 @@
 import * as feathersAuthentication from '@feathersjs/authentication'
-import { disallow } from 'feathers-hooks-common'
+import { disallow, iff, iffElse } from 'feathers-hooks-common'
 import { PostCore, CheckDataOptions, PostType } from '../../declarations'
 // Don't remove this comment. It's needed to format import lines nicely.
 import checkData from '../../hooks/check/check-data'
@@ -38,7 +38,9 @@ import patchCalendar from '../../hooks/calendar/patch-calendar'
 
 import addCalendar from '../../hooks/add/add-calendar'
 
-const checkDataOptions: CheckDataOptions<PostCore> = {
+import isPost from '../../hooks/post/is-post'
+
+const checkDataTutorOptions: CheckDataOptions<PostCore> = {
   fields: [
     'comment',
     'type',
@@ -52,6 +54,10 @@ const checkDataOptions: CheckDataOptions<PostCore> = {
   arrayFields: ['studentsIds', 'tutorsIds'],
   numberFields: ['duration', 'studentsCapacity', 'tutorsCapacity'],
   dateFields: ['startAt'],
+}
+
+const checkDataStudentOptions: CheckDataOptions<PostCore> = {
+  fields: ['comment', 'type', 'duration', 'subjectId'],
 }
 
 const unwantedFields = ['studentsIds', 'tutorsIds', 'creatorId']
@@ -68,7 +74,11 @@ export default {
     get: [],
     create: [
       authenticate('jwt'),
-      checkData(checkDataOptions),
+      iffElse(
+        isPost('tuteur'),
+        checkData(checkDataTutorOptions),
+        checkData(checkDataStudentOptions)
+      ),
       checkDuplicate(),
       checkIds(),
       checkTime(),
