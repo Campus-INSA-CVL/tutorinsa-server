@@ -71,6 +71,7 @@ describe("'check-calendars' hook", () => {
       room: {
         _id: '5e28944c60e9be0d88bb897f',
         startAt: '1970-01-01T19:00:00.000Z',
+        duration: 60,
       },
       startAt: '2020-05-21T19:00:00.000Z',
     }
@@ -119,6 +120,7 @@ describe("'check-calendars' hook", () => {
         room: {
           _id: '5e28944c60e9be0d88bb897f',
           startAt: '1970-01-01T19:00:00.000Z',
+          duration: 60,
         },
       }
 
@@ -140,6 +142,7 @@ describe("'check-calendars' hook", () => {
         room: {
           startAt: '1970-01-01T19:00:00.000Z',
           _id: '5e28944c60e9be0d88bb897f',
+          duration: 120,
         },
         calendar,
       } as unknown) as Post & {
@@ -168,6 +171,7 @@ describe("'check-calendars' hook", () => {
         room: {
           startAt: '1970-01-01T19:00:00.000Z',
           _id: '5e28944c60e9be0d88bb897f',
+          duration: 120,
         },
         calendar,
       } as unknown) as Post & {

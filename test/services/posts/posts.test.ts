@@ -172,7 +172,7 @@ describe("'posts' service", () => {
     })
 
     it("should have an 'endAt' property", () => {
-      expect(result.endAt).toBe('2020-06-01T21:00:00.000Z')
+      expect(result.endAt).toBeDefined()
     })
 
     it('should not update (disallow)', async () => {

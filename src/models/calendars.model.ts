@@ -3,6 +3,8 @@
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 import { Application, Calendar } from '../declarations'
+import { checkDuration } from './validation/validate'
+
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals'
 
 export default function (app: Application) {
@@ -18,6 +20,7 @@ export default function (app: Application) {
       duration: {
         type: Number,
         required: true,
+        validate: checkDuration,
       },
       roomId: {
         type: mongooseClient.Schema.Types.ObjectId,

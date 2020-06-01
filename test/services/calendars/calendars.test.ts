@@ -106,7 +106,10 @@ describe(`'${serviceName}' service`, () => {
       expect(result).toBeDefined()
       expect(result).toHaveProperty('_id')
       expect(result).toHaveProperty('startAt')
-      expect(result).toHaveProperty('roomId', result.roomId)
+      expect(result).toHaveProperty('startAt')
+      expect(result).toHaveProperty('roomId', room._id)
+      expect(result).toHaveProperty('duration', room.duration)
+
       expect(result).toHaveProperty('slots')
 
       expect(result).toHaveProperty('createdAt')
