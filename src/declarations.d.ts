@@ -139,6 +139,7 @@ export interface CalendarCore {
   _id?: Id
   startAt: string
   roomId: Id
+  duration: number
   slots?: Slot[]
 }
 

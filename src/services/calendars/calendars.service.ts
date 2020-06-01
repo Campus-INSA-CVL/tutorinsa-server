@@ -18,10 +18,12 @@ export default function (app: Application) {
   const options = {
     Model: createModel(app),
     paginate: app.get('paginate'),
+    lean: { virtuals: true },
   }
 
   let calendars: Calendars & { docs?: object }
   // Create service with any options it requires
+  // @ts-ignore
   calendars = new Calendars(options, app)
 
   // Create documentation

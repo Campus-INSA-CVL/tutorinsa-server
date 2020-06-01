@@ -29,6 +29,7 @@ export class Calendars extends Service {
     const calendarData: Calendar = {
       startAt: startAtCalendar,
       roomId: data.room!._id as string,
+      duration: data.room!.duration,
       slots,
     }
     return super.create(calendarData, params)

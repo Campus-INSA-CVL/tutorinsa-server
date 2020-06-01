@@ -2,7 +2,8 @@
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
-import { Application } from '../declarations'
+import { Application, Calendar } from '../declarations'
+import mongooseLeanVirtuals from 'mongoose-lean-virtuals'
 
 export default function (app: Application) {
   const modelName = 'calendars'
@@ -12,6 +13,10 @@ export default function (app: Application) {
     {
       startAt: {
         type: Date,
+        required: true,
+      },
+      duration: {
+        type: Number,
         required: true,
       },
       roomId: {
@@ -39,8 +44,15 @@ export default function (app: Application) {
     },
     {
       timestamps: true,
+      id: false,
     }
   )
+
+  schema.virtual('full').get(function (this: Calendar) {
+    return this.slots?.length === this.duration % 30
+  })
+
+  schema.plugin(mongooseLeanVirtuals)
 
   // This is necessary to avoid model compilation errors in watch mode
   // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel
