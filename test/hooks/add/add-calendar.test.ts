@@ -38,7 +38,7 @@ describe("'add-calendar' hook", () => {
       firstName: 'username',
       email: 'username@insa-cvl.fr',
       password: '$Azerty1',
-      permissions: ['eleve'],
+      permissions: ['tuteur'],
       yearId: '',
       departmentId: '',
       favoriteSubjectsIds: [],
@@ -69,7 +69,7 @@ describe("'add-calendar' hook", () => {
 
     post = {
       comment: 'hello there',
-      type: 'eleve',
+      type: 'tuteur',
       startAt: createDate(),
       duration: 60,
       studentsCapacity: 15,

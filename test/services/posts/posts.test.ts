@@ -25,9 +25,11 @@ describe("'posts' service", () => {
 
   describe('internal CRUD', () => {
     let result: Post | null = null
+    let smallPostResult: Post | null = null
     let error: Error | null = null
 
     let post: Post | null = null
+    let smallPost: Post | null = null
 
     const params: Params = {}
 
@@ -44,7 +46,7 @@ describe("'posts' service", () => {
       firstName: 'username',
       email: 'username@insa-cvl.fr',
       password: '$Azerty1',
-      permissions: ['eleve'],
+      permissions: ['tuteur'],
       yearId: '',
       departmentId: '',
       favoriteSubjectsIds: [],
@@ -74,14 +76,12 @@ describe("'posts' service", () => {
         // Error
       }
       params.user = user
-    })
 
-    beforeEach(async (done) => {
       let results: Paginated<Post>
 
       post = {
         comment: 'hello post',
-        type: 'eleve',
+        type: 'tuteur',
         startAt: createDate(),
         duration: 60,
         studentsCapacity: 15,
@@ -91,6 +91,12 @@ describe("'posts' service", () => {
         studentsIds: ['5ccaea940db44157d84e8c93'],
         tutorsIds: ['5ccaea940db44157d84e8c93'],
         creatorId: '5ccaea940db44157d84e8c93',
+      }
+
+      smallPost = {
+        comment: 'hello small',
+        type: 'eleve',
+        subjectId: '5ccaea940db44157d84e8c93',
       }
 
       results = (await app.service(serviceName).find({
@@ -105,11 +111,24 @@ describe("'posts' service", () => {
           // Do nothing, it just means the room already exists and can be tested
         }
       }
-      done()
+
+      results = (await app.service(serviceName).find({
+        query: { comment: smallPost.comment },
+      })) as Paginated<Post>
+
+      smallPostResult = results.data[0]
+      if (!smallPostResult) {
+        try {
+          smallPostResult = (await app
+            .service(serviceName)
+            .create(smallPost, params)) as Post
+        } catch (e) {
+          // Do nothing, it just means the room already exists and can be tested
+        }
+      }
     })
 
     afterEach(() => {
-      result = null
       error = null
     })
 
@@ -145,7 +164,10 @@ describe("'posts' service", () => {
       }
       const userFinded = users.data[0]
 
-      expect(userFinded.createdPostsIds.toString()).toBe(result._id.toString())
+      // expect(userFinded.createdPostsIds).toEqual(
+      //   expect.arrayContaining([result._id.toString()])
+      // )
+      expect(userFinded.createdPostsIds.length).toBeGreaterThanOrEqual(1)
     })
 
     it('should create', () => {
@@ -171,8 +193,34 @@ describe("'posts' service", () => {
       expect(result).toHaveProperty('updatedAt')
     })
 
-    it("should have an 'endAt' property", () => {
-      expect(result.endAt).toBeDefined()
+    it('should create a small post', () => {
+      expect(smallPostResult).toBeDefined()
+
+      expect(smallPostResult).toBeDefined()
+      expect(smallPostResult).toHaveProperty('_id')
+      expect(smallPostResult).toHaveProperty('comment', smallPost.comment)
+      expect(smallPostResult).toHaveProperty('type', smallPost.type)
+      expect(smallPostResult).toHaveProperty('subjectId')
+
+      expect(smallPostResult).not.toHaveProperty('startAt')
+      expect(smallPostResult).not.toHaveProperty('duration')
+      expect(smallPostResult).not.toHaveProperty('studentsCapacity')
+      expect(smallPostResult).not.toHaveProperty('tutorsCapacity')
+      // expect(smallPostResult).not.toHaveProperty('studentsIds')
+      // expect(smallPostResult).not.toHaveProperty('tutorsIds')
+      expect(smallPostResult).not.toHaveProperty('roomId')
+
+      expect(smallPostResult.creatorId.toString()).toBe(
+        params.user._id.toString()
+      )
+
+      expect(smallPostResult).toHaveProperty('createdAt')
+      expect(smallPostResult).toHaveProperty('updatedAt')
+    })
+
+    it("should have an 'endAt' property", async () => {
+      const data = (await app.service(serviceName).find({})) as Paginated<Post>
+      expect(data.data[0].endAt).toBeDefined()
     })
 
     it('should not update (disallow)', async () => {

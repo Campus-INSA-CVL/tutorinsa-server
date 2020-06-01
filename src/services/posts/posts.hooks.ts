@@ -57,10 +57,20 @@ const checkDataTutorOptions: CheckDataOptions<PostCore> = {
 }
 
 const checkDataStudentOptions: CheckDataOptions<PostCore> = {
-  fields: ['comment', 'type', 'duration', 'subjectId'],
+  fields: ['comment', 'type', 'subjectId'],
 }
 
-const unwantedFields = ['studentsIds', 'tutorsIds', 'creatorId']
+const unwantedTutorFields = ['studentsIds', 'tutorsIds', 'creatorId']
+const unwantedStudentFields = [
+  'startAt',
+  'duration',
+  'studentsCapacity',
+  'tutorsCapacity',
+  'roomId',
+  'studentsIds',
+  'tutorsIds',
+  'creatorId',
+]
 
 const typesOptions: PostType[] = ['eleve', 'tuteur']
 
@@ -76,6 +86,11 @@ export default {
       authenticate('jwt'),
       iffElse(
         isPost('tuteur'),
+        removeUnwantedFields(unwantedTutorFields),
+        removeUnwantedFields(unwantedStudentFields)
+      ),
+      iffElse(
+        isPost('tuteur'),
         checkData(checkDataTutorOptions),
         checkData(checkDataStudentOptions)
       ),
@@ -87,12 +102,14 @@ export default {
       checkLength(),
       checkCapacity(),
       normalizeDate(['startAt']),
-      addRoom(),
-      addCalendar(),
-      checkConcordanceDay(),
-      checkTimeCompaibility(),
-      checkCalendars(),
-      removeUnwantedFields(unwantedFields),
+      iff(
+        isPost('tuteur'),
+        addRoom(),
+        addCalendar(),
+        checkConcordanceDay(),
+        checkTimeCompaibility(),
+        checkCalendars()
+      ),
     ],
     update: [disallow()],
     patch: [
@@ -117,7 +134,10 @@ export default {
       // checkCalendars(),
       // ,
     ],
-    remove: [authenticate('jwt'), addRoom(), addCalendar()],
+    remove: [
+      authenticate('jwt'),
+      iff(isPost('tuteur'), addRoom(), addCalendar()),
+    ],
   },
 
   after: {
@@ -126,8 +146,7 @@ export default {
     get: [],
     create: [
       patchUser([['createdPostsIds', '_id', 'array']]),
-      createCalendar(),
-      patchCalendar('create'),
+      iff(isPost('tuteur'), createCalendar(), patchCalendar('create')),
     ],
     update: [],
     patch: [
@@ -137,7 +156,7 @@ export default {
     ],
     remove: [
       patchUser([['createdPostsIds', '_id', 'array']]),
-      patchCalendar('remove'),
+      iff(isPost('tuteur'), patchCalendar('remove')),
     ],
   },
 

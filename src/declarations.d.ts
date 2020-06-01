@@ -106,15 +106,15 @@ export interface PostCore {
   _id?: Id
   comment: string
   type: PostType
-  startAt: string
-  duration: number
-  studentsCapacity: number
-  tutorsCapacity: number
+  startAt?: string
+  duration?: number
+  studentsCapacity?: number
+  tutorsCapacity?: number
   subjectId: Id
-  studentsIds: Id[]
-  tutorsIds: Id[]
-  roomId: Id
-  creatorId: Id
+  studentsIds?: Id[]
+  tutorsIds?: Id[]
+  roomId?: Id
+  creatorId?: Id
   createdAt?: string
   updatedAt?: string
 

@@ -11,7 +11,6 @@ import addDataToUser from '../../utils/addDataToUser'
 import createDate from '../../utils/createDate'
 
 import { HookContext, Service, Params, Paginated } from '@feathersjs/feathers'
-import { GeneralError } from '@feathersjs/errors'
 
 describe("'patch-calendar' hook", () => {
   let context: HookContext<
@@ -49,7 +48,7 @@ describe("'patch-calendar' hook", () => {
       firstName: 'username',
       email: 'username@insa-cvl.fr',
       password: '$Azerty1',
-      permissions: ['eleve'],
+      permissions: ['tuteur'],
       yearId: '',
       departmentId: '',
       favoriteSubjectsIds: [],
@@ -80,7 +79,7 @@ describe("'patch-calendar' hook", () => {
 
     post = {
       comment: 'hello there',
-      type: 'eleve',
+      type: 'tuteur',
       startAt: createDate(),
       duration: 30,
       studentsCapacity: 15,
@@ -136,7 +135,7 @@ describe("'patch-calendar' hook", () => {
 
     anotherPost = {
       comment: 'hello there',
-      type: 'eleve',
+      type: 'tuteur',
       startAt: createDate(30),
       duration: 30,
       studentsCapacity: 15,

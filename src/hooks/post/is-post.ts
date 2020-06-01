@@ -11,10 +11,12 @@ export default (options: PostType): ((hook: HookContext) => boolean) => {
   return (context: HookContext<Post>) => {
     const { data } = context
 
-    if (!data?.type) {
-      throw new BadRequest(`a type is required`)
+    if (data) {
+      if (!data?.type) {
+        throw new BadRequest(`a type is required`)
+      }
+      return data.type === options
     }
-
-    return data.type === options
+    return false
   }
 }

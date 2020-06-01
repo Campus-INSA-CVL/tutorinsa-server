@@ -32,14 +32,14 @@ export default (options = {}): Hook => {
           case 'studentsCapacity':
             inf = 5
             sup = 20
-            if (!isBetween(inf, sup, data[key])) {
+            if (!isBetween(inf, sup, data[key] as number)) {
               throw new BadRequest(`${key} must be between ${inf} and ${sup}`)
             }
             break
           case 'tutorsCapacity':
             inf = 1
             sup = 5
-            if (!isBetween(inf, sup, data[key])) {
+            if (!isBetween(inf, sup, data[key] as number)) {
               throw new BadRequest(`${key} must be between ${inf} and ${sup}`)
             }
             break

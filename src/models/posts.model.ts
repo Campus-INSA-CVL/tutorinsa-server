@@ -26,23 +26,19 @@ export default function (app: Application) {
       },
       startAt: {
         type: Date,
-        required: true,
         validate: [checkMinutes, checkDate],
       },
       duration: {
         type: Number,
-        required: true,
         validate: checkDuration,
       },
       studentsCapacity: {
         type: Number,
-        required: true,
         min: 5,
         max: 20,
       },
       tutorsCapacity: {
         type: Number,
-        required: true,
         min: 1,
         max: 5,
       },
@@ -55,22 +51,17 @@ export default function (app: Application) {
         {
           type: mongooseClient.Schema.Types.ObjectId,
           ref: 'users',
-          required: true,
-          default: [],
         },
       ],
       tutorsIds: [
         {
           type: mongooseClient.Schema.Types.ObjectId,
           ref: 'users',
-          required: true,
-          default: [],
         },
       ],
       roomId: {
         type: mongooseClient.Schema.Types.ObjectId,
         ref: 'rooms',
-        required: true,
       },
       creatorId: {
         type: mongooseClient.Schema.Types.ObjectId,
@@ -84,10 +75,28 @@ export default function (app: Application) {
     }
   )
 
+  /**
+   * Add default value before saving the post
+   */
+  schema.pre('save', function (this: Post, next: () => void) {
+    if (this.type === 'tuteur') {
+      this.studentsIds = []
+    }
+
+    next()
+  })
+
+  /**
+   * Add the end of the post
+   */
   schema.virtual('endAt').get(function (this: Post) {
-    return moment(this.startAt)
-      .add(moment.duration(this.duration, 'minutes'))
-      .toISOString()
+    if (this.type === 'tuteur') {
+      return moment(this.startAt)
+        .add(moment.duration(this.duration, 'minutes'))
+        .toISOString()
+    } else {
+      return undefined
+    }
   })
 
   schema.plugin(mongooseLeanVirtuals)

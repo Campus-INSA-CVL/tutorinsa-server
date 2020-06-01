@@ -20,7 +20,9 @@ export class Posts extends Service {
     const userId = getUserId(params)
     // Add the creator to the correct fields
     data.creatorId = userId
-    data.tutorsIds = [userId]
+    if (data.type === 'tuteur') {
+      data.tutorsIds = [userId]
+    }
 
     return super.create(data, params)
   }
