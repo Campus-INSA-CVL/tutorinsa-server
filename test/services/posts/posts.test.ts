@@ -1,5 +1,5 @@
 import app from '../../../src/app'
-import { Post, Room, User } from '../../../src/declarations'
+import { Post, Room, User, Calendar } from '../../../src/declarations'
 import addDataToUser from '../../utils/addDataToUser'
 import createDate from '../../utils/createDate'
 
@@ -216,6 +216,16 @@ describe("'posts' service", () => {
 
       expect(smallPostResult).toHaveProperty('createdAt')
       expect(smallPostResult).toHaveProperty('updatedAt')
+    })
+
+    it('should not create a calendar with a small post', async () => {
+      const calendars = (await app
+        .service('calendars')
+        .find({ query: { 'slots.postId': smallPostResult._id } })) as Paginated<
+        Calendar
+      >
+
+      expect(calendars.total).toBe(0)
     })
 
     it("should have an 'endAt' property", async () => {
