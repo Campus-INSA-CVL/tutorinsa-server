@@ -4,52 +4,54 @@
 // for more of what you can do here.
 import { Application, Calendar } from '../declarations'
 import { checkDuration } from './validation/validate'
+import mongoose from 'mongoose'
 
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals'
+
+const objSchema = {
+  startAt: {
+    type: Date,
+    required: true,
+  },
+  duration: {
+    type: Number,
+    required: true,
+    validate: checkDuration,
+  },
+  roomId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'rooms',
+    required: true,
+  },
+  slots: [
+    {
+      postId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'posts',
+        required: true,
+      },
+      startAt: {
+        type: Date,
+        required: true,
+      },
+      occupied: {
+        type: Boolean,
+        required: true,
+      },
+    },
+  ],
+}
+
+const objOptions = {
+  timestamps: true,
+  id: false,
+}
 
 export default function (app: Application) {
   const modelName = 'calendars'
   const mongooseClient = app.get('mongooseClient')
   const { Schema } = mongooseClient
-  const schema = new Schema(
-    {
-      startAt: {
-        type: Date,
-        required: true,
-      },
-      duration: {
-        type: Number,
-        required: true,
-        validate: checkDuration,
-      },
-      roomId: {
-        type: mongooseClient.Schema.Types.ObjectId,
-        ref: 'rooms',
-        required: true,
-      },
-      slots: [
-        {
-          postId: {
-            type: mongooseClient.Schema.Types.ObjectId,
-            ref: 'posts',
-            required: true,
-          },
-          startAt: {
-            type: Date,
-            required: true,
-          },
-          occupied: {
-            type: Boolean,
-            required: true,
-          },
-        },
-      ],
-    },
-    {
-      timestamps: true,
-      id: false,
-    }
-  )
+  const schema = new Schema(objSchema, objOptions)
 
   schema.virtual('full').get(function (this: Calendar) {
     return this.slots?.length === this.duration % 30
@@ -64,3 +66,5 @@ export default function (app: Application) {
   }
   return mongooseClient.model(modelName, schema)
 }
+
+export { objSchema, objOptions }

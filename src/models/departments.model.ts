@@ -4,23 +4,24 @@
 // for more of what you can do here.
 import { Application } from '../declarations'
 
+const objSchema = {
+  name: {
+    type: String,
+    lowercase: true,
+    unique: true,
+    required: true,
+  },
+}
+
+const objOptions = {
+  timestamps: true,
+}
+
 export default function (app: Application) {
   const modelName = 'departments'
   const mongooseClient = app.get('mongooseClient')
   const { Schema } = mongooseClient
-  const schema = new Schema(
-    {
-      name: {
-        type: String,
-        lowercase: true,
-        unique: true,
-        required: true,
-      },
-    },
-    {
-      timestamps: true,
-    }
-  )
+  const schema = new Schema(objSchema, objOptions)
 
   // This is necessary to avoid model compilation errors in watch mode
   // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel
@@ -29,3 +30,5 @@ export default function (app: Application) {
   }
   return mongooseClient.model(modelName, schema)
 }
+
+export { objSchema, objOptions }

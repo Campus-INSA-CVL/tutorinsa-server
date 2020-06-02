@@ -8,45 +8,46 @@ import moment from '../utils/moment'
 
 import { checkMinutes, checkDuration } from './validation/validate'
 
+const objSchema = {
+  campus: {
+    type: String,
+    required: true,
+    lowercase: true,
+    enum: ['blois', 'bourges'],
+  },
+  name: {
+    type: String,
+    required: true,
+    lowercase: true,
+  },
+  day: {
+    type: String,
+    lowarcase: true,
+    required: true,
+    enum: moment.weekdays(),
+  },
+  startAt: {
+    type: Date,
+    required: true,
+    validate: checkMinutes,
+  },
+  duration: {
+    type: Number,
+    required: true,
+    validate: checkDuration,
+  },
+}
+
+const objOptions = {
+  timestamps: true,
+  id: false,
+}
+
 export default function (app: Application) {
   const modelName = 'rooms'
   const mongooseClient = app.get('mongooseClient')
   const { Schema } = mongooseClient
-  const schema = new Schema(
-    {
-      campus: {
-        type: String,
-        required: true,
-        lowercase: true,
-        enum: ['blois', 'bourges'],
-      },
-      name: {
-        type: String,
-        required: true,
-        lowercase: true,
-      },
-      day: {
-        type: String,
-        lowarcase: true,
-        required: true,
-        enum: moment.weekdays(),
-      },
-      startAt: {
-        type: Date,
-        required: true,
-        validate: checkMinutes,
-      },
-      duration: {
-        type: Number,
-        required: true,
-        validate: checkDuration,
-      },
-    },
-    {
-      timestamps: true,
-      id: false,
-    }
-  )
+  const schema = new Schema(objSchema, objOptions)
 
   /**
    * Set startAt to a 1970'date
@@ -82,3 +83,5 @@ export default function (app: Application) {
   }
   return mongooseClient.model(modelName, schema)
 }
+
+export { objSchema, objOptions }

@@ -95,7 +95,7 @@ function removeSlots(calendar: Calendar, post: Post): Slot[] {
  */
 function patchSlots(calendar: Calendar, post: Post): Slot[] {
   const previousSlots = removeSlots(calendar, post)
-  const newSlots = createSlots(post.startAt, post.duration, post._id)
+  const newSlots = createSlots(post.startAt!, post.duration!, post._id)
 
   return [...previousSlots, ...newSlots]
 }

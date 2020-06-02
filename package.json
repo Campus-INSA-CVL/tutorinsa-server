@@ -24,12 +24,13 @@
     "npm": ">= 3.0.0"
   },
   "scripts": {
-    "test": "npm run compile && npm run jest",
-    "dev": "ts-node-dev --no-notify src/",
     "lint": "tslint 'src/**/*.ts' 'test/**/*.ts'",
-    "start": "npm run compile && node lib/",
     "jest": "jest --forceExit --detectOpenHandles",
+    "test": "npm run compile && npm run jest",
     "compile": "shx rm -rf lib/ && tsc",
+    "dev": "ts-node-dev --no-notify src/",
+    "start": "npm run compile && node lib/",
+    "populatedb": "ts-node populatedb.ts",
     "precommit": "npm run lint"
   },
   "pre-commit": [
@@ -69,6 +70,7 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "@types/async": "^3.2.3",
     "@types/compression": "^1.7.0",
     "@types/cors": "^2.8.6",
     "@types/helmet": "0.0.46",
@@ -79,6 +81,7 @@
     "@types/mongoose-lean-virtuals": "^0.5.1",
     "@types/serve-favicon": "^2.5.0",
     "@types/validator": "^13.0.0",
+    "async": "^3.2.0",
     "axios": "^0.19.2",
     "jest": "^25.5.4",
     "nodemon": "^2.0.3",
@@ -86,6 +89,7 @@
     "prettier": "^2.0.5",
     "shx": "^0.3.2",
     "ts-jest": "^25.4.0",
+    "ts-node": "^8.10.2",
     "ts-node-dev": "^1.0.0-pre.44",
     "tslib": "^2.0.0",
     "tslint": "^6.1.2",
