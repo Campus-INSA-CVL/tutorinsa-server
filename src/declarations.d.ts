@@ -119,6 +119,8 @@ export interface PostCore {
   updatedAt?: string
 
   endAt?: string
+  fullStudents?: string
+  fullTutors?: string
 }
 
 export type Post = PostCore & {
@@ -146,3 +148,12 @@ export interface CalendarCore {
 export type Calendar = CalendarCore & {
   [key: string]: string | undefined | Id | Slot[]
 }
+
+export type SubscriptionType = 'subscribe' | 'unsubscribe'
+
+export interface SubscriptionCore {
+  type: SubscriptionType
+  as: PostType
+}
+
+export type Subscription = SubscriptionCore

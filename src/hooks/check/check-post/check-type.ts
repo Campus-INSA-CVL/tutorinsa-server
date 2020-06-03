@@ -4,13 +4,21 @@ import { Hook, HookContext } from '@feathersjs/feathers'
 import { Post, PostType } from '../../../declarations'
 import { BadRequest } from '@feathersjs/errors'
 
-export default (options: PostType[]): Hook => {
+/**
+ * Check that the content of a field of data is in an array
+ * @param {string}
+ * @param {string[]}
+ */
+export default (fieldName: string, types: string[]): Hook => {
   return async (context: HookContext<Post>) => {
     const { data } = context
 
-    if (data?.type) {
-      if (!options.includes(data.type)) {
-        throw new BadRequest(`${data.type} is an incorrect type of post`)
+    if (data) {
+      const field = data[fieldName]
+      if (field && typeof field !== 'number' && !Array.isArray(field)) {
+        if (!types.includes(field)) {
+          throw new BadRequest(`${field} is an incorrect type`)
+        }
       }
     }
 

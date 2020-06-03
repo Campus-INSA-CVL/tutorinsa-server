@@ -99,6 +99,18 @@ export default function (app: Application) {
       return undefined
     }
   })
+  /**
+   * Tell if the post if full for the student
+   */
+  schema.virtual('fullStudents').get(function (this: Post) {
+    return this.studentsIds?.length === this.studentsCapacity
+  })
+  /**
+   * Tell if the post if full for the tutor
+   */
+  schema.virtual('fullTutors').get(function (this: Post) {
+    return this.tutorsIds?.length === this.tutorsCapacity
+  })
 
   schema.plugin(mongooseLeanVirtuals)
 

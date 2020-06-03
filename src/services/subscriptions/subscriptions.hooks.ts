@@ -1,8 +1,17 @@
 import * as authentication from '@feathersjs/authentication'
 import { disallow } from 'feathers-hooks-common'
 // Don't remove this comment. It's needed to format import lines nicely.
+import checkType from '../../hooks/check/check-post/check-type'
+import { SubscriptionType, PostType } from '../../declarations'
+
+import addPost from '../../hooks/add/add-post'
+
+import checkIsPostFull from '../../hooks/subscription/check-is-post-full'
 
 const { authenticate } = authentication.hooks
+
+const typeOptions: SubscriptionType[] = ['subscribe', 'unsubscribe']
+const asOptions: PostType[] = ['eleve', 'tuteur']
 
 export default {
   before: {
@@ -11,7 +20,13 @@ export default {
     get: [disallow()],
     create: [disallow()],
     update: [disallow()],
-    patch: [authenticate('jwt')],
+    patch: [
+      authenticate('jwt'),
+      checkType('type', typeOptions),
+      checkType('as', asOptions),
+      addPost(),
+      checkIsPostFull(),
+    ],
     remove: [disallow()],
   },
 

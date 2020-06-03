@@ -56,6 +56,18 @@ const objSchema = {
       default: [],
     },
   ],
+  studentSubscriptionsIds: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'post',
+    },
+  ],
+  tutorSubscriptionsIds: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'post',
+    },
+  ],
 }
 
 const objOptions = {
