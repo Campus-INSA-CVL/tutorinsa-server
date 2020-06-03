@@ -1,45 +1,69 @@
-# feathersjs-server
+<img src="./logo_tutorinsa.png" alt="Tutorinsa logo" style="display: block; margin: auto;">
 
-> 
+# API TutorINSA
 
-## About
+> A RESTful API for the TutorINSA's application !
 
-This project uses [Feathers](http://feathersjs.com). An open source web framework for building modern real-time applications.
+## Start the server
 
-## Getting Started
+### Requirement
 
-Getting up and running is as easy as 1, 2, 3.
+This project need, to run correctly:
 
-1. Make sure you have [NodeJS](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
-2. Install your dependencies
+- [nodejs](https://nodejs.org/en/)
+- [mongodb server](https://www.mongodb.com/try/download/community)
 
-    ```
-    cd path/to/feathersjs-server
-    npm install
-    ```
+### Configuration
 
-3. Start your app
+You can change database, test and default in the config file (a .env will be used in the futur)
 
-    ```
-    npm start
-    ```
+### Install the dependancies
 
-## Testing
-
-Simply run `npm test` and all your tests in the `test/` directory will be run.
-
-## Scaffolding
-
-Feathers has a powerful command line interface. Here are a few things it can do:
-
-```
-$ npm install -g @feathersjs/cli          # Install Feathers CLI
-
-$ feathers generate service               # Generate a new Service
-$ feathers generate hook                  # Generate a new Hook
-$ feathers help                           # Show all commands
+```bash
+# install the dependancies
+npm install
 ```
 
-## Help
+### Start the server
 
-For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com).
+```bash
+# strart the server in development mode
+npm run dev
+# strart the server in production mode
+npm run start
+```
+
+### Populate the database
+
+```bash
+# add data to a database
+npm run populatedb mongodb://localhost:27017/name_of_your_local_db
+```
+
+## Documentation
+
+Available at [localhost:3030/docs]() after starting the server
+
+## Questions
+
+## Issues
+
+## Contributing
+
+## Lint & Test
+
+```bash
+# check syntax of the code
+npm run lint
+# fix small issues
+npm run lint -- --fix
+```
+
+```bash
+# execute all tests
+npm run jest
+# compile code and execute all tests
+npm run test
+```
+
+## Licence
