@@ -38,9 +38,9 @@ export class Subscriptions implements ServiceMethods<Subscription> {
     data: Subscription,
     params?: Params
   ): Promise<Subscription> {
-    // in hook, check that the post is not full (add virtual field) depending of the 'as' and only if the user want to subcrib
-    // check the user permission
-    // add the post to the user and the user to the post
+    // check the user permission to sub as a tutor, user must be a tutor create a hook before add room
+    // add the post to the user and the user to the post, to do in the class
+    // do all tests
 
     return data
   }

@@ -6,7 +6,7 @@ import { SubscriptionType, PostType } from '../../declarations'
 
 import addPost from '../../hooks/add/add-post'
 
-import checkIsPostFull from '../../hooks/subscription/check-is-post-full'
+import checkIsPostFull from '../../hooks/check/check-subscription/check-is-post-full'
 
 const { authenticate } = authentication.hooks
 
