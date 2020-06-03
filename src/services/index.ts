@@ -6,6 +6,7 @@ import departments from './departments/departments.service'
 import rooms from './rooms/rooms.service'
 import posts from './posts/posts.service'
 import calendars from './calendars/calendars.service'
+import subscription from './subscription/subscription.service'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default function (app: Application) {
@@ -16,4 +17,5 @@ export default function (app: Application) {
   app.configure(rooms)
   app.configure(posts)
   app.configure(calendars)
+  app.configure(subscription)
 }
