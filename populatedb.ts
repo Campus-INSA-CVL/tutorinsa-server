@@ -7,6 +7,10 @@ console.log(
 // Get arguments passed on command line
 const userArgs = process.argv.slice(2)
 
+if (!userArgs.length) {
+  throw new Error('you must provide a mongo URI')
+}
+
 import async from 'async'
 import mongoose from 'mongoose'
 import moment from 'moment'
