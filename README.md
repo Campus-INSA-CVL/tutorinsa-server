@@ -1,4 +1,4 @@
-<img src="./logo_tutorinsa.png" alt="Tutorinsa logo" style="display: block; margin: auto;">
+<!-- <img src="./tutorinsa.png" alt="Tutorinsa logo" style="display: block; margin: auto;"> -->
 
 # API TutorINSA
 
@@ -15,7 +15,8 @@ This project need, to run correctly:
 
 ### Configuration
 
-You can change database, test and default in the config file (a .env will be used in the futur)
+You can change the development database in the "config/default.json" at the "mongodb" field.
+You have to create a ".env" file using the ".local.env" as a pattern, and fill it. ".env" is used for production. In development, some generic settings are provided, but can be change in "config/default.json". "config/production.json" will merge and overwrite settings from "config/default.json".
 
 ### Install the dependancies
 
