@@ -1,3 +1,5 @@
+import dotenv from 'dotenv'
+dotenv.config()
 import path from 'path'
 import favicon from 'serve-favicon'
 import compress from 'compression'

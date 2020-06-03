@@ -1,4 +1,5 @@
 {
   "host": "feathersjs-server-app.feathersjs.com",
+  "mongodb": "MONGODB",
   "port": "PORT"
 }
