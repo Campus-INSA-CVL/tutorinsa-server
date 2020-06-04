@@ -8,6 +8,8 @@ import addPost from '../../hooks/add/add-post'
 
 import checkIsPostFull from '../../hooks/check/check-subscription/check-is-post-full'
 
+import checkIsUserAble from '../../hooks/check/check-subscription/check-is-user-able'
+
 const { authenticate } = authentication.hooks
 
 const typeOptions: SubscriptionType[] = ['subscribe', 'unsubscribe']
@@ -24,6 +26,7 @@ export default {
       authenticate('jwt'),
       checkType('type', typeOptions),
       checkType('as', asOptions),
+      checkIsUserAble(),
       addPost(),
       checkIsPostFull(),
     ],

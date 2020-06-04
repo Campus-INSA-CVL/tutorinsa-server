@@ -1,29 +1,64 @@
-import { User } from '../../declarations'
+import {
+  User,
+  UserCore,
+  Subscription,
+  Post,
+  PostCore,
+} from '../../declarations'
 import { GeneralError } from '@feathersjs/errors'
-import { Id } from '@feathersjs/feathers'
+import { Id, Params } from '@feathersjs/feathers'
+
+type AllowedFieldsWithType<Obj, Type> = {
+  [K in keyof Obj]: Obj[K] extends Type ? K : never
+}
+
+type ExtractFieldsOfType<Obj, Type> = AllowedFieldsWithType<
+  Obj,
+  Type
+>[keyof Obj]
 
 /**
- * Return an array without the post id
- * @param {Id} postId
- * @param {User} user
- * @returns {User['createdPostsIds']} an array without the post id but with the other from the user
+ * Return an array without the post id using the user data
+ * @param {T} previous
+ * @param {ExtractFieldsOfType<T, Id[]>} field
+ * @param {Id} id
+ * @returns {Id[]} an array without the post id but with the other from the user
  */
-function removePostId(postId: Id, user: User): User['createdPostsIds'] {
+function removeId(
+  previous: Post | User,
+  field:
+    | ExtractFieldsOfType<UserCore, Id[]>
+    | ExtractFieldsOfType<PostCore, Id[]>,
+  id: Id
+): Id[] {
+  if (!field) {
+    return []
+  }
   return [
-    ...user.createdPostsIds.filter(
-      (createdPostId) => createdPostId.toString() !== postId.toString()
+    ...(previous[field] as Id[]).filter(
+      (idFromField: Id) => idFromField.toString() !== id.toString()
     ),
   ]
 }
 
 /**
- * Return an array with the new and previous post id
- * @param {Id} postId
- * @param {User} user
- * @returns {User['createdPostsIds']} a array containing the new post id and the previous from the user
+ * Return an array with the new and previous post id using the user data
+ * @param {Post | User} previous
+ * @param {ExtractFieldsOfType<UserCore, Id[]> | ExtractFieldsOfType<PostCore, Id[]>} field
+ * @param {Id} id
+ * @returns {Id[]} an array with the new id
  */
-function addPostId(postId: Id, user: User): User['createdPostsIds'] {
-  return [...user.createdPostsIds, postId]
+function addId(
+  previous: Post | User,
+  field:
+    | ExtractFieldsOfType<UserCore, Id[]>
+    | ExtractFieldsOfType<PostCore, Id[]>,
+  id: Id
+): Id[] {
+  if (!field) {
+    return []
+  }
+  return [...(previous[field] as Id[]), id]
 }
 
 /**
@@ -48,12 +83,66 @@ function updateCreatedPostsIds(data: Partial<User>, user: User): Partial<User> {
           createdPostId.toString() === data.createdPostsIds!.toString()
       )
     ) {
-      data.createdPostsIds = removePostId(data.createdPostsIds[0], user)
+      data.createdPostsIds = removeId(
+        user,
+        'createdPostsIds',
+        data.createdPostsIds[0]
+      )
     } else {
-      data.createdPostsIds = addPostId(data.createdPostsIds[0], user)
+      data.createdPostsIds = addId(
+        user,
+        'createdPostsIds',
+        data.createdPostsIds[0]
+      )
     }
   }
   return data
 }
 
-export { updateCreatedPostsIds }
+/**
+ * Add or remove id from subscription fields to patch the user
+ * @param {Partial<User>} data some fields from a user used to patch a user
+ * @param {User} user
+ * @param {object} params
+ * @returns {Partial<User>} the updated data
+ */
+function updateSubcriptions(
+  data: Partial<User | Post>,
+  previous: User | Post,
+  params: Params & { subType?: Subscription['type']; post?: Post }
+): Partial<User | Post> {
+  if (data) {
+    if (params.subType && params.post) {
+      const fields = Object.keys(data) as [
+        | 'studentsIds'
+        | 'tutorsIds'
+        | 'studentSubscriptionsIds'
+        | 'tutorSubscriptionsIds'
+        | undefined
+      ]
+
+      if (fields[0]) {
+        if (params.subType === 'subscribe') {
+          data[fields[0]] = addId(
+            previous,
+            fields[0],
+            (data[fields[0]] as Id[])[0]
+          )
+        } else if (params.subType === 'unsubscribe') {
+          data[fields[0]] = removeId(
+            previous,
+            fields[0],
+            (data[fields[0]] as Id[])[0]
+          )
+        } else {
+          throw new GeneralError(
+            `'${params.subType}' this type is unknow (subscription service)`
+          )
+        }
+      }
+    }
+  }
+  return data
+}
+
+export { updateCreatedPostsIds, updateSubcriptions }

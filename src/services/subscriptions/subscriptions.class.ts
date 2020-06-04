@@ -1,5 +1,11 @@
 import { Id, NullableId, Params, ServiceMethods } from '@feathersjs/feathers'
-import { Application, Subscription } from '../../declarations'
+import { Application, Subscription, Post, User } from '../../declarations'
+import { BadRequest, GeneralError } from '@feathersjs/errors'
+import {
+  createUserData,
+  createPostData,
+  patchSubcription,
+} from './subscriptions.functions'
 
 // tslint:disable-next-line
 interface ServiceOptions {}
@@ -36,10 +42,30 @@ export class Subscriptions implements ServiceMethods<Subscription> {
   async patch(
     id: NullableId,
     data: Subscription,
-    params?: Params
+    params: Params
   ): Promise<Subscription> {
-    // check the user permission to sub as a tutor, user must be a tutor create a hook before add room
-    // add the post to the user and the user to the post, to do in the class
+    if (!id) {
+      throw new BadRequest('you must provide an id')
+    }
+
+    const { user } = params
+
+    // Patch the post and the user for the subcription
+    const options = { subType: data.type, post: params.post }
+
+    const userData = createUserData(data.as, id)
+    await patchSubcription(
+      this.app,
+      'users',
+      (user as User)._id!,
+      userData,
+      options
+    )
+
+    const postData = createPostData(data.as, user._id)
+    await patchSubcription(this.app, 'posts', id, postData, options)
+
+    // maybe use makeParams
     // do all tests
 
     return data

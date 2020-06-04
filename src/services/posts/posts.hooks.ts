@@ -98,7 +98,7 @@ export default {
       checkIds(),
       checkTime(),
       checkDate(),
-      checkType(typesOptions),
+      checkType('type', typesOptions),
       checkLength(),
       checkCapacity(),
       normalizeDate(['startAt']),
@@ -113,7 +113,7 @@ export default {
     ],
     update: [disallow()],
     patch: [
-      disallow(),
+      disallow('external'),
       // iff(
       //   isProvider('external'),
       //   removeUnwantedFields(['startAt', ...unwantedFields])

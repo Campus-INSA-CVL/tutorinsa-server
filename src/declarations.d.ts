@@ -92,6 +92,8 @@ export interface UserCore {
   favoriteSubjectsIds: Id[]
   difficultSubjectsIds: Id[]
   createdPostsIds: Id[]
+  studentSubscriptionsIds: Id[]
+  tutorSubscriptionsIds: Id[]
   createdAt?: string
   updatedAt?: string
 }
@@ -111,8 +113,8 @@ export interface PostCore {
   studentsCapacity?: number
   tutorsCapacity?: number
   subjectId: Id
-  studentsIds?: Id[]
-  tutorsIds?: Id[]
+  studentsIds: Id[]
+  tutorsIds: Id[]
   roomId?: Id
   creatorId?: Id
   createdAt?: string
