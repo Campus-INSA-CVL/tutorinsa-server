@@ -10,6 +10,7 @@ describe("'check-type' hook", () => {
   let result: HookContext<Post>
 
   const typesOptions: PostType[] = ['eleve', 'tuteur']
+  const fieldName = 'type'
 
   beforeEach(() => {
     context = {
@@ -28,7 +29,10 @@ describe("'check-type' hook", () => {
     expect.assertions(2)
 
     try {
-      result = (await checkType(typesOptions)(context)) as HookContext<Post>
+      result = (await checkType(
+        fieldName,
+        typesOptions
+      )(context)) as HookContext<Post>
     } catch (e) {
       error = e
     }
@@ -46,7 +50,10 @@ describe("'check-type' hook", () => {
 
       context.data = Object.assign({}, data) as Post
       try {
-        result = (await checkType(typesOptions)(context)) as HookContext<Post>
+        result = (await checkType(
+          fieldName,
+          typesOptions
+        )(context)) as HookContext<Post>
       } catch (e) {
         error = e
       }
@@ -63,11 +70,14 @@ describe("'check-type' hook", () => {
 
     context.data = Object.assign({}, data) as Post
     try {
-      result = (await checkType(typesOptions)(context)) as HookContext<Post>
+      result = (await checkType(
+        fieldName,
+        typesOptions
+      )(context)) as HookContext<Post>
     } catch (e) {
       error = e
     }
     expect(error).toBeInstanceOf(BadRequest)
-    expect(error.message).toBe(`${data.type} is an incorrect type of post`)
+    expect(error.message).toBe(`${data.type} is an incorrect type`)
   })
 })
