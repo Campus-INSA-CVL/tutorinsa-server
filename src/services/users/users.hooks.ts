@@ -46,7 +46,11 @@ const checkDataOptions: CheckDataOptions<UserCore> = {
   unwantedFields: ['permissions', 'email'],
 }
 
-const unwantedFields = ['createdPostsIds']
+const unwantedFields = [
+  'createdPostsIds',
+  'studentSubscriptionsIds',
+  'tutorSubscriptionsIds',
+]
 
 const permissionsOptions: CheckPermissionsOptions = {
   permissions: ['admin', 'eleve', 'tuteur'],
