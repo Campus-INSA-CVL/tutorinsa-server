@@ -27,8 +27,11 @@ type ExtractFieldsOfType<Obj, Type> = AllowedFieldsWithType<
 function removeId(
   previous: Post | User,
   field:
-    | ExtractFieldsOfType<UserCore, Id[]>
-    | ExtractFieldsOfType<PostCore, Id[]>,
+    | 'studentsIds'
+    | 'tutorsIds'
+    | 'studentSubscriptionsIds'
+    | 'tutorSubscriptionsIds'
+    | 'createdPostsIds',
   id: Id
 ): Id[] {
   if (!field) {
@@ -51,8 +54,11 @@ function removeId(
 function addId(
   previous: Post | User,
   field:
-    | ExtractFieldsOfType<UserCore, Id[]>
-    | ExtractFieldsOfType<PostCore, Id[]>,
+    | 'studentsIds'
+    | 'tutorsIds'
+    | 'studentSubscriptionsIds'
+    | 'tutorSubscriptionsIds'
+    | 'createdPostsIds',
   id: Id
 ): Id[] {
   if (!field) {
@@ -118,7 +124,6 @@ function updateSubcriptions(
         | 'tutorsIds'
         | 'studentSubscriptionsIds'
         | 'tutorSubscriptionsIds'
-        | undefined
       ]
 
       if (fields[0]) {

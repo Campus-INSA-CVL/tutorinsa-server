@@ -51,7 +51,7 @@ export class Subscriptions implements ServiceMethods<Subscription> {
     const { user } = params
 
     // Patch the post and the user for the subcription
-    const options = { subType: data.type, post: params.post }
+    const options = { subType: data.type, post: params.post, user }
 
     const userData = createUserData(data.as, id)
     await patchSubcription(
