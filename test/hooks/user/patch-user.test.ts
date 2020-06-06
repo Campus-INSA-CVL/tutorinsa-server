@@ -69,7 +69,7 @@ describe("'patch-user' hook", () => {
       subjectId: '5ccaea940db44157d84e8c93',
       roomId: '5ccaea940db44157d84e8c93',
       studentsIds: [],
-      tutorsIds: [],
+      tutorsIds: [user._id.toString()],
       creatorId: '5ccaea940db44157d84e8c93',
     }
   })
@@ -164,7 +164,7 @@ describe("'patch-user' hook", () => {
     expect(error.message).toEqual('an error occured when the user was updated')
   })
 
-  it('should patch the user (array to array)', async () => {
+  it('should patch the user (string to array)', async () => {
     expect.assertions(2)
 
     // @ts-ignore
@@ -193,34 +193,34 @@ describe("'patch-user' hook", () => {
     )
   })
 
-  // it('should patch the user (string to array)', async () => {
-  //   expect.assertions(2)
+  it('should patch the user (array to array)', async () => {
+    expect.assertions(2)
 
-  //   // @ts-ignore
-  //   context.result = Object.assign({}, post)
-  //   context.params = Object.assign({}, params)
+    // @ts-ignore
+    context.result = Object.assign({}, post)
+    context.params = Object.assign({}, params)
 
-  //   const options = [['createdPostsIds', '_id', 'array']]
+    const options = [['createdPostsIds', 'tutorsIds', 'array']]
 
-  //   try {
-  //     // @ts-ignore
-  //     result = (await patchUser(options)(context)) as HookContext
-  //   } catch (e) {
-  //     error = e
-  //   }
+    try {
+      // @ts-ignore
+      result = (await patchUser(options)(context)) as HookContext
+    } catch (e) {
+      error = e
+    }
 
-  //   let users: Paginated<User>
-  //   try {
-  //     users = (await app.service('users').find()) as Paginated<User>
-  //   } catch (error) {
-  //     //
-  //   }
+    let users: Paginated<User>
+    try {
+      users = (await app.service('users').find()) as Paginated<User>
+    } catch (error) {
+      //
+    }
 
-  //   expect(error).toBeNull()
-  //   expect(users.data[0].createdPostsIds[0].toString()).toBe(
-  //     post._id.toString()
-  //   )
-  // })
+    expect(error).toBeNull()
+    expect(users.data[0].createdPostsIds[0].toString()).toBe(
+      user._id.toString()
+    )
+  })
 
   // it('should patch the user (string to string)', async () => {
   //   expect.assertions(2)
@@ -229,7 +229,7 @@ describe("'patch-user' hook", () => {
   //   context.result = Object.assign({}, post)
   //   context.params = Object.assign({}, params)
 
-  //   const options = [['createdPostsIds', '_id', 'array']]
+  //   const options = [['yearId', '_id', 'string']]
 
   //   try {
   //     // @ts-ignore
@@ -246,8 +246,6 @@ describe("'patch-user' hook", () => {
   //   }
 
   //   expect(error).toBeNull()
-  //   expect(users.data[0].createdPostsIds[0].toString()).toBe(
-  //     post._id.toString()
-  //   )
+  //   expect(users.data[0].yearId.toString()).toBe(post._id.toString())
   // })
 })

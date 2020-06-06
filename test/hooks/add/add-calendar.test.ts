@@ -31,6 +31,7 @@ describe("'add-calendar' hook", () => {
   beforeAll(async () => {
     await app.get('mongooseClient').model('rooms').find().deleteMany()
     await app.get('mongooseClient').model('posts').find().deleteMany()
+    await app.get('mongooseClient').model('calendars').find().deleteMany()
     await app.get('mongooseClient').model('users').find().deleteMany()
 
     const dataUser: User = {
@@ -129,24 +130,25 @@ describe("'add-calendar' hook", () => {
     expect(error.message).toEqual('no room provided to add a calendar')
   })
 
-  // it('should thow a error if find failed', async () => {
-  //   expect.assertions(2)
+  it('should thow a error if find failed', async () => {
+    expect.assertions(2)
 
-  // use a spy
+    // @ts-ignore
+    context.app = {}
 
-  //   context.data = Object.assign({}, { ...post, room }) as Post & {
-  //     room: Room
-  //   }
+    context.data = Object.assign({}, { ...post, room }) as Post & {
+      room: Room
+    }
 
-  //   try {
-  //     result = (await addCalendar()(context)) as HookContext
-  //   } catch (e) {
-  //     error = e
-  //   }
+    try {
+      result = (await addCalendar()(context)) as HookContext
+    } catch (e) {
+      error = e
+    }
 
-  //   expect(error).toBeInstanceOf(GeneralError)
-  //   expect(error.message).toEqual('find calendars encountered an error')
-  // })
+    expect(error).toBeInstanceOf(GeneralError)
+    expect(error.message).toEqual('find calendars encountered an error')
+  })
 
   it('should add the calendar to the context', async () => {
     expect.assertions(2)

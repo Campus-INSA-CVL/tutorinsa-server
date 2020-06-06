@@ -164,4 +164,32 @@ describe("'create-calendar' hook", () => {
     expect(error).toBeInstanceOf(GeneralError)
     expect(error.message).toEqual('no room provided')
   })
+
+  it('should throw an error if create a calendar failed', async () => {
+    // @ts-ignore
+    context.app = {}
+
+    const data = {
+      ...post,
+      room,
+    }
+
+    context.data = Object.assign({}, data) as Post & {
+      calendar?: Calendar
+      room: Room
+    }
+
+    post._id = '5ccaea940db44157d84e8c93'
+    // @ts-ignore
+    context.result = Object.assign({}, post)
+
+    try {
+      result = (await createCalendar()(context)) as HookContext
+    } catch (e) {
+      error = e
+    }
+
+    expect(error).toBeInstanceOf(GeneralError)
+    expect(error.message).toEqual("the calendar can't be created")
+  })
 })

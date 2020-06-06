@@ -57,14 +57,14 @@ export default (options = {}): Hook => {
       if (data.calendar) {
         switch (method) {
           case 'create':
-            const postSlots = createSlots(data.startAt, data.duration)
+            const postSlots = createSlots(data.startAt!, data.duration!)
 
             checkAvaibilitySlots(data.calendar, postSlots)
 
             break
           // case 'patch':
           //   break
-
+          /* istanbul ignore next */
           default:
             break
         }

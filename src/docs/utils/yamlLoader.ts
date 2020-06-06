@@ -7,10 +7,10 @@ import logger from '../../logger'
 
 /**
  * load yml file and return it in json
- * @param name name of the yml file containing the documentation
- * @param debug
+ * @param {string} name name of the yml file containing the documentation
+ * @returns {object} the file data
  */
-const loader = (name: string, debug: boolean = false): object => {
+const loader = (name: string): object => {
   let data: object
 
   try {
@@ -20,10 +20,6 @@ const loader = (name: string, debug: boolean = false): object => {
   } catch (e) {
     logger.error(e)
     data = {}
-  }
-
-  if (debug) {
-    logger.debug(util.inspect(data, false, 10, true))
   }
 
   return data

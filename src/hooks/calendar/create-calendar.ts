@@ -27,6 +27,7 @@ export default (options = {}): Hook => {
     const { app, data, result } = context
 
     if (data) {
+      /* istanbul ignore else */
       if (!data.calendar) {
         if (!data.room) {
           throw new GeneralError('no room provided')

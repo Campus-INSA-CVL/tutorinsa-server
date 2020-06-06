@@ -79,8 +79,8 @@ describe("'check-time-compatibility' hook", () => {
           startAt: '2020-05-20T20:00:00.000Z',
           endAt: '2020-05-20T23:00:00.000Z',
         },
-        startAt: '2020-05-20T20:30:00.000Z',
-        duration: 120,
+        startAt: '2020-05-20T21:30:00.000Z',
+        duration: 90,
       }
 
       context.data = Object.assign({}, data) as Post & { room: Room }

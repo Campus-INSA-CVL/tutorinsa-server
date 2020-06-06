@@ -190,5 +190,34 @@ describe("'check-calendars' hook", () => {
       expect(error).toBeInstanceOf(BadRequest)
       expect(error.message).toBe(`the slot at 19:0 is not available`)
     })
+
+    it('nothing should happend without slots', async () => {
+      context.data = Object.assign({}, {
+        startAt: '2020-05-21T19:30:00.000Z',
+        duration: 60,
+        room: {
+          startAt: '1970-01-01T19:00:00.000Z',
+          _id: '5e28944c60e9be0d88bb897f',
+          duration: 120,
+        },
+        calendar,
+      } as unknown) as Post & {
+        room: Room
+        calendar: Calendar | undefined
+      }
+
+      delete context.data.calendar.slots
+
+      try {
+        result = (await checkCalendars()(context)) as HookContext<
+          Post & { room: Room; calendar: Calendar | undefined }
+        >
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeNull()
+      expect(result.data.calendar).toBeDefined()
+    })
   })
 })

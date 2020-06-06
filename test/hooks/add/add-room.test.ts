@@ -1,10 +1,12 @@
 import addRoom from '../../../src/hooks/add/add-room'
 import app from '../../../src/app'
 
-import { HookContext, Service, Paginated } from '@feathersjs/feathers'
-import { GeneralError } from '@feathersjs/errors'
+import { HookContext, Service, Paginated, Params } from '@feathersjs/feathers'
+import { GeneralError, BadRequest } from '@feathersjs/errors'
 
-import { Room } from '../../../src/declarations'
+import { Room, User, Post } from '../../../src/declarations'
+import addDataToUser from '../../utils/addDataToUser'
+import createDate from '../../utils/createDate'
 
 describe("'add-room' hook", () => {
   let context: HookContext<Room>
@@ -107,5 +109,101 @@ describe("'add-room' hook", () => {
 
     expect(error).toBeInstanceOf(GeneralError)
     expect(error.message).toBe('impossible to add a room to data')
+  })
+
+  describe("method 'remove'", () => {
+    let post: Post
+    let user: User
+
+    const params: Params = {}
+
+    beforeAll(async () => {
+      await app.get('mongooseClient').model('posts').find().deleteMany()
+      await app.get('mongooseClient').model('users').find().deleteMany()
+      await app.get('mongooseClient').model('calendars').find().deleteMany()
+
+      const dataUser: User = {
+        lastName: 'fakeLastName',
+        firstName: 'username',
+        email: 'username@insa-cvl.fr',
+        password: '$Azerty1',
+        permissions: ['tuteur'],
+        yearId: '',
+        departmentId: '',
+        favoriteSubjectsIds: [],
+        difficultSubjectsIds: [],
+        createdPostsIds: [],
+      }
+
+      try {
+        await addDataToUser(dataUser)
+        user = await app.service('users').create(dataUser)
+      } catch (e) {
+        // Error
+      }
+      params.user = user
+
+      post = {
+        comment: 'hello there',
+        type: 'tuteur',
+        startAt: createDate(),
+        duration: 60,
+        studentsCapacity: 15,
+        tutorsCapacity: 2,
+        subjectId: '5ccaea940db44157d84e8c93',
+        roomId: room._id.toString(),
+        studentsIds: [],
+        tutorsIds: [],
+        creatorId: '5ccaea940db44157d84e8c93',
+      }
+      try {
+        post = await app.service('posts').create(post, params)
+      } catch (error) {
+        // An error?
+      }
+    })
+
+    beforeEach(() => {
+      // @ts-ignore
+      context.method = 'remove'
+    })
+
+    it('should throw an error if there is no id', async () => {
+      try {
+        await addRoom()(context)
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeInstanceOf(BadRequest)
+      expect(error.message).toBe('an id is required to add a room')
+    })
+
+    it('should thow an error if the getPost failed', async () => {
+      context.id = 'a fake id !'
+
+      try {
+        await addRoom()(context)
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeInstanceOf(GeneralError)
+      expect(error.message).toBe('impossible to get post')
+    })
+
+    it('should add startAt from the post and the room the data', async () => {
+      context.id = post._id
+
+      try {
+        result = (await addRoom()(context)) as HookContext<Room>
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeNull()
+      expect(result.data).toHaveProperty('startAt')
+      expect(result.data.room).toEqual(room)
+    })
   })
 })

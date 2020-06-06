@@ -3,6 +3,7 @@ import path from 'path'
 
 // Custom format
 const logFormat = format.printf(
+  /* istanbul ignore next */
   (info) => `${info.timestamp} ${info.level} [${info.label}]: ${info.message}`
 )
 
@@ -27,7 +28,7 @@ const options: {
   exitOnError: false,
 }
 
-// Add transports depending of the env
+/* istanbul ignore next */
 if (process.env.NODE_ENV === 'test') {
   const consoleLogs = new transports.Console({
     format: format.simple(),
@@ -36,6 +37,7 @@ if (process.env.NODE_ENV === 'test') {
   options.transports.push(consoleLogs)
 }
 
+/* istanbul ignore next */
 if (process.env.NODE_ENV === 'development') {
   const consoleLogs = new transports.Console({
     format: format.combine(format.colorize(), logFormat),
@@ -44,6 +46,7 @@ if (process.env.NODE_ENV === 'development') {
   options.transports.push(consoleLogs)
 }
 
+/* istanbul ignore next */
 if (process.env.NODE_ENV === 'production') {
   const logs = new transports.File({
     filename: 'logs',

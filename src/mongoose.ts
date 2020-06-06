@@ -10,7 +10,9 @@ export default function (app: Application) {
       useUnifiedTopology: true,
     })
     .catch((err) => {
+      /* istanbul ignore next */
       logger.error(err)
+      /* istanbul ignore next */
       process.exit(1)
     })
 

@@ -1,6 +1,5 @@
 import { Id, NullableId, Params, ServiceMethods } from '@feathersjs/feathers'
 import { Application, Subscription, Post, User } from '../../declarations'
-import { BadRequest, GeneralError } from '@feathersjs/errors'
 import {
   createUserData,
   createPostData,
@@ -19,18 +18,22 @@ export class Subscriptions implements ServiceMethods<Subscription> {
     this.app = app
   }
 
+  /* istanbul ignore next */
   async find(params?: Params): Promise<any> {
     return
   }
 
+  /* istanbul ignore next */
   async get(id: Id, params?: Params): Promise<any> {
     return
   }
 
+  /* istanbul ignore next */
   async create(data: Subscription, params?: Params): Promise<any> {
     return
   }
 
+  /* istanbul ignore next */
   async update(
     id: NullableId,
     data: Subscription,
@@ -40,14 +43,10 @@ export class Subscriptions implements ServiceMethods<Subscription> {
   }
 
   async patch(
-    id: NullableId,
+    id: Id,
     data: Subscription,
     params: Params
   ): Promise<Subscription> {
-    if (!id) {
-      throw new BadRequest('you must provide an id')
-    }
-
     const { user } = params
 
     // Patch the post and the user for the subcription
@@ -71,6 +70,7 @@ export class Subscriptions implements ServiceMethods<Subscription> {
     return data
   }
 
+  /* istanbul ignore next */
   async remove(id: NullableId, params?: Params): Promise<any> {
     return
   }

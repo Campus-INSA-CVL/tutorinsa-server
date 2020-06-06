@@ -20,12 +20,14 @@ function createData(options: string[][], result: Post): Partial<User> {
       )
     }
 
+    /* istanbul ignore else */
     if (option[2] === 'array') {
       if (Array.isArray(result[option[1]])) {
         data[option[0]] = [...(result[option[1]] as string[])]
       } else {
         data[option[0]] = [result[option[1].toString()] as string]
       }
+      /* istanbul ignore next : unsed function*/
     } else if (option[2] === 'string') {
       data[option[0]] = result[option[1]]?.toString()
     }

@@ -34,9 +34,6 @@ function removeId(
     | 'createdPostsIds',
   id: Id
 ): Id[] {
-  if (!field) {
-    return []
-  }
   return [
     ...(previous[field] as Id[]).filter(
       (idFromField: Id) => idFromField.toString() !== id.toString()
@@ -61,9 +58,6 @@ function addId(
     | 'createdPostsIds',
   id: Id
 ): Id[] {
-  if (!field) {
-    return []
-  }
   return [...(previous[field] as Id[]), id]
 }
 
@@ -126,6 +120,7 @@ function updateSubcriptions(
         | 'tutorSubscriptionsIds'
       ]
 
+      /* istanbul ignore else */
       if (fields[0]) {
         if (params.subType === 'subscribe') {
           data[fields[0]] = addId(

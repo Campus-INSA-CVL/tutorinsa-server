@@ -22,6 +22,7 @@ function checkEndTime(time: Time) {
       `end time from post (${time.endPost}) is after end time from room (${time.endRoom})`
     )
   } else if (time.endPost.getUTCHours() === time.endRoom.getUTCHours()) {
+    /* istanbul ignore else */
     if (time.endPost.getUTCMinutes() > time.endRoom.getUTCMinutes()) {
       throw new BadRequest(
         `end hour from post (${time.endPost}) is equal to end hour from room (${time.endRoom}) but start minutes from post is after end minutes from room`
@@ -32,11 +33,14 @@ function checkEndTime(time: Time) {
       `end time from post (${time.endPost}) is before start time from room (${time.startRoom})`
     )
   } else if (time.endPost.getUTCHours() === time.startRoom.getUTCHours()) {
+    /* istanbul ignore else */
     if (time.endPost.getUTCMinutes() <= time.startRoom.getUTCMinutes()) {
       throw new BadRequest(
         `end hour from post (${time.endPost}) is equal to start hour from room (${time.startRoom}) but end minutes from post is before (or equal to) start minutes from room`
       )
     }
+  } else {
+    return
   }
 }
 
@@ -50,6 +54,7 @@ function checkStartTime(time: Time) {
       `start time from post (${time.startPost}) is before start time from room (${time.startRoom})`
     )
   } else if (time.startPost.getUTCHours() === time.startRoom.getUTCHours()) {
+    /* istanbul ignore else */
     if (time.startPost.getUTCMinutes() < time.startRoom.getUTCMinutes()) {
       throw new BadRequest(
         `start hour from post (${time.startPost}) is equal to start hour from room (${time.startRoom}) but start minutes from post is before start minutes from room`
@@ -60,11 +65,14 @@ function checkStartTime(time: Time) {
       `start time from post (${time.startPost}) is after end time from room (${time.endRoom})`
     )
   } else if (time.startPost.getUTCHours() === time.endRoom.getUTCHours()) {
+    /* istanbul ignore else */
     if (time.startPost.getUTCMinutes() >= time.endRoom.getUTCMinutes()) {
       throw new BadRequest(
         `start hour from post (${time.startPost}) is equal to end hour from room (${time.endRoom}) but start minutes from post is after (or equal to) end minutes from room`
       )
     }
+  } else {
+    return
   }
 }
 
@@ -96,7 +104,7 @@ export default (options = {}): Hook => {
             startRoom: moment.utc(data.room.startAt).toDate(),
             endRoom: moment.utc(data.room.endAt as string).toDate(),
             startPost: moment.utc(data.startAt).toDate(),
-            endPost: moment.utc(endAt(data.startAt, data.duration)).toDate(),
+            endPost: moment.utc(endAt(data.startAt!, data.duration!)).toDate(),
           }
 
           checkStartTime(time)
@@ -104,6 +112,7 @@ export default (options = {}): Hook => {
           checkEndTime(time)
 
           break
+        /* istanbul ignore next */
         default:
           break
       }

@@ -11,6 +11,7 @@ import addDataToUser from '../../utils/addDataToUser'
 import createDate from '../../utils/createDate'
 
 import { HookContext, Service, Params, Paginated } from '@feathersjs/feathers'
+import { GeneralError } from '@feathersjs/errors'
 
 describe("'patch-calendar' hook", () => {
   let context: HookContext<
@@ -185,5 +186,21 @@ describe("'patch-calendar' hook", () => {
     )
     expect(calendars.data[0].slots[1]).toHaveProperty('startAt')
     expect(result).toEqual(context)
+  })
+
+  it('should throw an error if patch failed', async () => {
+    // @ts-ignore
+    context.app = {}
+    // @ts-ignore
+    context.data = { calendar: { _id: 'a fake id' } as Calendar }
+
+    try {
+      await patchCalendar('create')(context)
+    } catch (e) {
+      error = e
+    }
+
+    expect(error).toBeInstanceOf(GeneralError)
+    expect(error.message).toBe("the calendar can't be patched")
   })
 })
