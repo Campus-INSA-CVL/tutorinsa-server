@@ -1,5 +1,11 @@
 import app from '../../../src/app'
-import { Post, Room, User, Calendar } from '../../../src/declarations'
+import {
+  Post,
+  Room,
+  User,
+  Calendar,
+  Subscription,
+} from '../../../src/declarations'
 import addDataToUser from '../../utils/addDataToUser'
 import createDate from '../../utils/createDate'
 
@@ -243,7 +249,24 @@ describe("'posts' service", () => {
       expect(error).toBeInstanceOf(MethodNotAllowed)
     })
 
-    // it.todo('should patch the comment')
+    it('should patch the subscription', async () => {
+      let patchedPost: Post
+
+      const data: Partial<Post> = {
+        tutorsIds: [user._id.toString()],
+      }
+      params.subType = 'subscribe'
+      params.post = result
+      try {
+        patchedPost = await app
+          .service(serviceName)
+          .patch(result._id, data, params)
+      } catch (e) {
+        error = e
+      }
+      expect(error).toBeNull()
+      expect(patchedPost.tutorsIds[0].toString()).toBe(user._id.toString())
+    })
 
     it('should delete', async () => {
       expect.assertions(15)

@@ -14,7 +14,7 @@ function checkUserAbility(
   userPermissions: UserPermission[]
 ): void {
   if (!userPermissions.includes(as)) {
-    throw new BadRequest(`you must be a ${as} to do this`)
+    throw new BadRequest(`you must be a '${as}' to do this`)
   }
 }
 
@@ -37,7 +37,7 @@ export default (options = {}): Hook => {
 
     if (data) {
       if (!user) {
-        throw new BadRequest(`you must be authenticated to ${data.type}`)
+        throw new BadRequest(`you must be authenticated`)
       }
 
       const userPermissions = getUserPermissions(user as User)

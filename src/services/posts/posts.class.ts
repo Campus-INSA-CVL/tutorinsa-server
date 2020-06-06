@@ -1,5 +1,11 @@
 import { Service, MongooseServiceOptions } from 'feathers-mongoose'
-import { Application, Post, Calendar, Room, PostCore } from '../../declarations'
+import {
+  Application,
+  Post,
+  Calendar,
+  Room,
+  Subscription,
+} from '../../declarations'
 import { Params, Id, NullableId } from '@feathersjs/feathers'
 import { getUserId } from './posts.functions'
 import { updateSubcriptions } from '../users/users.functions'
@@ -27,7 +33,11 @@ export class Posts extends Service {
 
     return super.create(data, params)
   }
-  async patch(id: NullableId, data: Partial<Post>, params: Params) {
+  async patch(
+    id: NullableId,
+    data: Partial<Post>,
+    params: Params & { subType?: Subscription['type']; post: Post }
+  ) {
     let patchedData: Partial<Post> = {}
 
     patchedData = Object.assign(

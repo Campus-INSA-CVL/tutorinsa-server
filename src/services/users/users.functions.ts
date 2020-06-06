@@ -115,10 +115,10 @@ function updateCreatedPostsIds(data: Partial<User>, user: User): Partial<User> {
 function updateSubcriptions(
   data: Partial<User | Post>,
   previous: User | Post,
-  params: Params & { subType?: Subscription['type']; post?: Post }
+  params: Params & { subType?: Subscription['type'] }
 ): Partial<User | Post> {
   if (data) {
-    if (params.subType && params.post) {
+    if (params.subType) {
       const fields = Object.keys(data) as [
         | 'studentsIds'
         | 'tutorsIds'
