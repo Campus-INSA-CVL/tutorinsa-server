@@ -10,5 +10,5 @@
     "removeComments": true,
     "esModuleInterop": true
   },
-  "exclude": ["test"]
+  "exclude": ["test", "populatedb.ts"]
 }

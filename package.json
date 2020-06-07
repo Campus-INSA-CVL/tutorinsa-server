@@ -26,7 +26,7 @@
   "scripts": {
     "lint": "tslint 'src/**/*.ts' 'test/**/*.ts'",
     "jest": "jest --forceExit --detectOpenHandles",
-    "test": "npm run compile && npm run jest",
+    "test": "npm run lint && npm run compile && npm run jest -- --collectCoverage=true",
     "compile": "shx rm -rf lib/ && tsc",
     "dev": "ts-node-dev --no-notify src/",
     "start": "npm run compile && node lib/",

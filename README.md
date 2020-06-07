@@ -1,4 +1,4 @@
-<!-- <img src="./tutorinsa.png" alt="Tutorinsa logo" style="display: block; margin: auto;"> -->
+<img src="./tutorinsa.png" alt="Tutorinsa logo" style="display: block; margin: auto;">
 
 # API TutorINSA
 
@@ -43,7 +43,7 @@ npm run populatedb mongodb://localhost:27017/name_of_your_local_db
 
 ## Documentation
 
-Available at [localhost:3030/docs]() after starting the server
+Available at [localhost:3030/docs](localhost:3030/docs) after starting the server
 
 ## Questions
 

@@ -11,6 +11,7 @@ import addPost from '../../../src/hooks/add/add-post'
 import { Post, Room, User } from '../../../src/declarations'
 import addDataToUser from '../../utils/addDataToUser'
 import createDate from '../../utils/createDate'
+import moment from '../../../src/utils/moment'
 
 describe("'add-post' hook", () => {
   let context: HookContext<any>
@@ -161,7 +162,7 @@ describe("'add-post' hook", () => {
     expect(result.params.post).toBeDefined()
     expect(result.params.post).toEqual({
       ...resultPost,
-      endAt: '2020-06-08T21:00:00.000Z',
+      endAt: moment.utc(resultPost.startAt).hours(21).toISOString(),
       fullStudents: false,
       fullTutors: false,
     })
