@@ -16,7 +16,7 @@ jobs:
           mongodb-version: 4.0
           mongodb-replica-set: test-rs
       - run: npm ci
-      - run: npm test:ci
+      - run: npm run test:ci
         continue-on-error: true
         env:
           CI: true
