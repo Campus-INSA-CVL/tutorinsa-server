@@ -31,27 +31,29 @@ function trimSanitize(value: string): string {
  * @param options
  * @returns the sanitized object
  */
-function sanitizeStrings(
-  data: User | Year | Subject | Department | Post,
-  options: CheckDataOptions
-): User | Year | Subject | Department | Post {
+function sanitizeStrings<T>(
+  data: T & { [key: string]: string },
+  options: CheckDataOptions<T>
+): T {
   for (const key in data) {
     if (data.hasOwnProperty(key)) {
       const element = data[key]
 
       if (
         typeof element === 'string' &&
-        !options.unwantedFields?.includes(key)
+        !(options.unwantedFields as string[])?.includes(key)
       ) {
+        // @ts-ignore unexpected error
         data[key] = trimSanitize(element)
       } else if (
         Array.isArray(element) &&
-        !options.unwantedFields?.includes(key)
+        !(options.unwantedFields as string[])?.includes(key)
       ) {
         const tmp: string[] = []
         element.forEach((el: string | Id) => {
           tmp.push(trimSanitize(el.toString()))
         })
+        // @ts-ignore unexpected error
         data[key] = tmp
       }
     }
@@ -65,28 +67,28 @@ function sanitizeStrings(
  * @param data
  * @param options
  */
-function checkTypeofFields(
-  data: User | Year | Subject | Department | Post | Room,
-  options: CheckDataOptions
+function checkTypeofFields<T>(
+  data: T & { [key: string]: string },
+  options: CheckDataOptions<T>
 ): void {
   data = Object.assign({}, data)
   const keys: string[] = Object.keys(data)
 
   keys.forEach((key) => {
     // Must be an array
-    if (options.arrayFields?.includes(key)) {
+    if ((options.arrayFields as string[])?.includes(key)) {
       // But it's not
       if (!Array.isArray(data[key])) {
         throw new BadRequest(`type of '${key}' is incorrect, must be an array`)
       }
       // Must be an number
-    } else if (options.numberFields?.includes(key)) {
+    } else if ((options.numberFields as string[])?.includes(key)) {
       // But it's not
       if (typeof data[key] !== 'number') {
         throw new BadRequest(`type of '${key}' is incorrect, must be a number`)
       }
       // Must be an date
-    } else if (options.dateFields?.includes(key)) {
+    } else if ((options.dateFields as string[])?.includes(key)) {
       if (
         !moment(new Date(data[key] as string)).isValid() ||
         typeof data[key] === 'number'
@@ -109,15 +111,12 @@ function checkTypeofFields(
  * @param data
  * @param fields
  */
-function checkMissingFields(
-  data: User | Year | Subject | Department | Post | Room,
-  fields: CheckDataOptions['fields']
-) {
+function checkMissingFields<T>(data: T, fields: CheckDataOptions<T>['fields']) {
   // All keys from the data
   const keys = Object.keys(data)
   // Compare data keys and wanted keys
   fields.forEach((field) => {
-    if (!keys.includes(field)) {
+    if (!keys.includes(field.toString())) {
       throw new BadRequest(`'${field}' is missing`)
     }
   })
@@ -126,10 +125,8 @@ function checkMissingFields(
 /**
  * Validate (type) and sanitize data from the hook context (able to manage many services)
  */
-export default (options: CheckDataOptions): Hook => {
-  return async (
-    context: HookContext<User | Year | Subject | Department | Post | Room>
-  ) => {
+export default <T>(options: CheckDataOptions<T>): Hook => {
+  return async (context: HookContext<T>) => {
     const { method, data } = context
 
     if (data) {
@@ -137,8 +134,11 @@ export default (options: CheckDataOptions): Hook => {
         checkMissingFields(data, options.fields)
       }
       // Sanitize before check type because of Date (can be valid before sanitized but invalid after sanitized)
-      context.data = sanitizeStrings(data, options)
-      checkTypeofFields(data, options)
+      context.data = sanitizeStrings(
+        data as T & { [key: string]: string },
+        options
+      )
+      checkTypeofFields(data as T & { [key: string]: string }, options)
     }
 
     return context

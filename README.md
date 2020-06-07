@@ -4,6 +4,8 @@
 
 > A RESTful API for the TutorINSA's application !
 
+![CI](https://github.com/Campus-INSA-CVL/tutorinsa-server/workflows/CI/badge.svg)
+
 ## Start the server
 
 ### Requirement
@@ -45,11 +47,7 @@ npm run populatedb mongodb://localhost:27017/name_of_your_local_db
 
 Available at [localhost:3030/docs](localhost:3030/docs) after starting the server
 
-## Questions
-
-## Issues
-
-## Contributing
+## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 
 ## Lint & Test
 
@@ -68,3 +66,7 @@ npm run test
 ```
 
 ## Licence
+
+Copyright (c) Forever and Ever, or at least the current year.
+
+Licensed under the [MIT license](https://github.com/Campus-INSA-CVL/tutorinsa-server/blob/dev/LICENSE).

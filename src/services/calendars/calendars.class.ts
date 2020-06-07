@@ -15,14 +15,15 @@ export class Calendars extends Service {
     this.app = app
   }
   async create(data: { post: Post; room: Room }, params?: Params) {
+    // Only full post come here, student post don't need a calendar
     const slots = createSlots(
-      data.post.startAt,
-      data.post.duration,
+      data.post.startAt!,
+      data.post.duration!,
       data.post._id as string
     )
 
     const startAtCalendar = createConcatDate(
-      data.post.startAt,
+      data.post.startAt!,
       data.room!.startAt
     )
 

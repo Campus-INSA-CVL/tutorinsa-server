@@ -52,7 +52,7 @@ export default (options = {}): Hook => {
       const post = await getPost(app, id)
       context.data = {}
       context.data.startAt = post.startAt
-      context.data.room = await getRoom(app, post.roomId)
+      context.data.room = await getRoom(app, post.roomId as Id)
     }
     return context
   }
