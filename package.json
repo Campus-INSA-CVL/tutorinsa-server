@@ -1,19 +1,26 @@
 {
-  "name": "feathersjs-server",
-  "description": "",
+  "name": "tutorinsa-server",
+  "description": "API for Application of TutorINSA, an association whose aim is to give tutoring courses to students",
   "version": "0.0.0",
-  "homepage": "",
+  "homepage": "https://github.com/Campus-INSA-CVL/tutorinsa-server",
   "private": true,
   "main": "src",
   "keywords": [
-    "feathers"
+    "insa cvl",
+    "tutorinsa",
+    "tutorat",
+    "élèves",
+    "ingénieurs"
   ],
   "author": {
     "name": "Esteban S",
     "email": "esteban.soubiran@insa-cvl.fr"
   },
   "contributors": [],
-  "bugs": {},
+  "bugs": {
+    "url": "https://github.com/Campus-INSA-CVL/tutorinsa-server/issues",
+    "email": "esteban.soubiran@insa-cvl.fr"
+  },
   "directories": {
     "lib": "src",
     "test": "test/",
