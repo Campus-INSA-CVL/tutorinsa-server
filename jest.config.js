@@ -3,6 +3,7 @@ module.exports = {
   // verbose: true,
   // collectCoverage: true,
   coverageReporters: ['text', 'json', 'html'],
+  reporters: ['default', 'jest-junit'],
   testEnvironment: 'node',
   globals: {
     'ts-jest': {

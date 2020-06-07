@@ -4,6 +4,8 @@
 
 > A RESTful API for the TutorINSA's application !
 
+![CI](https://github.com/Campus-INSA-CVL/tutorinsa-server/workflows/CI/badge.svg)
+
 ## Start the server
 
 ### Requirement

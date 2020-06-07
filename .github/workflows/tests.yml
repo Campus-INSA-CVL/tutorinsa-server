@@ -17,5 +17,10 @@ jobs:
           mongodb-replica-set: test-rs
       - run: npm ci
       - run: npm test
+        continue-on-error: true
         env:
           CI: true
+      - name: Publish Test Report
+        uses: IgnusG/jest-report-action@v2.3.3
+        with:
+          access-token: ${{ secrets.GITHUB_TOKEN }}
