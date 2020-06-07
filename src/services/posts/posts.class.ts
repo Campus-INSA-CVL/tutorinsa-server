@@ -36,7 +36,7 @@ export class Posts extends Service {
   async patch(
     id: NullableId,
     data: Partial<Post>,
-    params: Params & { subType?: Subscription['type']; post: Post }
+    params: Params & { subType?: Subscription['type']; post?: Post }
   ) {
     let patchedData: Partial<Post> = {}
 
