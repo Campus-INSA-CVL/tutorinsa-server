@@ -302,6 +302,86 @@ function createCalendar(
     cb(null, calendar)
   })
 }
+async function createSubscription(
+  post: mongoose.Document | Post,
+  user: mongoose.Document | User,
+  type: PostType,
+  cb: (e: Error | null, value: unknown) => void
+) {
+  const userId = user._id.toString()
+  const postId = post._id.toString()
+  let data: object
+
+  if (type === 'eleve') {
+    data = {
+      studentSubscriptionsIds: [
+        // @ts-ignore
+        ...(user as User).studentSubscriptionsIds,
+        postId,
+      ],
+    }
+  } else {
+    data = {
+      tutorSubscriptionsIds: [...(user as User).tutorSubscriptionsIds, postId],
+    }
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    { _id: userId },
+    data,
+    { new: true },
+    (e) => {
+      if (e) {
+        console.error(e)
+        cb(e, null)
+        return
+      }
+    }
+  )
+
+  users.forEach((u, index) => {
+    if (u._id.toString() === user?._id.toString()) {
+      // @ts-ignore
+      users[index] = updatedUser
+    }
+  })
+
+  if (type === 'eleve') {
+    data = {
+      studentsIds: [
+        // @ts-ignore
+        ...(post as Post).studentsIds,
+        userId,
+      ],
+    }
+  } else {
+    data = {
+      tutorsIds: [...(post as Post).tutorsIds, userId],
+    }
+  }
+
+  const updatedPost = await Post.findByIdAndUpdate(
+    { _id: postId },
+    data,
+    { new: true },
+    (e) => {
+      if (e) {
+        console.error(e)
+        cb(e, null)
+        return
+      }
+    }
+  )
+
+  posts.forEach((p, index) => {
+    if (p._id.toString() === post?._id.toString()) {
+      // @ts-ignore
+      posts[index] = updatedPost
+    }
+  })
+
+  cb(null, null)
+}
 
 /**
  * Post all documents
@@ -481,6 +561,20 @@ function postUser(cb: () => void) {
           callback
         )
       },
+      (callback) => {
+        createUser(
+          'Chester',
+          'Wilson',
+          'wilson.chester@insa-cvl.fr',
+          ['tuteur'],
+          years[1],
+          departments[0],
+          [subjects[2]],
+          [subjects[4], subjects[3]],
+          [],
+          callback
+        )
+      },
     ],
     cb
   )
@@ -571,6 +665,25 @@ function postCalendar(cb: () => void) {
     cb
   )
 }
+function subscribe(cb: () => void) {
+  async.series(
+    [
+      (callback) => {
+        createSubscription(posts[0], users[0], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[0], users[2], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[1], users[2], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[0], users[4], 'tuteur', callback)
+      },
+    ],
+    cb
+  )
+}
 
 /**
  * Remove all the data from the database
@@ -645,6 +758,7 @@ async.series(
     postUser,
     postPost,
     postCalendar,
+    subscribe,
   ], // Optional callback
   (err, results) => {
     if (err) {
