@@ -1,10 +1,13 @@
-<img src="./tutorinsa.png" alt="Tutorinsa logo" style="display: block; margin: auto;">
-
+<p align="center"><img src="./tutorinsa.png" alt="Tutorinsa logo" align="center" style="width:320px"></p><br/>
+<p align="center">
+  <a href="https://github.com/Campus-INSA-CVL/tutorinsa-server/workflows/CI/badge.svg">
+    <img src="https://github.com/Campus-INSA-CVL/tutorinsa-server/workflows/CI/badge.svg" alt="tests status" />
+  </a>
+</p>
+ 
 # API TutorINSA
 
 > A RESTful API for the TutorINSA's application !
-
-![CI](https://github.com/Campus-INSA-CVL/tutorinsa-server/workflows/CI/badge.svg)
 
 ## Start the server
 
