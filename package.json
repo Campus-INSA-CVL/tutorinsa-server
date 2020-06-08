@@ -1,19 +1,31 @@
 {
-  "name": "feathersjs-server",
-  "description": "",
+  "name": "tutorinsa-server",
+  "description": "API for Application of TutorINSA, an association whose aim is to give tutoring courses to students",
   "version": "0.0.0",
-  "homepage": "",
+  "homepage": "https://github.com/Campus-INSA-CVL/tutorinsa-server",
   "private": true,
   "main": "src",
   "keywords": [
-    "feathers"
+    "insa cvl",
+    "tutorinsa",
+    "tutorat",
+    "élèves",
+    "ingénieurs"
   ],
   "author": {
     "name": "Esteban S",
     "email": "esteban.soubiran@insa-cvl.fr"
   },
+  "license": "MIT",
   "contributors": [],
-  "bugs": {},
+  "repository": {
+    "url": "https://github.com/Campus-INSA-CVL/tutorinsa-server",
+    "type": "git"
+  },
+  "bugs": {
+    "url": "https://github.com/Campus-INSA-CVL/tutorinsa-server/issues",
+    "email": "esteban.soubiran@insa-cvl.fr"
+  },
   "directories": {
     "lib": "src",
     "test": "test/",
@@ -62,11 +74,11 @@
     "feathers-mongoose": "^8.3.0",
     "feathers-swagger": "^1.2.1",
     "helmet": "^3.22.0",
-    "js-yaml": "^3.13.1",
-    "moment": "^2.25.3",
+    "js-yaml": "^3.14.0",
+    "moment": "^2.26.0",
     "mongodb-core": "^3.2.7",
-    "mongoose": "^5.9.11",
-    "mongoose-lean-virtuals": "^0.6.2",
+    "mongoose": "^5.9.18",
+    "mongoose-lean-virtuals": "^0.6.7",
     "serve-favicon": "^2.5.0",
     "validator": "^13.0.0",
     "winston": "^3.2.1"
@@ -76,10 +88,10 @@
     "@types/compression": "^1.7.0",
     "@types/cors": "^2.8.6",
     "@types/helmet": "0.0.46",
-    "@types/jest": "^25.2.1",
-    "@types/js-yaml": "^3.12.3",
-    "@types/jsonwebtoken": "^8.3.9",
-    "@types/mongoose": "^5.7.15",
+    "@types/jest": "^25.2.3",
+    "@types/js-yaml": "^3.12.4",
+    "@types/jsonwebtoken": "^8.5.0",
+    "@types/mongoose": "^5.7.22",
     "@types/mongoose-lean-virtuals": "^0.5.1",
     "@types/serve-favicon": "^2.5.0",
     "@types/validator": "^13.0.0",
@@ -87,18 +99,18 @@
     "axios": "^0.19.2",
     "jest": "^25.5.4",
     "jest-junit": "^10.0.0",
-    "nodemon": "^2.0.3",
+    "nodemon": "^2.0.4",
     "pre-commit": "^1.2.2",
     "prettier": "^2.0.5",
     "shx": "^0.3.2",
-    "ts-jest": "^25.4.0",
+    "ts-jest": "^25.5.1",
     "ts-node": "^8.10.2",
     "ts-node-dev": "^1.0.0-pre.44",
     "tslib": "^2.0.0",
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
     "tslint-plugin-prettier": "^2.3.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.5"
   },
   "jest-junit": {
     "suiteNameTemplate": "{filepath}",

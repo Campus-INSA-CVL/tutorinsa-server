@@ -17,7 +17,7 @@ const options: {
   )[]
   exitOnError: boolean
 } = {
-  level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+  level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
   format: format.combine(
     format.label({
       label: path.basename(process.mainModule!?.filename ?? 'test'),
@@ -44,10 +44,7 @@ if (process.env.NODE_ENV === 'development') {
   })
 
   options.transports.push(consoleLogs)
-}
-
-/* istanbul ignore next */
-if (process.env.NODE_ENV === 'production') {
+} else {
   const logs = new transports.File({
     filename: 'logs',
     format: format.combine(format.json()),

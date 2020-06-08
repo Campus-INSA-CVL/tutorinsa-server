@@ -10,6 +10,8 @@ import checkIsPostFull from '../../hooks/check/check-subscription/check-is-post-
 
 import checkIsUserAble from '../../hooks/check/check-subscription/check-is-user-able'
 
+import allowSubscription from '../../hooks/subscription/allow-subscription'
+
 const { authenticate } = authentication.hooks
 
 const typeOptions: SubscriptionType[] = ['subscribe', 'unsubscribe']
@@ -28,6 +30,7 @@ export default {
       checkType('as', asOptions),
       checkIsUserAble(),
       addPost(),
+      allowSubscription('tuteur'),
       checkIsPostFull(),
     ],
     remove: [disallow()],

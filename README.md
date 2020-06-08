@@ -1,10 +1,13 @@
-<img src="./tutorinsa.png" alt="Tutorinsa logo" style="display: block; margin: auto;">
-
+<p align="center"><img src="./tutorinsa.png" alt="Tutorinsa logo" align="center" style="width:320px"></p><br/>
+<p align="center">
+  <a href="https://github.com/Campus-INSA-CVL/tutorinsa-server/workflows/CI/badge.svg">
+    <img src="https://github.com/Campus-INSA-CVL/tutorinsa-server/workflows/CI/badge.svg" alt="tests status" />
+  </a>
+</p>
+ 
 # API TutorINSA
 
 > A RESTful API for the TutorINSA's application !
-
-![CI](https://github.com/Campus-INSA-CVL/tutorinsa-server/workflows/CI/badge.svg)
 
 ## Start the server
 
@@ -48,6 +51,8 @@ npm run populatedb mongodb://localhost:27017/name_of_your_local_db
 Available at [localhost:3030/docs](localhost:3030/docs) after starting the server
 
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
+
+Feel free to help us ! Use [issues](https://github.com/Campus-INSA-CVL/tutorinsa-server/issues) and [pull requests](https://github.com/Campus-INSA-CVL/tutorinsa-server/pulls) !
 
 ## Lint & Test
 

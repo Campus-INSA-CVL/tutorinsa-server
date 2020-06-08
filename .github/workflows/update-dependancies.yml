@@ -1,0 +1,27 @@
+name: Update packages
+on:
+  schedule:
+    - cron: "0 0 * * 1"
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+jobs:
+  release:
+    name: Update npm packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git checkout
+        uses: actions/checkout@v2
+      - name: Update npm packages
+        uses: technote-space/create-pr-action@v2.0.3
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EXECUTE_COMMANDS: |
+            npx npm-check-updates -u --packageFile package.json
+            npm install
+            npm upgrade
+            npm audit
+          COMMIT_MESSAGE: "chore(dependencies): Update all dependencies"
+          COMMIT_NAME: "GitHub Actions"
+          COMMIT_EMAIL: "esteban.soubiran@insa-cvl.fr"
+          PR_BRANCH_NAME: "chore-npm-update-${PR_ID}"
+          PR_TITLE: "chore(dependencies): Update all dependencies"
