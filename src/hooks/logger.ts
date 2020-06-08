@@ -5,6 +5,9 @@ import { FeathersError } from '@feathersjs/errors'
 import util from 'util'
 import logger from '../logger'
 
+/**
+ * Log message and data
+ */
 export default (options = {}): Hook => {
   return async (context: HookContext<FeathersError>) => {
     const { error, method, path, params, type, id, data, result } = context
