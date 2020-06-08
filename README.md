@@ -15,8 +15,8 @@
 
 This project need, to run correctly:
 
-- [nodejs](https://nodejs.org/en/)
-- [mongodb server](https://www.mongodb.com/try/download/community)
+- [Node.js](https://nodejs.org/en/)
+- [Mongodb server](https://www.mongodb.com/try/download/community)
 
 ### Configuration
 
