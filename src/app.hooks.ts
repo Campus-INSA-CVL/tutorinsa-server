@@ -1,12 +1,11 @@
-import logger from './hooks/logger' // Application hooks that run for every service
-import { iff } from 'feathers-hooks-common'
+import { iff, isProvider } from 'feathers-hooks-common'
+import { HookContext } from '@feathersjs/feathers'
 // Don't remove this comment. It's needed to format import lines nicely.
 import authenticate from './hooks/authentication/authenticate'
 import authorize from './hooks/authentication/authorize'
-import { HookContext } from '@feathersjs/feathers'
 
+import logger from './hooks/logger' // Application hooks that run for every service
 import pickData from './hooks/authentication/pick-data'
-
 import pickResult from './hooks/authentication/pick-result'
 
 export default {
@@ -23,14 +22,14 @@ export default {
     ],
     find: [],
     get: [],
-    create: [pickData()],
-    update: [pickData()],
-    patch: [pickData()],
+    create: [iff(isProvider('external'), pickData())],
+    update: [iff(isProvider('external'), pickData())],
+    patch: [iff(isProvider('external'), pickData())],
     remove: [],
   },
 
   after: {
-    all: [logger(), pickResult()],
+    all: [logger(), iff(isProvider('external'), pickResult())],
     find: [],
     get: [],
     create: [],
