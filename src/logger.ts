@@ -17,7 +17,7 @@ const options: {
   )[]
   exitOnError: boolean
 } = {
-  level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
+  level: process.env.NODE_ENV === 'development' ? 'debug' : 'warn',
   format: format.combine(
     format.label({
       label: path.basename(process.mainModule!?.filename ?? 'test'),
