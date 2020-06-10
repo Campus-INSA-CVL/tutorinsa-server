@@ -5,6 +5,10 @@ import authenticate from './hooks/authentication/authenticate'
 import authorize from './hooks/authentication/authorize'
 import { HookContext } from '@feathersjs/feathers'
 
+import pickData from './hooks/authentication/pick-data'
+
+import pickResult from './hooks/authentication/pick-result'
+
 export default {
   before: {
     all: [
@@ -19,14 +23,14 @@ export default {
     ],
     find: [],
     get: [],
-    create: [],
-    update: [],
-    patch: [],
+    create: [pickData()],
+    update: [pickData()],
+    patch: [pickData()],
     remove: [],
   },
 
   after: {
-    all: [logger()],
+    all: [logger(), pickResult()],
     find: [],
     get: [],
     create: [],

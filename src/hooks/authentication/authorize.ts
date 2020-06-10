@@ -1,36 +1,30 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import { Hook, HookContext } from '@feathersjs/feathers'
-import { AbilityBuilder, Ability, createAliasResolver } from '@casl/ability'
 import { Forbidden } from '@feathersjs/errors'
+import { ForbiddenError } from '@casl/ability'
 
-import { User, Department } from '../../declarations'
+import defineAbilitiesFor, { Services } from './ability'
 
-type Actions = 'create' | 'read' | 'update' | 'delete'
-type Services = Department | 'Department'
-type AppAbility = Ability<[Actions, Services]>
+ForbiddenError.setDefaultMessage(
+  (error) => `You are not allowed to ${error.action} on ${error.subjectType}`
+)
 
-createAliasResolver({
-  read: ['get', 'find'],
-})
-
-function defineAbilitiesFor(user: User) {
-  const { rules, can, cannot } = new AbilityBuilder<AppAbility>()
-
-  can('delete', 'Department')
-
-  return new Ability<[Actions, Services]>(rules)
-}
-
+/**
+ * Check if a user can access to a ressource
+ */
 export default (options = {}): Hook => {
   return async (context: HookContext) => {
-    const { params } = context
+    const { params, method, path } = context
     const { user } = params
 
     const ability = defineAbilitiesFor(user)
+    params.ability = ability
 
-    if (!ability.can('read', 'Department')) {
-      throw new Forbidden("you can't")
+    try {
+      ForbiddenError.from(ability).throwUnlessCan(method, path as Services)
+    } catch (error) {
+      throw new Forbidden(error)
     }
 
     return context
