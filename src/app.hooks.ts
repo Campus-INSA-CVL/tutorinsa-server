@@ -6,7 +6,8 @@ import authorize from './hooks/authentication/authorize'
 
 import logger from './hooks/logger' // Application hooks that run for every service
 import pickData from './hooks/authentication/pick-data'
-import pickResult from './hooks/authentication/pick-result'
+
+import handleQuery from './hooks/authentication/handle-query'
 
 export default {
   before: {
@@ -19,6 +20,7 @@ export default {
         authenticate(),
         authorize()
       ),
+      iff(isProvider('external'), handleQuery()),
     ],
     find: [],
     get: [],
@@ -29,7 +31,7 @@ export default {
   },
 
   after: {
-    all: [logger(), iff(isProvider('external'), pickResult())],
+    all: [logger()],
     find: [],
     get: [],
     create: [],
