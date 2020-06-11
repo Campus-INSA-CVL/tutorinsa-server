@@ -60,6 +60,7 @@
     "@casl/ability": "^4.1.5",
     "@casl/mongoose": "^3.0.3",
     "@feathers-plus/batch-loader": "^0.3.6",
+    "@feathers-plus/cache": "^1.4.0",
     "@feathersjs/authentication": "^4.5.3",
     "@feathersjs/authentication-local": "^4.5.4",
     "@feathersjs/authentication-oauth": "^4.5.4",
