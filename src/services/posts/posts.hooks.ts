@@ -143,9 +143,9 @@ export default {
   },
 
   after: {
-    all: [iff(isProvider('external'), pickResult())],
-    find: [],
-    get: [],
+    all: [],
+    find: [iff(isProvider('external'), pickResult())],
+    get: [iff(isProvider('external'), pickResult())],
     create: [
       patchUser([['createdPostsIds', '_id', 'array']]),
       iff(isPost('tuteur'), createCalendar(), patchCalendar('create')),
