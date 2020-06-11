@@ -61,6 +61,7 @@ export default function defineAbilitiesFor(user: User) {
       'favoriteSubjectsIds',
       'difficultSubjectsIds',
       'createdPostsIds',
+      'year',
       '__v',
     ])
 
