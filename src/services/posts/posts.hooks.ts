@@ -1,5 +1,5 @@
 import * as feathersAuthentication from '@feathersjs/authentication'
-import { disallow, iff, iffElse } from 'feathers-hooks-common'
+import { disallow, iff, iffElse, isProvider } from 'feathers-hooks-common'
 import { PostCore, CheckDataOptions, PostType } from '../../declarations'
 // Don't remove this comment. It's needed to format import lines nicely.
 import checkData from '../../hooks/check/check-data'
@@ -39,6 +39,8 @@ import patchCalendar from '../../hooks/calendar/patch-calendar'
 import addCalendar from '../../hooks/add/add-calendar'
 
 import isPost from '../../hooks/post/is-post'
+
+import pickResult from '../../hooks/authentication/pick-result'
 
 const checkDataTutorOptions: CheckDataOptions<PostCore> = {
   fields: [
@@ -141,7 +143,7 @@ export default {
   },
 
   after: {
-    all: [],
+    all: [iff(isProvider('external'), pickResult())],
     find: [],
     get: [],
     create: [
