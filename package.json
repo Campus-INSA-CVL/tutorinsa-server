@@ -58,6 +58,7 @@
   "types": "lib/",
   "dependencies": {
     "@casl/ability": "^4.1.5",
+    "@casl/mongoose": "^3.0.3",
     "@feathers-plus/batch-loader": "^0.3.6",
     "@feathersjs/authentication": "^4.5.3",
     "@feathersjs/authentication-local": "^4.5.4",
