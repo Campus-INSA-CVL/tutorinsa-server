@@ -9,7 +9,7 @@ export class Users extends Service {
     super(options)
   }
   async patch(id: NullableId, data: Partial<User>, params?: Params) {
-    let patchedData: Partial<User> = {}
+    let patchedData: Partial<User> = data
     if (params?.user) {
       const { user } = params
       patchedData = Object.assign(
@@ -21,6 +21,6 @@ export class Users extends Service {
         updateSubcriptions(data, user, params)
       )
     }
-    return super.patch(id, data, {})
+    return super.patch(id, patchedData, {})
   }
 }

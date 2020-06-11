@@ -14,12 +14,14 @@ export default (options = {}): Hook => {
     const { data, method, params, path } = context
     const { ability } = params
 
-    if (data) {
-      const fields = permittedFieldsOf(ability, method, path)
-      logger.debug(`filds pick: ${util.inspect(fields, false, 10, true)}`)
-      const rawData = pick(data, fields)
-      logger.debug(`raw data: ${util.inspect(rawData, false, 10, true)}`)
-      context.data = rawData
+    if (ability) {
+      if (data) {
+        const fields = permittedFieldsOf(ability, method, path)
+        logger.debug(`fields pick: ${util.inspect(fields, false, 10, true)}`)
+        const rawData = pick(data, fields)
+        logger.debug(`raw data: ${util.inspect(rawData, false, 10, true)}`)
+        context.data = rawData
+      }
     }
 
     return context

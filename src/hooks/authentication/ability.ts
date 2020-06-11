@@ -1,4 +1,4 @@
-import { AbilityBuilder, Ability, createAliasResolver } from '@casl/ability'
+import { AbilityBuilder, Ability } from '@casl/ability'
 
 import { User, ServiceTypes } from '../../declarations'
 import { HookContext } from '@feathersjs/feathers'
@@ -9,8 +9,23 @@ type AppAbility = Ability<[Actions, Services]>
 
 export default function defineAbilitiesFor(user: User) {
   const { rules, can, cannot } = new AbilityBuilder<AppAbility>()
+  can('find', ['subjects', 'years', 'departments'], ['_id', 'name'])
+
+  if (user) {
+    can('find', 'posts', { creatorId: user._id })
+    can('find', 'users', ['_id', 'email'])
+    can('get', 'users')
+    // can('patch', 'users')
+    // can('patch', 'users')
+    can('patch', 'users', ['lastName'], { _id: user._id })
+
+    // can(['update', 'remove'], 'users', { _id: user._id })
+    can(['find', 'get'], ['rooms', 'calendars'])
+  }
   // can('find', 'departments')
-  // can('find', 'posts')
+  // can(['get', 'find'], 'users')
+  // if (user) {
+  // }
 
   // can('find', 'years', ['_id', 'createdAt', 'updatedAt', '__v'])
   // can('find', 'posts', ['_id', 'comment', 'createdAt', 'updatedAt', '__v'])

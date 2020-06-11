@@ -1,6 +1,7 @@
-import { disallow } from 'feathers-hooks-common'
+import { disallow, iff, isProvider } from 'feathers-hooks-common'
 import checkData from '../../hooks/check/check-data'
 import { CheckDataOptions, YearCore } from '../../declarations'
+import pickResult from '../../hooks/authentication/pick-result'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 const checkDataOptions: CheckDataOptions<YearCore> = {
@@ -19,7 +20,7 @@ export default {
   },
 
   after: {
-    all: [],
+    all: [iff(isProvider('external'), pickResult())],
     find: [],
     get: [],
     create: [],

@@ -21,6 +21,7 @@ import {
   CheckDataOptions,
   UserCore,
 } from '../../declarations'
+import pickResult from '../../hooks/authentication/pick-result'
 
 const { authenticate } = feathersAuthentication.hooks
 const { hashPassword, protect } = local.hooks
@@ -95,8 +96,8 @@ export default {
       // Always must be the last hook
       protect('password'),
     ],
-    find: [],
-    get: [],
+    find: [iff(isProvider('external'), pickResult())],
+    get: [iff(isProvider('external'), pickResult())],
     create: [],
     update: [],
     patch: [],
