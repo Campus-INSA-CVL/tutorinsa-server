@@ -55,7 +55,15 @@ app.configure(channels)
 
 // Configure a middleware for 404s and the error handler
 app.use(express.notFound())
-app.use(express.errorHandler({ logger } as any))
+app.use(
+  express.errorHandler({
+    logger,
+    html: {
+      403: path.join(__dirname, '..', 'public/403.html'),
+      404: path.join(__dirname, '..', 'public/404.html'),
+    },
+  } as any)
+)
 
 app.hooks(appHooks)
 
