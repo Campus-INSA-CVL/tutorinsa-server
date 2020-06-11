@@ -1,13 +1,28 @@
 import { AbilityBuilder, Ability } from '@casl/ability'
 import { HookContext } from '@feathersjs/feathers'
 
-import { User, ServiceTypes } from '../../declarations'
+import { User, ServiceTypes, UserPermission } from '../../declarations'
 import moment from '../../utils/moment'
 
 export type Actions = HookContext['method']
 export type Services = keyof ServiceTypes
 type AppAbility = Ability<[Actions, Services]>
 
+/**
+ * Check if a user have a role
+ * @param {UserPermission} role
+ * @param {User} user
+ * @returns {boolean}
+ */
+function is(role: UserPermission, user: User): boolean {
+  return user.permissions.includes(role)
+}
+
+/**
+ * Create ability to manage access to ressources
+ * @param {User} user
+ * @returns {Ability} ability
+ */
 export default function defineAbilitiesFor(user: User) {
   const { rules, can } = new AbilityBuilder<AppAbility>()
   can(
@@ -79,6 +94,7 @@ export default function defineAbilitiesFor(user: User) {
         startAt: { $gte: moment().utc().hours(0) },
       }
     )
+    can('remove', 'posts', { creatorId: user._id })
 
     can(['find', 'get'], 'rooms', [
       '_id',
@@ -91,34 +107,44 @@ export default function defineAbilitiesFor(user: User) {
       '__v',
     ])
 
+    can(['find', 'get'], 'calendars', [
+      '_id',
+      'startAt',
+      'duration',
+      'roomId',
+      'slots',
+      'full',
+      '__v',
+    ])
+
     can('patch', 'subscriptions')
+
+    if (is('eleve', user)) {
+      can('create', 'posts', ['comment', 'type', 'subjectId'], {
+        type: 'eleve',
+      })
+    }
+
+    if (is('tuteur', user)) {
+      can(
+        'create',
+        'posts',
+        [
+          'comment',
+          'type',
+          'startAt',
+          'duration',
+          'studentsCapacity',
+          'tutorsCapacity',
+          'subjectId',
+          'roomId',
+        ],
+        {
+          type: 'tuteur',
+        }
+      )
+    }
   }
-  // can('find', ['subjects', 'years', 'departments'], ['_id', 'name'])
-
-  // if (user) {
-  //   can('find', 'posts', { creatorId: user._id })
-  //   can('find', 'users', ['_id', 'email'])
-  //   can('get', 'users')
-  //   // can('patch', 'users')
-  //   // can('patch', 'users')
-  //   can('patch', 'users', ['lastName'], { _id: user._id })
-
-  //   // can(['update', 'remove'], 'users', { _id: user._id })
-  //   can(['find', 'get'], ['rooms', 'calendars'])
-  // }
-  // can('find', 'departments')
-  // can(['get', 'find'], 'users')
-  // if (user) {
-  // }
-
-  // can('find', 'years', ['_id', 'createdAt', 'updatedAt', '__v'])
-  // can('find', 'posts', ['_id', 'comment', 'createdAt', 'updatedAt', '__v'])
-  // can('get', 'posts', ['_id', 'comment', 'createdAt', 'updatedAt', '__v'])
-
-  // can('create', 'years', ['name'])
-
-  // // @ts-ignore
-  // cannot('read', 'years').because('you cannot, be more powerful !')
 
   return new Ability<[Actions, Services]>(rules)
 }
