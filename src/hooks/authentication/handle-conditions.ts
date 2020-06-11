@@ -14,15 +14,22 @@ import logger from '../../logger'
  */
 export default (options = {}): Hook => {
   return async (context: HookContext) => {
-    const { id, method, path, params, app } = context
+    const { id, method, path, params, app, data } = context
     const { ability } = params
 
     if (ability) {
       if (!id) {
-        const query = toMongoQuery(ability, path, method)
-        logger.debug(`query: ${util.inspect(query, false, 10, true)}`)
-        if (query) {
-          Object.assign(params.query, query)
+        if (method === 'find') {
+          const query = toMongoQuery(ability, path, method)
+          logger.debug(`query: ${util.inspect(query, false, 10, true)}`)
+          if (query) {
+            Object.assign(params.query, query)
+          }
+        }
+        if (data && method === 'create') {
+          if (!ability.can(method, subject(path, data))) {
+            throw new Forbidden(`You are not allowed to ${method} on ${path}`)
+          }
         }
       } else {
         const result = await app.service(path).get(

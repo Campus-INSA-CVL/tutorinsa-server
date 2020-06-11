@@ -7,7 +7,7 @@ import authorize from './hooks/authentication/authorize'
 import logger from './hooks/logger' // Application hooks that run for every service
 import pickData from './hooks/authentication/pick-data'
 
-import handleQuery from './hooks/authentication/handle-query'
+import handleConditions from './hooks/authentication/handle-conditions'
 
 export default {
   before: {
@@ -20,7 +20,7 @@ export default {
         authenticate(),
         authorize()
       ),
-      iff(isProvider('external'), handleQuery()),
+      iff(isProvider('external'), handleConditions()),
     ],
     find: [],
     get: [],
