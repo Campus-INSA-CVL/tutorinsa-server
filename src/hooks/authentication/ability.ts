@@ -34,6 +34,65 @@ export default function defineAbilitiesFor(user: User) {
     ['_id', 'comment', 'type', 'startAt', 'duration', 'subjectId', '__v'],
     { startAt: { $gte: moment().utc().hours(0) } }
   )
+
+  if (user) {
+    can('find', 'users', [
+      '_id',
+      'lastName',
+      'firstName',
+      'email',
+      'yearId',
+      'departmentId',
+      'favoriteSubjectsIds',
+      'difficultSubjectsIds',
+      'createdPostsIds',
+      '__v',
+    ])
+
+    can('get', 'users', { _id: user._id })
+    can('remove', 'users', { _id: user._id })
+
+    can(
+      ['find', 'get'],
+      'posts',
+      [
+        '_id',
+        'comment',
+        'type',
+        'startAt',
+        'duration',
+        'studentsCapacity',
+        'tutorsCapacity',
+        'subjectId',
+        'studentsIds',
+        'tutorsIds',
+        'roomId',
+        'creatorId',
+        'endAt',
+        'fullStudents',
+        'fullTutors',
+        'createdAt',
+        'updatedAt',
+        '__v',
+      ],
+      {
+        startAt: { $gte: moment().utc().hours(0) },
+      }
+    )
+
+    can(['find', 'get'], 'rooms', [
+      '_id',
+      'campus',
+      'name',
+      'day',
+      'startAt',
+      'duration',
+      'endAt',
+      '__v',
+    ])
+
+    can('patch', 'subscriptions')
+  }
   // can('find', ['subjects', 'years', 'departments'], ['_id', 'name'])
 
   // if (user) {
