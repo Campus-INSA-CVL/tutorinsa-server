@@ -40,6 +40,9 @@ function pickFromResult(
   path: Services
 ): Paginated<object> | object[] | object {
   const fields = permittedFieldsOf(ability, method, path)
+  if (!fields.length) {
+    return result
+  }
   let rawResult: Paginated<object> | object[] | object = {}
   if (method === 'find') {
     if ((result as Paginated<object>).data) {
@@ -65,7 +68,7 @@ function pickFromResult(
  */
 export default (options = {}): Hook => {
   return async (context: HookContext) => {
-    const { result, method, params, path } = context
+    const { result, method, params, path, app } = context
     const { ability } = params
 
     if (result) {
