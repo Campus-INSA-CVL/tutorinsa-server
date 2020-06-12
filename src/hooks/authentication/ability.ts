@@ -148,6 +148,27 @@ export default function defineAbilitiesFor(user: User) {
         }
       )
     }
+
+    if (is('admin', user)) {
+      can('find', 'users', [
+        '_id',
+        'lastName',
+        'firstName',
+        'email',
+        'yearId',
+        'departmentId',
+        'favoriteSubjectsIds',
+        'difficultSubjectsIds',
+        'createdPostsIds',
+        'studentSubscriptionsIds',
+        'tutorSubscriptionsIds',
+        'year',
+        'department',
+        'favoriteSubjects',
+        'difficultSubjects',
+        '__v',
+      ])
+    }
   }
 
   return new Ability<[Actions, Services]>(rules)

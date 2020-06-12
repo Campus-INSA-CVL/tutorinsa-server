@@ -1,8 +1,8 @@
-import { HookContext, Service, Id } from '@feathersjs/feathers'
+import { HookContext, Service } from '@feathersjs/feathers'
 import BatchLoader from '@feathers-plus/batch-loader'
 import { callingParams } from 'feathers-hooks-common'
 
-import { User, ServiceTypes, Year, UserCore } from '../../declarations'
+import { User, ServiceTypes, UserCore } from '../../declarations'
 import logger from '../../logger'
 
 const { getResultsByKey, getUniqueKeys } = BatchLoader
