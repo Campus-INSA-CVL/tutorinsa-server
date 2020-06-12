@@ -21,7 +21,7 @@ export default (options = {}): Hook => {
           false,
           10,
           true
-        )}\nparams: ${util.inspect(params, false, 10, true)}`
+        )}\nparams: ${util.inspect(params, false, 2, true)}`
       )
     }
 
@@ -42,7 +42,7 @@ export default (options = {}): Hook => {
         )}\nparams: ${util.inspect(
           params,
           false,
-          10,
+          1,
           true
         )}\nresult: ${util.inspect(result, false, 10, true)}`
       )
