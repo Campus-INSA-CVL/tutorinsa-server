@@ -81,7 +81,7 @@ export default function defineAbilitiesFor(user: User) {
     can('remove', 'users', { _id: user._id })
 
     can(
-      ['find', 'get'],
+      'get',
       'posts',
       [
         '_id',
@@ -105,7 +105,40 @@ export default function defineAbilitiesFor(user: User) {
         'room',
         'creator',
         'students',
+        'tutors',
+        '__v',
+      ],
+      {
+        startAt: { $gte: moment().utc().hours(0) },
+      }
+    )
+
+    can(
+      'find',
+      'posts',
+      [
+        '_id',
+        'comment',
+        'type',
+        'startAt',
+        'duration',
+        'studentsCapacity',
+        'tutorsCapacity',
+        'subjectId',
+        'studentsIds',
         'tutorsIds',
+        'roomId',
+        'creatorId',
+        'endAt',
+        'fullStudents',
+        'fullTutors',
+        'createdAt',
+        'updatedAt',
+        'subject',
+        'room',
+        'creator',
+        'students',
+        'tutors',
         '__v',
       ],
       {
