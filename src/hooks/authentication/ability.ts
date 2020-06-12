@@ -46,7 +46,16 @@ export default function defineAbilitiesFor(user: User) {
   can(
     ['find', 'get'],
     'posts',
-    ['_id', 'comment', 'type', 'startAt', 'duration', 'subjectId', '__v'],
+    [
+      '_id',
+      'comment',
+      'type',
+      'startAt',
+      'duration',
+      'subjectId',
+      'subject',
+      '__v',
+    ],
     { startAt: { $gte: moment().utc().hours(0) } }
   )
 
@@ -92,6 +101,11 @@ export default function defineAbilitiesFor(user: User) {
         'fullTutors',
         'createdAt',
         'updatedAt',
+        'subject',
+        'room',
+        'creator',
+        'students',
+        'tutorsIds',
         '__v',
       ],
       {

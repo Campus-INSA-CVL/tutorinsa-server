@@ -2,18 +2,18 @@ import { HookContext, Service } from '@feathersjs/feathers'
 import BatchLoader from '@feathers-plus/batch-loader'
 import { callingParams } from 'feathers-hooks-common'
 
-import { User, ServiceTypes, UserCore } from '../../declarations'
+import { ServiceTypes, Post, PostCore } from '../../declarations'
 import logger from '../../logger'
 
 const { getResultsByKey, getUniqueKeys } = BatchLoader
 
 type LoaderContext = HookContext & {
   _loaders: {
-    year: { id: BatchLoader<string, object, HookContext<any, Service<any>>> }
-    department: {
+    subject: {
       id: BatchLoader<string, object, HookContext<any, Service<any>>>
     }
-    subject: {
+    user: { id: BatchLoader<string, object, HookContext<any, Service<any>>> }
+    room: {
       id: BatchLoader<string, object, HookContext<any, Service<any>>>
     }
   }
@@ -58,41 +58,41 @@ function createBatchLoader(
  *
  * @param {LoaderContext} context
  * @param {keyof LoaderContext['_loaders']} loader
- * @param {User} user
- * @param {keyof UserCore} from
- * @param {keyof UserCore} to
- * @returns {Promise<User>}
+ * @param {Post} post
+ * @param {keyof PostCore} from
+ * @param {keyof PostCore} to
+ * @returns {Promise<Post>}
  */
 async function joinId(
   context: LoaderContext,
   loader: keyof LoaderContext['_loaders'],
-  user: User,
-  from: keyof UserCore,
-  to: keyof UserCore
-): Promise<User> {
-  if (user[from]) {
-    const isArray = Array.isArray(user[from])
+  post: Post,
+  from: keyof PostCore,
+  to: keyof PostCore
+): Promise<Post> {
+  if (post[from]) {
+    const isArray = Array.isArray(post[from])
     try {
       let data: object | object[]
       if (isArray) {
         data = await context._loaders[loader].id.loadMany(
-          user[from] as string[]
+          post[from] as string[]
         )
         data = (data as object[]).filter((el) => el !== null)
       } else {
-        data = await context._loaders[loader].id.load(user[from] as string)
+        data = await context._loaders[loader].id.load(post[from] as string)
         if (data == null) {
           data = {}
         }
       }
       // @ts-ignore
-      user[to] = data
+      post[to] = data
     } catch (error) {
       logger.error(error)
       // @ts-ignore
-      user[to] = {}
+      post[to] = {}
     }
-    return user
+    return post
   } else {
     throw new Error(`${from} is not a field of the user`)
   }
@@ -101,31 +101,21 @@ async function joinId(
 export default {
   before: (context: LoaderContext) => {
     context._loaders = {
-      year: { id: createBatchLoader(context, 'years') },
-      department: { id: createBatchLoader(context, 'departments') },
       subject: { id: createBatchLoader(context, 'subjects') },
+      room: { id: createBatchLoader(context, 'rooms') },
+      user: { id: createBatchLoader(context, 'users') },
     }
   },
   joins: {
-    year: () => async (user: User, context: LoaderContext) =>
-      await joinId(context, 'year', user, 'yearId', 'year'),
-    department: () => async (user: User, context: LoaderContext) =>
-      await joinId(context, 'department', user, 'departmentId', 'department'),
-    favoriteSubjects: () => async (user: User, context: LoaderContext) =>
-      await joinId(
-        context,
-        'subject',
-        user,
-        'favoriteSubjectsIds',
-        'favoriteSubjects'
-      ),
-    difficultSubjects: () => async (user: User, context: LoaderContext) =>
-      await joinId(
-        context,
-        'subject',
-        user,
-        'difficultSubjectsIds',
-        'difficultSubjects'
-      ),
+    subject: () => async (post: Post, context: LoaderContext) =>
+      await joinId(context, 'subject', post, 'subjectId', 'subject'),
+    room: () => async (post: Post, context: LoaderContext) =>
+      await joinId(context, 'room', post, 'roomId', 'room'),
+    creator: () => async (post: Post, context: LoaderContext) =>
+      await joinId(context, 'user', post, 'creatorId', 'creator'),
+    students: () => async (post: Post, context: LoaderContext) =>
+      await joinId(context, 'user', post, 'studentsIds', 'students'),
+    tutors: () => async (post: Post, context: LoaderContext) =>
+      await joinId(context, 'user', post, 'tutorsIds', 'tutors'),
   },
 }
