@@ -96,10 +96,24 @@ export interface UserCore {
   tutorSubscriptionsIds?: Id[]
   createdAt?: string
   updatedAt?: string
+
+  year: Year
+  department: Department
+  favoriteSubjects: Subject[]
+  difficultSubjects: Subject[]
 }
 
 export type User = UserCore & {
-  [key: string]: string | string[] | UserPermission[] | undefined | Id | Id[]
+  [key: string]:
+    | string
+    | string[]
+    | UserPermission[]
+    | undefined
+    | Id
+    | Id[]
+    | Year
+    | Department
+    | Subject[]
 }
 
 export type PostType = 'eleve' | 'tuteur'
