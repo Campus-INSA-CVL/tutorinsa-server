@@ -7,6 +7,7 @@
     "max": 50
   },
   "authentication": {
+    "path": "/authentication",
     "entity": "user",
     "service": "users",
     "secret": "eqfngCiYEVut3r0aeOvFahy24IQ=",

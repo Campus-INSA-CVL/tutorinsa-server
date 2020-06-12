@@ -1,5 +1,6 @@
-import { disallow } from 'feathers-hooks-common'
+import { disallow, iff, isProvider } from 'feathers-hooks-common'
 import checkDate from '../../hooks/check/check-date'
+import pickResult from '../../hooks/authentication/pick-result'
 
 export default {
   before: {
@@ -14,8 +15,8 @@ export default {
 
   after: {
     all: [],
-    find: [],
-    get: [],
+    find: [iff(isProvider('external'), pickResult())],
+    get: [iff(isProvider('external'), pickResult())],
     create: [],
     update: [],
     patch: [],

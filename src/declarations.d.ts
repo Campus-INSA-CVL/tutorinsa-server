@@ -96,10 +96,24 @@ export interface UserCore {
   tutorSubscriptionsIds?: Id[]
   createdAt?: string
   updatedAt?: string
+
+  year: Year
+  department: Department
+  favoriteSubjects: Subject[]
+  difficultSubjects: Subject[]
 }
 
 export type User = UserCore & {
-  [key: string]: string | string[] | UserPermission[] | undefined | Id | Id[]
+  [key: string]:
+    | string
+    | string[]
+    | UserPermission[]
+    | undefined
+    | Id
+    | Id[]
+    | Year
+    | Department
+    | Subject[]
 }
 
 export type PostType = 'eleve' | 'tuteur'
@@ -123,10 +137,26 @@ export interface PostCore {
   endAt?: string
   fullStudents?: string
   fullTutors?: string
+
+  subject: Subject
+  room: Room
+  creator: User
+  students: User[]
+  tutors: User[]
 }
 
 export type Post = PostCore & {
-  [key: string]: string | string[] | number | PostType | undefined | Id | Id[]
+  [key: string]:
+    | string
+    | string[]
+    | number
+    | PostType
+    | undefined
+    | Id
+    | Id[]
+    | Subject
+    | Room
+    | User
 }
 
 export interface SlotCore {

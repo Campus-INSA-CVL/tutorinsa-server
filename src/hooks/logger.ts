@@ -5,6 +5,9 @@ import { FeathersError } from '@feathersjs/errors'
 import util from 'util'
 import logger from '../logger'
 
+/**
+ * Log message and data
+ */
 export default (options = {}): Hook => {
   return async (context: HookContext<FeathersError>) => {
     const { error, method, path, params, type, id, data, result } = context
@@ -18,7 +21,7 @@ export default (options = {}): Hook => {
           false,
           10,
           true
-        )}\nparams: ${util.inspect(params, false, 10, true)}`
+        )}\nparams: ${util.inspect(params, false, 2, true)}`
       )
     }
 
@@ -39,7 +42,7 @@ export default (options = {}): Hook => {
         )}\nparams: ${util.inspect(
           params,
           false,
-          10,
+          1,
           true
         )}\nresult: ${util.inspect(result, false, 10, true)}`
       )

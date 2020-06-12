@@ -1,6 +1,6 @@
 import * as feathersAuthentication from '@feathersjs/authentication'
 import * as local from '@feathersjs/authentication-local'
-import { disallow, iff, isProvider } from 'feathers-hooks-common'
+import { disallow, iff, isProvider, fastJoin } from 'feathers-hooks-common'
 // Don't remove this comment. It's needed to format import lines nicely.
 import checkData from '../../hooks/check/check-data'
 
@@ -16,13 +16,15 @@ import checkPermissions from '../../hooks/check/check-user/check-permissions'
 
 import removeUnwantedFields from '../../hooks/remove-unwanted-fields'
 
+import pickResult from '../../hooks/authentication/pick-result'
+
+import resolvers from './users.populate'
 import {
   CheckPermissionsOptions,
   CheckDataOptions,
   UserCore,
 } from '../../declarations'
 
-const { authenticate } = feathersAuthentication.hooks
 const { hashPassword, protect } = local.hooks
 
 const checkDataOptions: CheckDataOptions<UserCore> = {
@@ -91,12 +93,13 @@ export default {
 
   after: {
     all: [
+      fastJoin(resolvers),
       // Make sure the password field is never sent to the client
       // Always must be the last hook
       protect('password'),
     ],
-    find: [],
-    get: [],
+    find: [iff(isProvider('external'), pickResult())],
+    get: [iff(isProvider('external'), pickResult())],
     create: [],
     update: [],
     patch: [],

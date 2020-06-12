@@ -5,7 +5,7 @@ import {
   Post,
   PostCore,
 } from '../../declarations'
-import { GeneralError } from '@feathersjs/errors'
+import { GeneralError, BadRequest } from '@feathersjs/errors'
 import { Id, Params } from '@feathersjs/feathers'
 
 type AllowedFieldsWithType<Obj, Type> = {
@@ -44,7 +44,7 @@ function removeId(
 /**
  * Return an array with the new and previous post id using the user data
  * @param {Post | User} previous
- * @param {ExtractFieldsOfType<UserCore, Id[]> | ExtractFieldsOfType<PostCore, Id[]>} field
+ * @param {'studentsIds' | 'tutorsIds' | 'studentSubscriptionsIds'  | 'tutorSubscriptionsIds' | 'createdPostsIds'} field
  * @param {Id} id
  * @returns {Id[]} an array with the new id
  */
@@ -58,7 +58,36 @@ function addId(
     | 'createdPostsIds',
   id: Id
 ): Id[] {
+  if (isAlreadyIn(previous, field, id)) {
+    return [...(previous[field] as Id[])]
+  }
   return [...(previous[field] as Id[]), id]
+}
+
+/**
+ * Check if an id is already in the array
+ * @param {Post | User} previous
+ * @param { 'studentsIds' | 'tutorsIds' | 'studentSubscriptionsIds'  | 'tutorSubscriptionsIds' | 'createdPostsIds'} field
+ * @param {} id
+ * @returns {boolean}
+ */
+function isAlreadyIn(
+  previous: Post | User,
+  field:
+    | 'studentsIds'
+    | 'tutorsIds'
+    | 'studentSubscriptionsIds'
+    | 'tutorSubscriptionsIds'
+    | 'createdPostsIds',
+  id: Id
+): boolean {
+  let isFind = false
+  ;(previous[field]! as Id[]).forEach((el) => {
+    if (el.toString() === id.toString()) {
+      return (isFind = true)
+    }
+  })
+  return isFind
 }
 
 /**

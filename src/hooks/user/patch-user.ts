@@ -53,7 +53,7 @@ async function patchUser(
       { createdPostsIds: data.createdPostsIds },
       callingParams({
         propNames: ['user'],
-        newProps: { provider: undefined },
+        newProps: { provider: null },
       })(context)
     )
   } catch (e) {

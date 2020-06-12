@@ -1,8 +1,8 @@
-# Contributing to Campus INSA Centre-Val de Loire
+# Contributing to TutorINSA, an association of Campus INSA Centre-Val de Loire
 
-<!-- Thank you for contributing to Feathers! :heart: :tada:
+Thank you for contributing to TutorINSA, an association of Campus INSA Centre-Val de Loire! :heart: :tada:
 
-This repo is the main core and where most issues are reported. Campus INSA CVL embraces modularity and is broken up across many repos.
+This repo is where most issues are reported for the server of TutorINSA. Campus INSA CVL embraces modularity and is broken up across many repos.
 
 ## Report a bug
 
@@ -10,13 +10,13 @@ Before creating an issue please make sure you have checked out the docs. You mig
 
 If you haven't found your answer please feel free to create an issue on Github.
 
-Issues can be reported in the [issue tracker]().
+Issues can be reported in the [issue tracker](https://github.com/Campus-INSA-CVL/tutorinsa-server/issues).
 
 ## Report a Security Concern
 
 We take security very seriously at Campus INSA CVL. We welcome any peer review of our 100% open source code to ensure nobody's Campus INSA CVL app is ever compromised or hacked. As a web application developer you are responsible for any security breaches. We do our very best to make sure Campus INSA CVL is as secure as possible by default.
 
-In order to give the community time to respond and upgrade we strongly urge you report all security issues to us. Send one of the core team members a PM using the [campus page on facebook](https://www.facebook.com/campusinsacvl) or email us at ``insert email`` with details and we will respond ASAP.
+In order to give the community time to respond and upgrade we strongly urge you report all security issues to us. Send one of the core team members a PM using the [campus page on facebook](https://www.facebook.com/campusinsacvl) or email us at `webmaster@bde.insa-cvl.fr` with details and we will respond ASAP.
 
 ## Pull Requests
 
@@ -57,4 +57,3 @@ Project maintainers have the right and responsibility to remove, edit, or reject
 Instances of abusive, harassing, or otherwise unacceptable behavior may be reported by opening an issue or contacting one or more of the project maintainers.
 
 This Code of Conduct is adapted from the [Contributor Covenant](http://contributor-covenant.org), version 1.0.0, available at [http://contributor-covenant.org/version/1/0/0/](http://contributor-covenant.org/version/1/0/0/)
- -->
