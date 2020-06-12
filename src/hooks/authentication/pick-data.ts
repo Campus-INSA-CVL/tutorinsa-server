@@ -17,9 +17,9 @@ export default (options = {}): Hook => {
     if (ability) {
       if (data) {
         const fields = permittedFieldsOf(ability, method, path)
-        logger.debug(`fields pick: ${util.inspect(fields, false, 10, true)}`)
+        logger.debug(`fields pick: ${util.inspect(fields, false, 2, true)}`)
         const rawData = pick(data, fields)
-        logger.debug(`raw data: ${util.inspect(rawData, false, 10, true)}`)
+        logger.debug(`raw data: ${util.inspect(rawData, false, 3, true)}`)
         context.data = rawData
       }
     }
