@@ -23,7 +23,7 @@ function is(role: UserPermission, user: User): boolean {
  * @param {User} user
  * @returns {Ability} ability
  */
-export default function defineAbilitiesFor(user: User) {
+export default function defineAbilitiesFor(user: User): Ability {
   const { rules, can } = new AbilityBuilder<AppAbility>()
   can(
     ['find', 'get'],
