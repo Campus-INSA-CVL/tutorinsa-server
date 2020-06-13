@@ -41,7 +41,7 @@
     "test": "npm run lint && npm run compile && npm run jest -- --collectCoverage=true",
     "test:ci": "npm run lint && npm run compile && npm run jest -- --collectCoverage=true --ci --reporters=default --reporters=jest-junit",
     "compile": "shx rm -rf lib/ && tsc",
-    "dev": "ts-node-dev --no-notify src/",
+    "dev": "ts-node-dev --no-notify --watch src/docs src/",
     "start": "npm run compile && node lib/",
     "populatedb": "ts-node populatedb.ts",
     "precommit": "npm run lint"

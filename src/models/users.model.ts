@@ -12,11 +12,13 @@ const objSchema = {
   email: {
     type: String,
     unique: true,
+    required: true,
     lowercase: true,
     validate: checkEmail,
   },
   password: {
     type: String,
+    required: true,
   },
   permissions: [
     {
@@ -53,7 +55,6 @@ const objSchema = {
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'posts',
-      default: [],
     },
   ],
   studentSubscriptionsIds: [
