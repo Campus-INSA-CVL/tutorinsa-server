@@ -59,6 +59,22 @@ export default function defineAbilitiesFor(user: User): Ability {
     { startAt: { $gte: moment().utc().hours(0) } }
   )
 
+  can(
+    ['find', 'get'],
+    'posts',
+    [
+      '_id',
+      'comment',
+      'type',
+      'startAt',
+      'duration',
+      'subjectId',
+      'subject',
+      '__v',
+    ],
+    { type: 'eleve' }
+  )
+
   if (user) {
     can('find', 'users', [
       '_id',
