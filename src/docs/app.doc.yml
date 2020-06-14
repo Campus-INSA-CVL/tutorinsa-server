@@ -192,6 +192,208 @@ components:
           type: array
           items:
             type: objectId
+    post:
+      required:
+        - comment
+        - type
+        - subjectId
+        - creatorId
+      type: object
+      properties:
+        comment:
+          type: string
+          maxLength: 440
+        type:
+          type: string
+          enum:
+            - eleve
+            - tuteur
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        studentsCapacity:
+          type: numer
+          minimum: 5
+          maximum: 20
+        tutorsCapacity:
+          type: number
+          minimum: 1
+          maximum: 5
+        subjectId:
+          type: objectId
+          $ref: "#/components/schemas/subject"
+        studentsIds:
+          type: objectId
+          $ref: "#/components/schemas/user"
+        tutorsIds:
+          type: objectId
+          $ref: "#/components/schemas/user"
+        roomId:
+          type: objectId
+          $ref: "#/components/schemas/room"
+        creatorId:
+          type: objectId
+          $ref: "#/components/schemas/user"
+    findGetAnonymeTutorPost:
+      type: object
+      properties:
+        _id:
+          type: string
+        comment:
+          type: string
+        type:
+          type: string
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        subjectId:
+          type: objectId
+        subject:
+          $ref: "#/components/schemas/getSubject"
+    findGetAnonymeStudentPost:
+      type: object
+      properties:
+        _id:
+          type: string
+        comment:
+          type: string
+        type:
+          type: string
+        subjectId:
+          type: objectId
+        subject:
+          $ref: "#/components/schemas/getSubject"
+    findGetAuthTutorPost:
+      type: object
+      properties:
+        comment:
+          type: string
+        type:
+          type: string
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        studentsCapacity:
+          type: numer
+        tutorsCapacity:
+          type: number
+        subjectId:
+          type: objectId
+        studentsIds:
+          type: objectId
+        tutorsIds:
+          type: objectId
+        roomId:
+          type: objectId
+        creatorId:
+          type: objectId
+        endAt:
+          type: string
+          format: date-time
+        fullStudents:
+          type: boolean
+        fullTutors:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        subject:
+          $ref: "#/components/schemas/getSubject"
+        room:
+          $ref: "#/components/schemas/room"
+        creator:
+          $ref: "#/components/schemas/findUser"
+        students:
+          type: array
+          items:
+            $ref: "#/components/schemas/findUser"
+        tutors:
+          type: array
+          items:
+            $ref: "#/components/schemas/findUser"
+        __v:
+          type: number
+    findGetAuthStudentPost:
+      type: object
+      properties:
+        comment:
+          type: string
+        type:
+          type: string
+        subjectId:
+          type: objectId
+        creatorId:
+          type: objectId
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        subject:
+          $ref: "#/components/schemas/getSubject"
+        creator:
+          $ref: "#/components/schemas/findUser"
+        __v:
+          type: number
+    createTutorPost:
+      required:
+        - comment
+        - type
+        - subjectId
+      type: object
+      properties:
+        comment:
+          type: string
+          maxLength: 440
+        type:
+          type: string
+          enum:
+            - eleve
+            - tuteur
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        studentsCapacity:
+          type: numer
+          minimum: 5
+          maximum: 20
+        tutorsCapacity:
+          type: number
+          minimum: 1
+          maximum: 5
+        subjectId:
+          type: objectId
+        roomId:
+          type: objectId
+    createStudentPost:
+      required:
+        - comment
+        - type
+        - subjectId
+      type: object
+      properties:
+        comment:
+          type: string
+          maxLength: 440
+        type:
+          type: string
+          enum:
+            - eleve
+            - tuteur
+        subjectId:
+          type: objectId
     year:
       required:
         - name
@@ -240,6 +442,38 @@ components:
           type: string
         __v:
           type: number
+    room:
+      required:
+        - camppus
+        - name
+        - day
+        - startAt
+        - duration
+      type: object
+      properties:
+        campus:
+          type: string
+          enum: ["blois", "bourges"]
+        name:
+          type: string
+        day:
+          type: string
+          enum:
+            [
+              "lundi",
+              "mardi",
+              "mercredi",
+              "jeudi",
+              "vendredi",
+              "samedi",
+              "dimanche",
+            ]
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+
     errors:
       type: object
       properties:

@@ -1,1 +1,1105 @@
 description:
+produces:
+  - application/json
+operations:
+  find:
+    summary: Finds all posts
+    description:
+    responses:
+      200:
+        description: successful operation
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - type: object
+                  description: response when a user is **not authenticated**
+                  properties:
+                    total:
+                      type: integer
+                    limit:
+                      type: integer
+                    skip:
+                      type: interger
+                    data:
+                      type: array
+                      items:
+                        anyOf:
+                          - $ref: "#/components/schemas/findGetAnonymeTutorPost"
+                          - $ref: "#/components/schemas/findGetAnonymeStudentPost"
+
+                - type: object
+                  description: response when a user is **authenticated**
+                  properties:
+                    total:
+                      type: integer
+                    limit:
+                      type: integer
+                    skip:
+                      type: interger
+                    data:
+                      type: array
+                      items:
+                        anyOf:
+                          - $ref: "#/components/schemas/findGetAuthTutorPost"
+                          - $ref: "#/components/schemas/findGetAuthStudentPost"
+
+            examples:
+              anonymous:
+                description: response when a user is **not authenticated**
+                value:
+                  - _id: 5ee3828a5616bea3f0aabad0
+                    comment: so cool!
+                    type: tuteur
+                    startAt: "2020-06-15T18:00:00.000Z"
+                    duration: 60
+                    subjectId: 5ee3828a5616bea3f0aabab7
+                    subject:
+                      _id: 5ee3828a5616bea3f0aabab7
+                      name: eps
+                      __v: 0
+                    __v: 0
+                  - _id: 5ee3828a5616bea3f0aabad1
+                    comment: love to teach to other students!
+                    type: eleve
+                    subjectId: 5ee3828a5616bea3f0aabab9
+                    subject:
+                      _id: 5ee3828a5616bea3f0aabab9
+                      name: lv2
+                      __v: 0
+                    __v: 0
+              auth:
+                description: response when a user is **authenticated**
+                value:
+                  total: 2
+                  limit: 10
+                  skip: 0
+                  data:
+                    - _id: 5ee3828a5616bea3f0aabad1
+                      comment: love to teach to other students!
+                      type: tuteur
+                      startAt: "2020-06-15T14:00:00Z"
+                      duration: 90
+                      studentsCapacity: 20
+                      tutorsCapacity: 5
+                      subjectId: 5ee3828a5616bea3f0aabab9
+                      studentsIds:
+                        - 5ee3828a5616bea3f0aabacd
+                      tutorsIds:
+                        - 5ee3828a5616bea3f0aabacc
+                      roomId: 5ee3828a5616bea3f0aabaca
+                      creatorId: 5ee3828a5616bea3f0aabacc
+                      createdAt: "2020-06-12T13:26:34.923Z"
+                      updatedAt: "2020-06-12T13:26:34.959Z"
+                      endAt: "2020-06-15T15:30:00Z"
+                      fullStudents: false
+                      fullTutors: false
+                      subject:
+                        - _id: 5ee3828a5616bea3f0aabab9
+                          name: électronique analogique
+                          __v: 0
+                      room:
+                        - _id: 5ee3828a5616bea3f0aabaca
+                          campus: bourges
+                          name: e.101
+                          day: lundi
+                          startAt: "1970-01-01T16:00:00.000Z"
+                          duration: 120
+                          endAt: "1970-01-01T18:00:00.000Z"
+                          __v: 0
+                      creator:
+                        _id: 5ee3828a5616bea3f0aabacc
+                        lastName: simmons
+                        firstName: amber
+                        email: amber.simmons@insa-cvl.fr
+                        yearId: 5ee3828a5616bea3f0aababe
+                        departmentId: 5ee3828a5616bea3f0aabac3
+                        favoriteSubjectsIds:
+                          - 5ee3828a5616bea3f0aabab8
+                          - 5ee3828a5616bea3f0aabab9
+                        difficultSubjectsIds:
+                          - 5ee3828a5616bea3f0aababa
+                          - 5ee3828a5616bea3f0aababb
+                        createdPostsIds:
+                          - 5ee3828a5616bea3f0aabad0
+                          - 5ee3828a5616bea3f0aabad1
+                          - 5ee3828a5616bea3f0aabad2
+                        year:
+                          _id: 5ee3828a5616bea3f0aababe
+                          name: 2a
+                          __v: 0
+                        department:
+                          _id: 5ee3828a5616bea3f0aabac3
+                          name: sti
+                          __v: 0
+                        favoriteSubjects:
+                          - _id: 5ee3828a5616bea3f0aabab8
+                            name: mathématiques
+                            __v: 0
+                          - _id: 5ee3828a5616bea3f0aabab9
+                            name: lv2
+                            __v: 0
+                        difficultSubjects:
+                          - _id: 5ee3828a5616bea3f0aababa
+                            name: résistance des matériaux
+                            __v: 0
+                          - _id: 5ee3828a5616bea3f0aababb
+                            name: électronique analogique
+                            __v: 0
+                        __v: 0
+                      students:
+                        - _id: 5ee3828a5616bea3f0aabacb
+                          lastName: park
+                          firstName: paul
+                          email: paul.park@insa-cvl.fr
+                          yearId: 5ee3828a5616bea3f0aababd
+                          departmentId: 5ee3828a5616bea3f0aabac2
+                          favoriteSubjectsIds:
+                            - 5ee3828a5616bea3f0aabab7
+                            - 5ee3828a5616bea3f0aabab8
+                          difficultSubjectsIds:
+                            - 5ee3828a5616bea3f0aabab9
+                          createdPostsIds: []
+                          year:
+                            _id: 5ee3828a5616bea3f0aababd
+                            name: 1a
+                            __v: 0
+                          department:
+                            _id: 5ee3828a5616bea3f0aabac2
+                            name: stpi
+                            __v: 0
+                          favoriteSubjects:
+                            - _id: 5ee3828a5616bea3f0aabab7
+                              name: eps
+                              __v: 0
+                            - _id: 5ee3828a5616bea3f0aabab8
+                              name: mathématiques
+                              __v: 0
+                          difficultSubjects:
+                            - _id: 5ee3828a5616bea3f0aabab9
+                              name: lv2
+                              __v: 0
+                          __v: 0
+                        - _id: 5ee3828a5616bea3f0aabacd
+                          lastName: hill
+                          firstName: jake
+                          email: jake.hill@insa-cvl.fr
+                          yearId: 5ee3828a5616bea3f0aababf
+                          departmentId: 5ee3828a5616bea3f0aabac4
+                          favoriteSubjectsIds:
+                            - 5ee3828a5616bea3f0aabab9
+                          difficultSubjectsIds:
+                            - 5ee3828a5616bea3f0aababb
+                            - 5ee3828a5616bea3f0aababc
+                          createdPostsIds:
+                            - 5ee3828a5616bea3f0aabad3
+                          year:
+                            _id: 5ee3828a5616bea3f0aababf
+                            name: 3a
+                            __v: 0
+                          department:
+                            _id: 5ee3828a5616bea3f0aabac4
+                            name: gsi
+                            __v: 0
+                          favoriteSubjects:
+                            - _id: 5ee3828a5616bea3f0aabab9
+                              name: lv2
+                              __v: 0
+                          difficultSubjects:
+                            - _id: 5ee3828a5616bea3f0aababb
+                              name: électronique analogique
+                              __v: 0
+                            - _id: 5ee3828a5616bea3f0aababc
+                              name: introduction au droit
+                              __v: 0
+                          __v: 0
+                      tutors:
+                        - _id: 5ee3828a5616bea3f0aabacc
+                          lastName: simmons
+                          firstName: amber
+                          email: amber.simmons@insa-cvl.fr
+                          yearId: 5ee3828a5616bea3f0aababe
+                          departmentId: 5ee3828a5616bea3f0aabac3
+                          favoriteSubjectsIds:
+                            - 5ee3828a5616bea3f0aabab8
+                            - 5ee3828a5616bea3f0aabab9
+                          difficultSubjectsIds:
+                            - 5ee3828a5616bea3f0aababa
+                            - 5ee3828a5616bea3f0aababb
+                          createdPostsIds:
+                            - 5ee3828a5616bea3f0aabad0
+                            - 5ee3828a5616bea3f0aabad1
+                            - 5ee3828a5616bea3f0aabad2
+                          year:
+                            _id: 5ee3828a5616bea3f0aababe
+                            name: 2a
+                            __v: 0
+                          department:
+                            _id: 5ee3828a5616bea3f0aabac3
+                            name: sti
+                            __v: 0
+                          favoriteSubjects:
+                            - _id: 5ee3828a5616bea3f0aabab8
+                              name: mathématiques
+                              __v: 0
+                            - _id: 5ee3828a5616bea3f0aabab9
+                              name: lv2
+                              __v: 0
+                          difficultSubjects:
+                            - _id: 5ee3828a5616bea3f0aababa
+                              name: résistance des matériaux
+                              __v: 0
+                            - _id: 5ee3828a5616bea3f0aababb
+                              name: électronique analogique
+                              __v: 0
+                          __v: 0
+                        - _id: 5ee3828a5616bea3f0aabacf
+                          lastName: chester
+                          firstName: wilson
+                          email: wilson.chester@insa-cvl.fr
+                          yearId: 5ee3828a5616bea3f0aababe
+                          departmentId: 5ee3828a5616bea3f0aabac2
+                          favoriteSubjectsIds:
+                            - 5ee3828a5616bea3f0aabab9
+                          difficultSubjectsIds:
+                            - 5ee3828a5616bea3f0aababb
+                            - 5ee3828a5616bea3f0aababa
+                          createdPostsIds: []
+                          year:
+                            _id: 5ee3828a5616bea3f0aababe
+                            name: 2a
+                            __v: 0
+                          department:
+                            _id: 5ee3828a5616bea3f0aabac2
+                            name: stpi
+                            __v: 0
+                          favoriteSubjects:
+                            - _id: 5ee3828a5616bea3f0aabab9
+                              name: lv2
+                              __v: 0
+                          difficultSubjects:
+                            - _id: 5ee3828a5616bea3f0aababb
+                              name: électronique analogique
+                              __v: 0
+
+                            - _id: 5ee3828a5616bea3f0aababa
+                              name: résistance des matériaux
+                              __v: 0
+                          __v: 0
+                      __v: 0
+                    - _id: 5ee3828a5616bea3f0aabad2
+                      comment: you're welcome to learn new things !
+                      type: eleve
+                      studentsIds: []
+                      tutorsIds: []
+                      subjectId: 5ee3828a5616bea3f0aababb
+                      creatorId: 5ee3828a5616bea3f0aabacc
+                      updatedAt: "2020-06-12T13:26:34.927Z"
+                      createdAt: "2020-06-12T13:26:34.927Z"
+                      subject:
+                        - _id: 5ee3828a5616bea3f0aababb
+                          name: électronique analogique
+                          __v: 0
+                      creator:
+                        _id: 5ee3828a5616bea3f0aabacc
+                        lastName: simmons
+                        firstName: amber
+                        email: amber.simmons@insa-cvl.fr
+                        yearId: 5ee3828a5616bea3f0aababe
+                        departmentId: 5ee3828a5616bea3f0aabac3
+                        favoriteSubjectsIds:
+                          - 5ee3828a5616bea3f0aabab8
+                          - 5ee3828a5616bea3f0aabab9
+                        difficultSubjectsIds:
+                          - 5ee3828a5616bea3f0aababa
+                          - 5ee3828a5616bea3f0aababb
+                        createdPostsIds:
+                          - 5ee3828a5616bea3f0aabad0
+                          - 5ee3828a5616bea3f0aabad1
+                          - 5ee3828a5616bea3f0aabad2
+                        year:
+                          _id: 5ee3828a5616bea3f0aababe
+                          name: 2a
+                          __v: 0
+                        department:
+                          _id: 5ee3828a5616bea3f0aabac3
+                          name: sti
+                          __v: 0
+                        favoriteSubjects:
+                          - _id: 5ee3828a5616bea3f0aabab8
+                            name: mathématiques
+                            __v: 0
+                          - _id: 5ee3828a5616bea3f0aabab9
+                            name: lv2
+                            __v: 0
+                        difficultSubjects:
+                          - _id: 5ee3828a5616bea3f0aababa
+                            name: résistance des matériaux
+                            __v: 0
+                          - _id: 5ee3828a5616bea3f0aababb
+                            name: électronique analogique
+                            __v: 0
+                        __v: 0
+                      __v: 0
+
+  get:
+    summary: Get one post
+    description: Retrive one post
+    parameters:
+      - name: _id
+        in: path
+        description: ID of post that need to be fetch
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: successful operation
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/findGetAnonymeTutorPost"
+                - $ref: "#/components/schemas/findGetAnonymeStudentPost"
+                - $ref: "#/components/schemas/findGetAuthTutorPost"
+                - $ref: "#/components/schemas/findGetAuthStudentPost"
+            examples:
+              AnonymeTutor:
+                description: a **tutor** post when the user is **anonymous**
+                value:
+                  _id: 5ee3828a5616bea3f0aabad0
+                  comment: so cool!
+                  type: tuteur
+                  startAt: "2020-06-15T18:00:00.000Z"
+                  duration: 60
+                  subjectId: 5ee3828a5616bea3f0aabab7
+                  subject:
+                    _id: 5ee3828a5616bea3f0aabab7
+                    name: eps
+                    __v: 0
+                  __v: 0
+              AnonymeStudent:
+                description: a **student** post when the user is **anonymous**
+                value:
+                  _id: 5ee3828a5616bea3f0aabad1
+                  comment: love to teach to other students!
+                  type: eleve
+                  subjectId: 5ee3828a5616bea3f0aabab9
+                  subject:
+                    _id: 5ee3828a5616bea3f0aabab9
+                    name: lv2
+                    __v: 0
+                  __v: 0
+              AuthTutor:
+                description: a **tutor** post when the user is **authenticated**
+                value:
+                  _id: 5ee3828a5616bea3f0aabad1
+                  comment: love to teach to other students!
+                  type: tuteur
+                  startAt: "2020-06-15T14:00:00Z"
+                  duration: 90
+                  studentsCapacity: 20
+                  tutorsCapacity: 5
+                  subjectId: 5ee3828a5616bea3f0aabab9
+                  studentsIds:
+                    - 5ee3828a5616bea3f0aabacd
+                  tutorsIds:
+                    - 5ee3828a5616bea3f0aabacc
+                  roomId: 5ee3828a5616bea3f0aabaca
+                  creatorId: 5ee3828a5616bea3f0aabacc
+                  createdAt: "2020-06-12T13:26:34.923Z"
+                  updatedAt: "2020-06-12T13:26:34.959Z"
+                  endAt: "2020-06-15T15:30:00Z"
+                  fullStudents: false
+                  fullTutors: false
+                  subject:
+                    - _id: 5ee3828a5616bea3f0aabab9
+                      name: électronique analogique
+                      __v: 0
+                  room:
+                    - _id: 5ee3828a5616bea3f0aabaca
+                      campus: bourges
+                      name: e.101
+                      day: lundi
+                      startAt: "1970-01-01T16:00:00.000Z"
+                      duration: 120
+                      endAt: "1970-01-01T18:00:00.000Z"
+                      __v: 0
+                  creator:
+                    _id: 5ee3828a5616bea3f0aabacc
+                    lastName: simmons
+                    firstName: amber
+                    email: amber.simmons@insa-cvl.fr
+                    yearId: 5ee3828a5616bea3f0aababe
+                    departmentId: 5ee3828a5616bea3f0aabac3
+                    favoriteSubjectsIds:
+                      - 5ee3828a5616bea3f0aabab8
+                      - 5ee3828a5616bea3f0aabab9
+                    difficultSubjectsIds:
+                      - 5ee3828a5616bea3f0aababa
+                      - 5ee3828a5616bea3f0aababb
+                    createdPostsIds:
+                      - 5ee3828a5616bea3f0aabad0
+                      - 5ee3828a5616bea3f0aabad1
+                      - 5ee3828a5616bea3f0aabad2
+                    year:
+                      _id: 5ee3828a5616bea3f0aababe
+                      name: 2a
+                      __v: 0
+                    department:
+                      _id: 5ee3828a5616bea3f0aabac3
+                      name: sti
+                      __v: 0
+                    favoriteSubjects:
+                      - _id: 5ee3828a5616bea3f0aabab8
+                        name: mathématiques
+                        __v: 0
+                      - _id: 5ee3828a5616bea3f0aabab9
+                        name: lv2
+                        __v: 0
+                    difficultSubjects:
+                      - _id: 5ee3828a5616bea3f0aababa
+                        name: résistance des matériaux
+                        __v: 0
+                      - _id: 5ee3828a5616bea3f0aababb
+                        name: électronique analogique
+                        __v: 0
+                    __v: 0
+                  students:
+                    - _id: 5ee3828a5616bea3f0aabacb
+                      lastName: park
+                      firstName: paul
+                      email: paul.park@insa-cvl.fr
+                      yearId: 5ee3828a5616bea3f0aababd
+                      departmentId: 5ee3828a5616bea3f0aabac2
+                      favoriteSubjectsIds:
+                        - 5ee3828a5616bea3f0aabab7
+                        - 5ee3828a5616bea3f0aabab8
+                      difficultSubjectsIds:
+                        - 5ee3828a5616bea3f0aabab9
+                      createdPostsIds: []
+                      year:
+                        _id: 5ee3828a5616bea3f0aababd
+                        name: 1a
+                        __v: 0
+                      department:
+                        _id: 5ee3828a5616bea3f0aabac2
+                        name: stpi
+                        __v: 0
+                      favoriteSubjects:
+                        - _id: 5ee3828a5616bea3f0aabab7
+                          name: eps
+                          __v: 0
+                        - _id: 5ee3828a5616bea3f0aabab8
+                          name: mathématiques
+                          __v: 0
+                      difficultSubjects:
+                        - _id: 5ee3828a5616bea3f0aabab9
+                          name: lv2
+                          __v: 0
+                      __v: 0
+                  tutors:
+                    - _id: 5ee3828a5616bea3f0aabacc
+                      lastName: simmons
+                      firstName: amber
+                      email: amber.simmons@insa-cvl.fr
+                      yearId: 5ee3828a5616bea3f0aababe
+                      departmentId: 5ee3828a5616bea3f0aabac3
+                      favoriteSubjectsIds:
+                        - 5ee3828a5616bea3f0aabab8
+                        - 5ee3828a5616bea3f0aabab9
+                      difficultSubjectsIds:
+                        - 5ee3828a5616bea3f0aababa
+                        - 5ee3828a5616bea3f0aababb
+                      createdPostsIds:
+                        - 5ee3828a5616bea3f0aabad0
+                        - 5ee3828a5616bea3f0aabad1
+                        - 5ee3828a5616bea3f0aabad2
+                      year:
+                        _id: 5ee3828a5616bea3f0aababe
+                        name: 2a
+                        __v: 0
+                      department:
+                        _id: 5ee3828a5616bea3f0aabac3
+                        name: sti
+                        __v: 0
+                      favoriteSubjects:
+                        - _id: 5ee3828a5616bea3f0aabab8
+                          name: mathématiques
+                          __v: 0
+                        - _id: 5ee3828a5616bea3f0aabab9
+                          name: lv2
+                          __v: 0
+                      difficultSubjects:
+                        - _id: 5ee3828a5616bea3f0aababa
+                          name: résistance des matériaux
+                          __v: 0
+                        - _id: 5ee3828a5616bea3f0aababb
+                          name: électronique analogique
+                          __v: 0
+                      __v: 0
+                  __v: 0
+              AuthStudent:
+                description: a **student** post when the user is **authenticated**
+                value:
+                  _id: 5ee3828a5616bea3f0aabad3
+                  comment: please I need help to undersantd this subject !
+                  type: eleve
+                  subjectId: 5ee3828a5616bea3f0aababc
+                  subject:
+                    _id: 5ee3828a5616bea3f0aababc
+                    name: introduction au droit
+                    __v: 0
+                  __v: 0
+                  studentsIds: []
+                  tutorsIds: []
+                  creatorId: 5ee3828a5616bea3f0aabacd
+                  fullStudents: false
+                  fullTutors: false
+                  createdAt: "2020-06-12T13:26:34.932Z"
+                  updatedAt: "2020-06-12T13:26:34.932Z"
+                  creator:
+                    _id: 5ee3828a5616bea3f0aabacd
+                    lastName: hill
+                    firstName: jake
+                    email: jake.hill@insa-cvl.fr
+                    yearId: 5ee3828a5616bea3f0aababf
+                    departmentId: 5ee3828a5616bea3f0aabac4
+                    favoriteSubjectsIds:
+                      - 5ee3828a5616bea3f0aabab9
+                    difficultSubjectsIds:
+                      - 5ee3828a5616bea3f0aababb
+                      - 5ee3828a5616bea3f0aababc
+                    createdPostsIds:
+                      - 5ee3828a5616bea3f0aabad3
+                    year:
+                      _id: 5ee3828a5616bea3f0aababf
+                      name: 3a
+                      __v: 0
+                    department:
+                      _id: 5ee3828a5616bea3f0aabac4
+                      name: gsi
+                      __v: 0
+                    favoriteSubjects:
+                      - _id: 5ee3828a5616bea3f0aabab9
+                        name: lv2
+                        __v: 0
+                    difficultSubjects:
+                      - _id: 5ee3828a5616bea3f0aababb
+                        name: électronique analogique
+                        __v: 0
+                      - _id: 5ee3828a5616bea3f0aababc
+                        name: introduction au droit
+                        __v: 0
+                    __v: 0
+                  students: []
+                  tutors: []
+      400:
+        $ref: "#/components/responses/BadRequest"
+
+  create:
+    summary: Create a post
+    description: The permission of a user determine which type of post a user can create
+    parameters:
+    requestBody:
+      description: Post object that will be created
+      content:
+        json:
+          schema:
+            oneOf:
+              - $ref: "#/components/schemas/createTutorPost"
+              - $ref: "#/components/schemas/createStudentPost"
+          examples:
+            tutor:
+              description: a post of type '**tuteur**'
+              value:
+                comment: super ok
+                type: tuteur
+                subjectId: 5ece439b6bc145c909be5507
+                roomId: 5ec1913f47bff53528e4b6fc
+                startAt: "2020-06-22T16:00:00.000Z"
+                duration: 90
+                studentsCapacity: 20
+                tutorsCapacity: 5
+            student:
+              description: a post of type '**student**'
+              value:
+                comment: super ok
+                type: tuteur
+                subjectId: 5ece439b6bc145c909be5507
+      required: true
+    responses:
+      201:
+        description: created
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/findGetAuthTutorPost"
+                - $ref: "#/components/schemas/findGetAuthStudentPost"
+            examples:
+              Tutor:
+                description: a **tutor** post
+                value:
+                  _id: 5ee3828a5616bea3f0aabad1
+                  comment: love to teach to other students!
+                  type: tuteur
+                  startAt: "2020-06-15T14:00:00Z"
+                  duration: 90
+                  studentsCapacity: 20
+                  tutorsCapacity: 5
+                  subjectId: 5ee3828a5616bea3f0aabab9
+                  studentsIds:
+                    - 5ee3828a5616bea3f0aabacd
+                  tutorsIds:
+                    - 5ee3828a5616bea3f0aabacc
+                  roomId: 5ee3828a5616bea3f0aabaca
+                  creatorId: 5ee3828a5616bea3f0aabacc
+                  createdAt: "2020-06-12T13:26:34.923Z"
+                  updatedAt: "2020-06-12T13:26:34.959Z"
+                  endAt: "2020-06-15T15:30:00Z"
+                  fullStudents: false
+                  fullTutors: false
+                  subject:
+                    - _id: 5ee3828a5616bea3f0aabab9
+                      name: électronique analogique
+                      __v: 0
+                  room:
+                    - _id: 5ee3828a5616bea3f0aabaca
+                      campus: bourges
+                      name: e.101
+                      day: lundi
+                      startAt: "1970-01-01T16:00:00.000Z"
+                      duration: 120
+                      endAt: "1970-01-01T18:00:00.000Z"
+                      __v: 0
+                  creator:
+                    _id: 5ee3828a5616bea3f0aabacc
+                    lastName: simmons
+                    firstName: amber
+                    email: amber.simmons@insa-cvl.fr
+                    yearId: 5ee3828a5616bea3f0aababe
+                    departmentId: 5ee3828a5616bea3f0aabac3
+                    favoriteSubjectsIds:
+                      - 5ee3828a5616bea3f0aabab8
+                      - 5ee3828a5616bea3f0aabab9
+                    difficultSubjectsIds:
+                      - 5ee3828a5616bea3f0aababa
+                      - 5ee3828a5616bea3f0aababb
+                    createdPostsIds:
+                      - 5ee3828a5616bea3f0aabad0
+                      - 5ee3828a5616bea3f0aabad1
+                      - 5ee3828a5616bea3f0aabad2
+                    year:
+                      _id: 5ee3828a5616bea3f0aababe
+                      name: 2a
+                      __v: 0
+                    department:
+                      _id: 5ee3828a5616bea3f0aabac3
+                      name: sti
+                      __v: 0
+                    favoriteSubjects:
+                      - _id: 5ee3828a5616bea3f0aabab8
+                        name: mathématiques
+                        __v: 0
+                      - _id: 5ee3828a5616bea3f0aabab9
+                        name: lv2
+                        __v: 0
+                    difficultSubjects:
+                      - _id: 5ee3828a5616bea3f0aababa
+                        name: résistance des matériaux
+                        __v: 0
+                      - _id: 5ee3828a5616bea3f0aababb
+                        name: électronique analogique
+                        __v: 0
+                    __v: 0
+                  students:
+                    - _id: 5ee3828a5616bea3f0aabacb
+                      lastName: park
+                      firstName: paul
+                      email: paul.park@insa-cvl.fr
+                      yearId: 5ee3828a5616bea3f0aababd
+                      departmentId: 5ee3828a5616bea3f0aabac2
+                      favoriteSubjectsIds:
+                        - 5ee3828a5616bea3f0aabab7
+                        - 5ee3828a5616bea3f0aabab8
+                      difficultSubjectsIds:
+                        - 5ee3828a5616bea3f0aabab9
+                      createdPostsIds: []
+                      year:
+                        _id: 5ee3828a5616bea3f0aababd
+                        name: 1a
+                        __v: 0
+                      department:
+                        _id: 5ee3828a5616bea3f0aabac2
+                        name: stpi
+                        __v: 0
+                      favoriteSubjects:
+                        - _id: 5ee3828a5616bea3f0aabab7
+                          name: eps
+                          __v: 0
+                        - _id: 5ee3828a5616bea3f0aabab8
+                          name: mathématiques
+                          __v: 0
+                      difficultSubjects:
+                        - _id: 5ee3828a5616bea3f0aabab9
+                          name: lv2
+                          __v: 0
+                      __v: 0
+                  tutors:
+                    - _id: 5ee3828a5616bea3f0aabacc
+                      lastName: simmons
+                      firstName: amber
+                      email: amber.simmons@insa-cvl.fr
+                      yearId: 5ee3828a5616bea3f0aababe
+                      departmentId: 5ee3828a5616bea3f0aabac3
+                      favoriteSubjectsIds:
+                        - 5ee3828a5616bea3f0aabab8
+                        - 5ee3828a5616bea3f0aabab9
+                      difficultSubjectsIds:
+                        - 5ee3828a5616bea3f0aababa
+                        - 5ee3828a5616bea3f0aababb
+                      createdPostsIds:
+                        - 5ee3828a5616bea3f0aabad0
+                        - 5ee3828a5616bea3f0aabad1
+                        - 5ee3828a5616bea3f0aabad2
+                      year:
+                        _id: 5ee3828a5616bea3f0aababe
+                        name: 2a
+                        __v: 0
+                      department:
+                        _id: 5ee3828a5616bea3f0aabac3
+                        name: sti
+                        __v: 0
+                      favoriteSubjects:
+                        - _id: 5ee3828a5616bea3f0aabab8
+                          name: mathématiques
+                          __v: 0
+                        - _id: 5ee3828a5616bea3f0aabab9
+                          name: lv2
+                          __v: 0
+                      difficultSubjects:
+                        - _id: 5ee3828a5616bea3f0aababa
+                          name: résistance des matériaux
+                          __v: 0
+                        - _id: 5ee3828a5616bea3f0aababb
+                          name: électronique analogique
+                          __v: 0
+                      __v: 0
+                  __v: 0
+              Student:
+                description: a **student** post
+                value:
+                  _id: 5ee3828a5616bea3f0aabad3
+                  comment: please I need help to undersantd this subject !
+                  type: eleve
+                  subjectId: 5ee3828a5616bea3f0aababc
+                  subject:
+                    _id: 5ee3828a5616bea3f0aababc
+                    name: introduction au droit
+                    __v: 0
+                  __v: 0
+                  studentsIds: []
+                  tutorsIds: []
+                  creatorId: 5ee3828a5616bea3f0aabacd
+                  fullStudents: false
+                  fullTutors: false
+                  createdAt: "2020-06-12T13:26:34.932Z"
+                  updatedAt: "2020-06-12T13:26:34.932Z"
+                  creator:
+                    _id: 5ee3828a5616bea3f0aabacd
+                    lastName: hill
+                    firstName: jake
+                    email: jake.hill@insa-cvl.fr
+                    yearId: 5ee3828a5616bea3f0aababf
+                    departmentId: 5ee3828a5616bea3f0aabac4
+                    favoriteSubjectsIds:
+                      - 5ee3828a5616bea3f0aabab9
+                    difficultSubjectsIds:
+                      - 5ee3828a5616bea3f0aababb
+                      - 5ee3828a5616bea3f0aababc
+                    createdPostsIds:
+                      - 5ee3828a5616bea3f0aabad3
+                    year:
+                      _id: 5ee3828a5616bea3f0aababf
+                      name: 3a
+                      __v: 0
+                    department:
+                      _id: 5ee3828a5616bea3f0aabac4
+                      name: gsi
+                      __v: 0
+                    favoriteSubjects:
+                      - _id: 5ee3828a5616bea3f0aabab9
+                        name: lv2
+                        __v: 0
+                    difficultSubjects:
+                      - _id: 5ee3828a5616bea3f0aababb
+                        name: électronique analogique
+                        __v: 0
+                      - _id: 5ee3828a5616bea3f0aababc
+                        name: introduction au droit
+                        __v: 0
+                    __v: 0
+                  students: []
+                  tutors: []
+      403:
+        $ref: "#/components/responses/Forbidden"
+      security:
+        - bearerAuth: []
+
+  update:
+    summary: Not allowed
+    description: Not allowed
+    parameters:
+    requestBody:
+    responses:
+      405:
+        $ref: "#/components/responses/NotAllowed"
+      500:
+        $ref: "#/components/responses/GeneralError"
+
+  patch:
+    summary: Not allowed
+    description: Not allowed
+    parameters:
+    requestBody:
+    responses:
+      405:
+        $ref: "#/components/responses/NotAllowed"
+      500:
+        $ref: "#/components/responses/GeneralError"
+
+  remove:
+    summary: Delete a post
+    description: A user is able to remove only his own post
+    parameters:
+      - name: _id
+        in: path
+        description: ID of year that need to be fetch
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: deleted
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/findGetAuthTutorPost"
+                - $ref: "#/components/schemas/findGetAuthStudentPost"
+            examples:
+              Tutor:
+                description: a **tutor** post
+                value:
+                  _id: 5ee3828a5616bea3f0aabad1
+                  comment: love to teach to other students!
+                  type: tuteur
+                  startAt: "2020-06-15T14:00:00Z"
+                  duration: 90
+                  studentsCapacity: 20
+                  tutorsCapacity: 5
+                  subjectId: 5ee3828a5616bea3f0aabab9
+                  studentsIds:
+                    - 5ee3828a5616bea3f0aabacd
+                  tutorsIds:
+                    - 5ee3828a5616bea3f0aabacc
+                  roomId: 5ee3828a5616bea3f0aabaca
+                  creatorId: 5ee3828a5616bea3f0aabacc
+                  createdAt: "2020-06-12T13:26:34.923Z"
+                  updatedAt: "2020-06-12T13:26:34.959Z"
+                  endAt: "2020-06-15T15:30:00Z"
+                  fullStudents: false
+                  fullTutors: false
+                  subject:
+                    - _id: 5ee3828a5616bea3f0aabab9
+                      name: électronique analogique
+                      __v: 0
+                  room:
+                    - _id: 5ee3828a5616bea3f0aabaca
+                      campus: bourges
+                      name: e.101
+                      day: lundi
+                      startAt: "1970-01-01T16:00:00.000Z"
+                      duration: 120
+                      endAt: "1970-01-01T18:00:00.000Z"
+                      __v: 0
+                  creator:
+                    _id: 5ee3828a5616bea3f0aabacc
+                    lastName: simmons
+                    firstName: amber
+                    email: amber.simmons@insa-cvl.fr
+                    yearId: 5ee3828a5616bea3f0aababe
+                    departmentId: 5ee3828a5616bea3f0aabac3
+                    favoriteSubjectsIds:
+                      - 5ee3828a5616bea3f0aabab8
+                      - 5ee3828a5616bea3f0aabab9
+                    difficultSubjectsIds:
+                      - 5ee3828a5616bea3f0aababa
+                      - 5ee3828a5616bea3f0aababb
+                    createdPostsIds:
+                      - 5ee3828a5616bea3f0aabad0
+                      - 5ee3828a5616bea3f0aabad1
+                      - 5ee3828a5616bea3f0aabad2
+                    year:
+                      _id: 5ee3828a5616bea3f0aababe
+                      name: 2a
+                      __v: 0
+                    department:
+                      _id: 5ee3828a5616bea3f0aabac3
+                      name: sti
+                      __v: 0
+                    favoriteSubjects:
+                      - _id: 5ee3828a5616bea3f0aabab8
+                        name: mathématiques
+                        __v: 0
+                      - _id: 5ee3828a5616bea3f0aabab9
+                        name: lv2
+                        __v: 0
+                    difficultSubjects:
+                      - _id: 5ee3828a5616bea3f0aababa
+                        name: résistance des matériaux
+                        __v: 0
+                      - _id: 5ee3828a5616bea3f0aababb
+                        name: électronique analogique
+                        __v: 0
+                    __v: 0
+                  students:
+                    - _id: 5ee3828a5616bea3f0aabacb
+                      lastName: park
+                      firstName: paul
+                      email: paul.park@insa-cvl.fr
+                      yearId: 5ee3828a5616bea3f0aababd
+                      departmentId: 5ee3828a5616bea3f0aabac2
+                      favoriteSubjectsIds:
+                        - 5ee3828a5616bea3f0aabab7
+                        - 5ee3828a5616bea3f0aabab8
+                      difficultSubjectsIds:
+                        - 5ee3828a5616bea3f0aabab9
+                      createdPostsIds: []
+                      year:
+                        _id: 5ee3828a5616bea3f0aababd
+                        name: 1a
+                        __v: 0
+                      department:
+                        _id: 5ee3828a5616bea3f0aabac2
+                        name: stpi
+                        __v: 0
+                      favoriteSubjects:
+                        - _id: 5ee3828a5616bea3f0aabab7
+                          name: eps
+                          __v: 0
+                        - _id: 5ee3828a5616bea3f0aabab8
+                          name: mathématiques
+                          __v: 0
+                      difficultSubjects:
+                        - _id: 5ee3828a5616bea3f0aabab9
+                          name: lv2
+                          __v: 0
+                      __v: 0
+                  tutors:
+                    - _id: 5ee3828a5616bea3f0aabacc
+                      lastName: simmons
+                      firstName: amber
+                      email: amber.simmons@insa-cvl.fr
+                      yearId: 5ee3828a5616bea3f0aababe
+                      departmentId: 5ee3828a5616bea3f0aabac3
+                      favoriteSubjectsIds:
+                        - 5ee3828a5616bea3f0aabab8
+                        - 5ee3828a5616bea3f0aabab9
+                      difficultSubjectsIds:
+                        - 5ee3828a5616bea3f0aababa
+                        - 5ee3828a5616bea3f0aababb
+                      createdPostsIds:
+                        - 5ee3828a5616bea3f0aabad0
+                        - 5ee3828a5616bea3f0aabad1
+                        - 5ee3828a5616bea3f0aabad2
+                      year:
+                        _id: 5ee3828a5616bea3f0aababe
+                        name: 2a
+                        __v: 0
+                      department:
+                        _id: 5ee3828a5616bea3f0aabac3
+                        name: sti
+                        __v: 0
+                      favoriteSubjects:
+                        - _id: 5ee3828a5616bea3f0aabab8
+                          name: mathématiques
+                          __v: 0
+                        - _id: 5ee3828a5616bea3f0aabab9
+                          name: lv2
+                          __v: 0
+                      difficultSubjects:
+                        - _id: 5ee3828a5616bea3f0aababa
+                          name: résistance des matériaux
+                          __v: 0
+                        - _id: 5ee3828a5616bea3f0aababb
+                          name: électronique analogique
+                          __v: 0
+                      __v: 0
+                  __v: 0
+              Student:
+                description: a **student** post
+                value:
+                  _id: 5ee3828a5616bea3f0aabad3
+                  comment: please I need help to undersantd this subject !
+                  type: eleve
+                  subjectId: 5ee3828a5616bea3f0aababc
+                  subject:
+                    _id: 5ee3828a5616bea3f0aababc
+                    name: introduction au droit
+                    __v: 0
+                  __v: 0
+                  studentsIds: []
+                  tutorsIds: []
+                  creatorId: 5ee3828a5616bea3f0aabacd
+                  fullStudents: false
+                  fullTutors: false
+                  createdAt: "2020-06-12T13:26:34.932Z"
+                  updatedAt: "2020-06-12T13:26:34.932Z"
+                  creator:
+                    _id: 5ee3828a5616bea3f0aabacd
+                    lastName: hill
+                    firstName: jake
+                    email: jake.hill@insa-cvl.fr
+                    yearId: 5ee3828a5616bea3f0aababf
+                    departmentId: 5ee3828a5616bea3f0aabac4
+                    favoriteSubjectsIds:
+                      - 5ee3828a5616bea3f0aabab9
+                    difficultSubjectsIds:
+                      - 5ee3828a5616bea3f0aababb
+                      - 5ee3828a5616bea3f0aababc
+                    createdPostsIds:
+                      - 5ee3828a5616bea3f0aabad3
+                    year:
+                      _id: 5ee3828a5616bea3f0aababf
+                      name: 3a
+                      __v: 0
+                    department:
+                      _id: 5ee3828a5616bea3f0aabac4
+                      name: gsi
+                      __v: 0
+                    favoriteSubjects:
+                      - _id: 5ee3828a5616bea3f0aabab9
+                        name: lv2
+                        __v: 0
+                    difficultSubjects:
+                      - _id: 5ee3828a5616bea3f0aababb
+                        name: électronique analogique
+                        __v: 0
+                      - _id: 5ee3828a5616bea3f0aababc
+                        name: introduction au droit
+                        __v: 0
+                    __v: 0
+                  students: []
+                  tutors: []
+      400:
+        $ref: "#/components/responses/BadRequest"
+      403:
+        $ref: "#/components/responses/Forbidden"
+      404:
+        $ref: "#/components/responses/NotFound"
+      500:
+        $ref: "#/components/responses/GeneralError"
+    security:
+      - bearerAuth: []
