@@ -214,7 +214,7 @@ components:
         duration:
           type: number
         studentsCapacity:
-          type: numer
+          type: number
           minimum: 5
           maximum: 20
         tutorsCapacity:
@@ -280,7 +280,7 @@ components:
         duration:
           type: number
         studentsCapacity:
-          type: numer
+          type: number
         tutorsCapacity:
           type: number
         subjectId:
@@ -366,7 +366,7 @@ components:
         duration:
           type: number
         studentsCapacity:
-          type: numer
+          type: number
           minimum: 5
           maximum: 20
         tutorsCapacity:
@@ -506,7 +506,7 @@ components:
           type: string
           format: date-time
         duration:
-          type: numer
+          type: number
         roomId:
           type: objectId
           $ref: "#/components/schemas/room"
@@ -530,10 +530,13 @@ components:
           type: string
           format: date-time
         duration:
-          type: numer
+          type: number
         roomId:
           type: objectId
-          $ref: "#/components/schemas/room"
+        room:
+          $ref: "#/components/schemas/getRoom"
+        full:
+          type: boolean
         slots:
           type: array
           items:
@@ -541,12 +544,15 @@ components:
             properties:
               postId:
                 type: objectId
-                $ref: "#/components/schemas/post"
               startAt:
                 type: string
                 format: date-time
               occupied:
                 type: boolean
+              post:
+                $ref: "#/components/schemas/findGetAuthTutorPost"
+              id:
+                type: objectId
     subscription:
       required:
         - type

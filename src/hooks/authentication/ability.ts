@@ -181,6 +181,7 @@ export default function defineAbilitiesFor(user: User): Ability {
       'roomId',
       'slots',
       'full',
+      'room',
       '__v',
     ])
 

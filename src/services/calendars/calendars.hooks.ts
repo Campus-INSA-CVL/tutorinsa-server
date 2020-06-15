@@ -1,6 +1,8 @@
-import { disallow, iff, isProvider } from 'feathers-hooks-common'
+import { disallow, iff, isProvider, fastJoin } from 'feathers-hooks-common'
 import checkDate from '../../hooks/check/check-date'
 import pickResult from '../../hooks/authentication/pick-result'
+import resolvers from './calendars.populate'
+import { Calendar } from '../../declarations'
 
 export default {
   before: {
@@ -14,7 +16,7 @@ export default {
   },
 
   after: {
-    all: [],
+    all: [fastJoin(resolvers)],
     find: [iff(isProvider('external'), pickResult())],
     get: [iff(isProvider('external'), pickResult())],
     create: [],
