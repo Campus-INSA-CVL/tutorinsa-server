@@ -1,1 +1,179 @@
 description:
+produces:
+  - application/json
+operations:
+  find:
+    summary: Finds all subjects
+    description: Retrive all subjects
+    responses:
+      200:
+        description: successful operation
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total:
+                  type: integer
+                limit:
+                  type: integer
+                skip:
+                  type: interger
+                data:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/getSubject"
+            example:
+              total: 2
+              limit: 10
+              skip: 0
+              data:
+                - _id: 5e5168f7db8d404de0cd9f74
+                  name: introduction à l'économie
+                  __v: 0
+                - _id: 5e5199583cdcb246146b5a53
+                  name: introduction au droit
+                  __v: 0
+
+  get:
+    summary: Get one subject
+    description: Retrive one subject
+    parameters:
+      - name: _id
+        in: path
+        description: ID of subject that need to be fetch
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: successful operation
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/getSubject"
+            example:
+              _id: 5e5168f7db8d404de0cd9f74
+              name: mécanique
+              __v: 0
+
+      400:
+        $ref: "#/components/responses/BadRequest"
+
+  create:
+    summary: Create a subject
+    description: Create a subject, only for admins
+    parameters:
+    requestBody:
+      description: Subject object that will be created
+      content:
+        json:
+          schema:
+            $ref: "#/components/schemas/subject"
+          example:
+            name: électronique numérique
+      required: true
+    responses:
+      201:
+        description: created
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/getSubject"
+            example:
+              _id: 5e5168f7db8d404de0cd9f74
+              name: électronique numérique
+              __v: 0
+      403:
+        $ref: "#/components/responses/Forbidden"
+      409:
+        description: conflict
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/errors"
+            example:
+              name: Conflict
+              message: "name: ${name} already exists."
+              code: 409
+              className: conflict
+              errors:
+                name: ${name}
+      security:
+        - bearerAuth: []
+
+  update:
+    summary: Not allowed
+    description: Not allowed
+    parameters:
+    requestBody:
+    responses:
+      405:
+        $ref: "#/components/responses/NotAllowed"
+
+  patch:
+    summary: Update a subject
+    parameters:
+      - name: _id
+        in: path
+        description: ID of subject that need to be fetch
+        required: true
+        schema:
+          type: string
+    requestBody:
+      description: Subject object that need to be updated
+      content:
+        json:
+          schema:
+            $ref: "#/components/schemas/subject"
+          example:
+            name: culture et communication
+      required: true
+    responses:
+      200:
+        description: updated
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/getSubject"
+            example:
+              _id: 5e5168f7db8d404de0cd9f74
+              name: EPS
+              __v: 0
+      400:
+        $ref: "#/components/responses/BadRequest"
+      403:
+        $ref: "#/components/responses/Forbidden"
+      404:
+        $ref: "#/components/responses/NotFound"
+    security:
+      - bearerAuth: []
+
+  remove:
+    summary: Delete a subject
+    parameters:
+      - name: _id
+        in: path
+        description: ID of subject that need to be fetch
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: deleted
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/getSubject"
+            example:
+              _id: 5e5168f7db8d404de0cd9f74
+              name: mathématiques
+              __v: 0
+      400:
+        $ref: "#/components/responses/BadRequest"
+      403:
+        $ref: "#/components/responses/Forbidden"
+      404:
+        $ref: "#/components/responses/NotFound"
+    security:
+      - bearerAuth: []
