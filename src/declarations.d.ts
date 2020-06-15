@@ -163,10 +163,12 @@ export interface SlotCore {
   postId: Id
   startAt: string
   occupied: boolean
+
+  post?: Post
 }
 
 export type Slot = SlotCore & {
-  [key: string]: string | undefined | Id | boolean
+  [key: string]: string | undefined | Id | boolean | Post
 }
 
 export interface CalendarCore {

@@ -2,6 +2,7 @@ import { disallow, iff, isProvider, fastJoin } from 'feathers-hooks-common'
 import checkDate from '../../hooks/check/check-date'
 import pickResult from '../../hooks/authentication/pick-result'
 import resolvers from './calendars.populate'
+import { Calendar } from '../../declarations'
 
 export default {
   before: {

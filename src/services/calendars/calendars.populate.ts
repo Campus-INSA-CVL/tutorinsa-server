@@ -2,7 +2,13 @@ import { HookContext, Service } from '@feathersjs/feathers'
 import BatchLoader from '@feathers-plus/batch-loader'
 import { callingParams } from 'feathers-hooks-common'
 
-import { ServiceTypes, Calendar, CalendarCore } from '../../declarations'
+import {
+  ServiceTypes,
+  Calendar,
+  CalendarCore,
+  Slot,
+  SlotCore,
+} from '../../declarations'
 import logger from '../../logger'
 
 const { getResultsByKey, getUniqueKeys } = BatchLoader
@@ -63,10 +69,10 @@ function createBatchLoader(
 async function joinId(
   context: LoaderContext,
   loader: keyof LoaderContext['_loaders'],
-  calendar: Calendar,
-  from: keyof CalendarCore,
-  to: keyof CalendarCore
-): Promise<CalendarCore> {
+  calendar: Calendar | Slot,
+  from: keyof CalendarCore | keyof SlotCore,
+  to: keyof CalendarCore | keyof SlotCore
+): Promise<CalendarCore | SlotCore> {
   if (calendar[from]) {
     const isArray = Array.isArray(calendar[from])
     try {
@@ -103,7 +109,18 @@ export default {
     }
   },
   joins: {
-    year: () => async (calendar: Calendar, context: LoaderContext) =>
+    room: () => async (calendar: Calendar, context: LoaderContext) =>
       await joinId(context, 'room', calendar, 'roomId', 'room'),
+    slots: {
+      resolver: () => async (calendar: Calendar, context: LoaderContext) =>
+        calendar.slots,
+      joins: {
+        joins: {
+          post: () => async (slot: Slot, context: LoaderContext) => {
+            await joinId(context, 'post', slot, 'postId', 'post')
+          },
+        },
+      },
+    },
   },
 }
