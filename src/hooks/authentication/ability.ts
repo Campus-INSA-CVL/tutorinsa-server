@@ -23,7 +23,7 @@ function is(role: UserPermission, user: User): boolean {
  * @param {User} user
  * @returns {Ability} ability
  */
-export default function defineAbilitiesFor(user: User) {
+export default function defineAbilitiesFor(user: User): Ability {
   const { rules, can } = new AbilityBuilder<AppAbility>()
   can(
     ['find', 'get'],
@@ -57,6 +57,22 @@ export default function defineAbilitiesFor(user: User) {
       '__v',
     ],
     { startAt: { $gte: moment().utc().hours(0) } }
+  )
+
+  can(
+    ['find', 'get'],
+    'posts',
+    [
+      '_id',
+      'comment',
+      'type',
+      'startAt',
+      'duration',
+      'subjectId',
+      'subject',
+      '__v',
+    ],
+    { type: 'eleve' }
   )
 
   if (user) {

@@ -1,1 +1,175 @@
 description:
+produces:
+  - application/json
+operations:
+  find:
+    summary: Finds all years
+    description: Retrive all years
+    responses:
+      200:
+        description: successful operation
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total:
+                  type: integer
+                limit:
+                  type: integer
+                skip:
+                  type: interger
+                data:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/getYear"
+            example:
+              total: 2
+              limit: 10
+              skip: 0
+              data:
+                - _id: 5e5168f7db8d404de0cd9f74
+                  name: 3a
+                  __v: 0
+                - _id: 5e5199583cdcb246146b5a53
+                  name: 2a
+                  __v: 0
+
+  get:
+    summary: Get one year
+    description: Retrive one year
+    parameters:
+      - name: _id
+        in: path
+        description: ID of year that need to be fetch
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: successful operation
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/getYear"
+            example:
+              _id: 5e5168f7db8d404de0cd9f74
+              name: 6a
+              __v: 0
+      400:
+        $ref: "#/components/responses/BadRequest"
+
+  create:
+    summary: Create a year
+    parameters:
+    requestBody:
+      description: Year object that will be created
+      content:
+        json:
+          schema:
+            $ref: "#/components/schemas/year"
+          example:
+            name: 2A
+      required: true
+    responses:
+      201:
+        description: created
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/getYear"
+            example:
+              _id: 5e5168f7db8d404de0cd9f74
+              name: 6a
+              __v: 0
+      403:
+        $ref: "#/components/responses/Forbidden"
+      409:
+        description: conflict
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/errors"
+            example:
+              name: Conflict
+              message: "name: ${name} already exists."
+              code: 409
+              className: conflict
+              errors:
+                name: ${name}
+      security:
+        - bearerAuth: []
+
+  update:
+    summary: Not allowed
+    description: Not allowed
+    parameters:
+    requestBody:
+    responses:
+      405:
+        $ref: "#/components/responses/NotAllowed"
+
+  patch:
+    summary: Update a year
+    parameters:
+      - name: _id
+        in: path
+        description: ID of year that need to be fetch
+        required: true
+        schema:
+          type: string
+    requestBody:
+      description: Year object that need to be updated
+      content:
+        json:
+          schema:
+            $ref: "#/components/schemas/year"
+          example:
+            name: 2A
+      required: true
+    responses:
+      200:
+        description: updated
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/getYear"
+            example:
+              _id: 5e5168f7db8d404de0cd9f74
+              name: 6a
+      400:
+        $ref: "#/components/responses/BadRequest"
+      403:
+        $ref: "#/components/responses/Forbidden"
+      404:
+        $ref: "#/components/responses/NotFound"
+    security:
+      - bearerAuth: []
+
+  remove:
+    summary: Delete a year
+    parameters:
+      - name: _id
+        in: path
+        description: ID of year that need to be fetch
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: deleted
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/getYear"
+            example:
+              _id: 5e5168f7db8d404de0cd9f74
+              name: 2a
+      400:
+        $ref: "#/components/responses/BadRequest"
+      403:
+        $ref: "#/components/responses/Forbidden"
+      404:
+        $ref: "#/components/responses/NotFound"
+    security:
+      - bearerAuth: []

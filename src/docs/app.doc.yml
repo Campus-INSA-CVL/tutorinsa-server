@@ -1,16 +1,509 @@
 info:
   title: API Tutorinsa CVL
-  description: API REST pour l'[application]() et le [site web](#) de l'association Tutorinsa de l'[INSA Centre Val de Loire](http://www.insa-centrevaldeloire.fr/). Pour plus d'information, vous pouvez consulter la page [Facebook](https://www.facebook.com/tutorinsacvl/).</br>Ce projet est entièrement réalisé par des étudiants de l'INSA Centre-Val de Loire. Si vous rencontrez des bugs, ou que vous souhaitez nous faire un retour d'expérence, n'hésitez pas à nous contacter.
-  version: 0.8.0
+  description: API REST pour l'[application]() et le [site web](#) de l'association Tutorinsa de l'[INSA Centre Val de Loire](http://www.insa-centrevaldeloire.fr/). Pour plus d'information, vous pouvez consulter la page [Facebook](https://www.facebook.com/tutorinsacvl/).</br>Ce projet est entièrement réalisé par des étudiants de l'INSA Centre-Val de Loire. Si vous rencontrez des bugs, ou que vous souhaitez nous faire un retour d'expérence, n'hésitez pas à nous contacter ([issues](https://github.com/Campus-INSA-CVL/tutorinsa-server/issues)).
+  version: 0.0.0
   termsOfService:
   contact:
     email: esteban.soubiran@insa-cvl.fr
   licence:
-    name:
-    url:
+    name: MIT
+    url: https://github.com/Campus-INSA-CVL/tutorinsa-server/blob/master/LICENSE
 
 components:
   schemas:
+    user:
+      required:
+        - lastName
+        - firstName
+        - email
+        - password
+        - permissions
+        - yearId
+        - departmentId
+        - favoriteSubjectsIds
+        - difficultSubjectsIds
+      type: object
+      properties:
+        lastName:
+          type: string
+        firstName:
+          type: string
+        password:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+            enum:
+              - eleve
+              - tuteur
+              - admin
+        yearId:
+          type: objectId
+          $ref: "#/components/schemas/year"
+        departmentId:
+          type: objectId
+          $ref: "#/components/schemas/department"
+        favoriteSubjectsIds:
+          type: array
+          items:
+            type: objectId
+            $ref: "#/components/schemas/subject"
+        difficultSubjectsIds:
+          type: array
+          items:
+            type: objectId
+            $ref: "#/components/schemas/subject"
+        createdPostsIds:
+          type: array
+          items:
+            type: objectId
+            $ref: "#/components/schemas/post"
+        studentSubscriptionsIds:
+          type: array
+          items:
+            type: objectId
+            $ref: "#/components/schemas/post"
+        tutorSubscriptionsIds:
+          type: array
+          items:
+            type: objectId
+            $ref: "#/components/schemas/post"
+    findUser:
+      type: object
+      properties:
+        lastName:
+          type: string
+        firstName:
+          type: string
+        password:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+            enum:
+              - eleve
+              - tuteur
+              - admin
+        yearId:
+          type: objectId
+        departmentId:
+          type: objectId
+        favoriteSubjectsIds:
+          type: array
+          items:
+            type: objectId
+        difficultSubjectsIds:
+          type: array
+          items:
+            type: objectId
+        createdPostsIds:
+          type: array
+          items:
+            type: objectId
+        year:
+          $ref: "#/components/schemas/getYear"
+        department:
+          $ref: "#/components/schemas/getDepartment"
+        favoriteSubjects:
+          $ref: "#/components/schemas/getSubject"
+        difficultSubjects:
+          $ref: "#/components/schemas/getSubject"
+        __v:
+          type: number
+    getUser:
+      type: object
+      properties:
+        _id:
+          type: string
+        lastName:
+          type: string
+        firstName:
+          type: string
+        password:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+            enum:
+              - eleve
+              - tuteur
+              - admin
+        yearId:
+          type: objectId
+        departmentId:
+          type: objectId
+        favoriteSubjectsIds:
+          type: array
+          items:
+            type: objectId
+        difficultSubjectsIds:
+          type: array
+          items:
+            type: objectId
+        createdPostsIds:
+          type: array
+          items:
+            type: objectId
+        studentSubscriptionsIds:
+          type: array
+          items:
+            type: objectId
+        tutorSubscriptionsIds:
+          type: array
+          items:
+            type: objectId
+        year:
+          $ref: "#/components/schemas/getYear"
+        department:
+          $ref: "#/components/schemas/getDepartment"
+        favoriteSubjects:
+          $ref: "#/components/schemas/getSubject"
+        difficultSubjects:
+          $ref: "#/components/schemas/getSubject"
+    createUser:
+      type: object
+      properties:
+        lastName:
+          type: string
+        firstName:
+          type: string
+        password:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+            enum:
+              - eleve
+              - tuteur
+              - admin
+        yearId:
+          type: objectId
+        departmentId:
+          type: objectId
+        favoriteSubjectsIds:
+          type: array
+          items:
+            type: objectId
+        difficultSubjectsIds:
+          type: array
+          items:
+            type: objectId
+    post:
+      required:
+        - comment
+        - type
+        - subjectId
+        - creatorId
+      type: object
+      properties:
+        comment:
+          type: string
+          maxLength: 440
+        type:
+          type: string
+          enum:
+            - eleve
+            - tuteur
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        studentsCapacity:
+          type: numer
+          minimum: 5
+          maximum: 20
+        tutorsCapacity:
+          type: number
+          minimum: 1
+          maximum: 5
+        subjectId:
+          type: objectId
+          $ref: "#/components/schemas/subject"
+        studentsIds:
+          type: objectId
+          $ref: "#/components/schemas/user"
+        tutorsIds:
+          type: objectId
+          $ref: "#/components/schemas/user"
+        roomId:
+          type: objectId
+          $ref: "#/components/schemas/room"
+        creatorId:
+          type: objectId
+          $ref: "#/components/schemas/user"
+    findGetAnonymeTutorPost:
+      type: object
+      properties:
+        _id:
+          type: string
+        comment:
+          type: string
+        type:
+          type: string
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        subjectId:
+          type: objectId
+        subject:
+          $ref: "#/components/schemas/getSubject"
+    findGetAnonymeStudentPost:
+      type: object
+      properties:
+        _id:
+          type: string
+        comment:
+          type: string
+        type:
+          type: string
+        subjectId:
+          type: objectId
+        subject:
+          $ref: "#/components/schemas/getSubject"
+    findGetAuthTutorPost:
+      type: object
+      properties:
+        comment:
+          type: string
+        type:
+          type: string
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        studentsCapacity:
+          type: numer
+        tutorsCapacity:
+          type: number
+        subjectId:
+          type: objectId
+        studentsIds:
+          type: objectId
+        tutorsIds:
+          type: objectId
+        roomId:
+          type: objectId
+        creatorId:
+          type: objectId
+        endAt:
+          type: string
+          format: date-time
+        fullStudents:
+          type: boolean
+        fullTutors:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        subject:
+          $ref: "#/components/schemas/getSubject"
+        room:
+          $ref: "#/components/schemas/room"
+        creator:
+          $ref: "#/components/schemas/findUser"
+        students:
+          type: array
+          items:
+            $ref: "#/components/schemas/findUser"
+        tutors:
+          type: array
+          items:
+            $ref: "#/components/schemas/findUser"
+        __v:
+          type: number
+    findGetAuthStudentPost:
+      type: object
+      properties:
+        comment:
+          type: string
+        type:
+          type: string
+        subjectId:
+          type: objectId
+        creatorId:
+          type: objectId
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        subject:
+          $ref: "#/components/schemas/getSubject"
+        creator:
+          $ref: "#/components/schemas/findUser"
+        __v:
+          type: number
+    createTutorPost:
+      required:
+        - comment
+        - type
+        - subjectId
+      type: object
+      properties:
+        comment:
+          type: string
+          maxLength: 440
+        type:
+          type: string
+          enum:
+            - eleve
+            - tuteur
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        studentsCapacity:
+          type: numer
+          minimum: 5
+          maximum: 20
+        tutorsCapacity:
+          type: number
+          minimum: 1
+          maximum: 5
+        subjectId:
+          type: objectId
+        roomId:
+          type: objectId
+    createStudentPost:
+      required:
+        - comment
+        - type
+        - subjectId
+      type: object
+      properties:
+        comment:
+          type: string
+          maxLength: 440
+        type:
+          type: string
+          enum:
+            - eleve
+            - tuteur
+        subjectId:
+          type: objectId
+    year:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+    getYear:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        __v:
+          type: number
+    department:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+    getDepartment:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        __v:
+          type: number
+    subject:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+    getSubject:
+      type: object
+      properties:
+        _id:
+          type: string
+        name:
+          type: string
+        __v:
+          type: number
+    room:
+      required:
+        - camppus
+        - name
+        - day
+        - startAt
+        - duration
+      type: object
+      properties:
+        campus:
+          type: string
+          enum: ["blois", "bourges"]
+        name:
+          type: string
+        day:
+          type: string
+          enum:
+            [
+              "lundi",
+              "mardi",
+              "mercredi",
+              "jeudi",
+              "vendredi",
+              "samedi",
+              "dimanche",
+            ]
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+      getRoom:
+        required:
+          - camppus
+          - name
+          - day
+          - startAt
+          - duration
+        type: object
+        properties:
+          campus:
+            type: string
+            enum: ["blois", "bourges"]
+          name:
+            type: string
+          day:
+            type: string
+            enum:
+              [
+                "lundi",
+                "mardi",
+                "mercredi",
+                "jeudi",
+                "vendredi",
+                "samedi",
+                "dimanche",
+              ]
+          startAt:
+            type: string
+            format: date-time
+          duration:
+            type: number
     errors:
       type: object
       properties:
@@ -29,11 +522,6 @@ components:
               type: string
         errors:
           type: object
-    subscription:
-      type: object
-      properties:
-        type:
-          type: string
     credentials:
       type: object
       properties:
@@ -79,7 +567,7 @@ components:
             $ref: "#/components/schemas/errors"
           example:
             name: Forbidden
-            message: You are not allowed to ${method} ${service}
+            message: You are not allowed to ${method} on ${service}
             code: 403
             className: forbidden
             errors: {}

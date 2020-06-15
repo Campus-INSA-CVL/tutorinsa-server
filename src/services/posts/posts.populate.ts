@@ -94,7 +94,7 @@ async function joinId(
     }
     return post
   } else {
-    throw new Error(`${from} is not a field of the user`)
+    return post
   }
 }
 
