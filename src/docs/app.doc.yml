@@ -492,6 +492,61 @@ components:
           format: date-time
         __v:
           type: number
+    calendars:
+      required:
+        - startAt
+        - duration
+        - roomId
+        - slots.postId
+        - slots.startAt
+        - slots.occupied
+      type: object
+      properties:
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: numer
+        roomId:
+          type: objectId
+          $ref: "#/components/schemas/room"
+        slots:
+          type: array
+          items:
+            type: object
+            properties:
+              postId:
+                type: objectId
+                $ref: "#/components/schemas/post"
+              startAt:
+                type: string
+                format: date-time
+              occupied:
+                type: boolean
+    findGetCalendars:
+      type: object
+      properties:
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: numer
+        roomId:
+          type: objectId
+          $ref: "#/components/schemas/room"
+        slots:
+          type: array
+          items:
+            type: object
+            properties:
+              postId:
+                type: objectId
+                $ref: "#/components/schemas/post"
+              startAt:
+                type: string
+                format: date-time
+              occupied:
+                type: boolean
     errors:
       type: object
       properties:
