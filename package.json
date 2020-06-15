@@ -45,7 +45,8 @@
     "start": "npm run compile && node lib/",
     "populatedb": "ts-node populatedb.ts",
     "precommit": "npm run lint",
-    "cpy:docs": "cpy docs/* ../lib  --cwd=src --no-overwrite --parents"
+    "cpy:docs": "cpy docs/* ../lib  --cwd=src --no-overwrite --parents",
+    "netlify": "cpy lib/** config/** public/** deploy  --no-overwrite --parents"
   },
   "pre-commit": [
     "precommit"
