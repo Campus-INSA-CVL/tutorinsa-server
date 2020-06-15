@@ -1,0 +1,181 @@
+description:
+produces:
+  - application/json
+operations:
+  create:
+    summary: Login
+    description: Login a user using credentials
+    parameters:
+    requestBody:
+      description: credentials and strategie to login the user
+      content:
+        json:
+          schema:
+            $ref: "#/components/schemas/credentials"
+          example:
+            strategy: local
+            email: example.example@insa-cvl.fr
+            password: $Azerty1
+      required: true
+    responses:
+      201:
+        description: login
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/auth"
+            example:
+              accessToken: eyJhbGciOiJ1NiIsInR5cCI6ImFjY2VzcyJ9.eyJydWxlcyI6W1siY3JlYXRlIiwidXNlcnMiXSxbInJlYWQiLCJzdWJqZWN0cyx5ZWFycyxkZXBhcnRtZW50cLFsicmVhZCIsInBvc3RzIiwwLDAsIl9pZCxjb21tZW50LHR5cGUsZGF0ZSxkdXJhdGlvbixzdWJqZWN0Il0sWyJyZWFkLHVwZGF0ZSxkZWxldGUiLCJ1c2VycyIseyJfaWQiOiI1ZTgzMGZjYjQwNmNkZDA1ODA4YjU3MWUifV0sWyJyZWFkwicm9vbXMiXSxbInJlYWQiLCJjYWxlbmRhciFsidXBkYXRlIiwic3Vic2NyaXB0aW9uIl0sWyJyZWFkLHVwZGF0ZSxkZWxldGUiLCJ1c2VycyJdLFsiY3JlYXRlLHVwZGF0ZSxkZWxldGUiLCJzdWJqZWyx5ZWFycyxkZXBhcnRtZW50cyxyb29tcyxjYWxlbmRhciJdLFsiY3JlYXRlLHVwZGF0ZSxkZWxldGUiLCJwb3N0cyJdXSwiaWF0IjoxNTg2NDc0MTA0LCJleHAiOjE1ODY1NjA1MDQsImF1ZCI6Imh0dHBzOi8vYXBpLXR1dG9yaW5zYS5henVyZXdlYnNpdGVzLm5ldC8iLCJpc3MiOXRvcmluc2EizdWIiOiI1ZTgzMGZjYjQwNmNkZDA1ODA4YjU3MWUiLCJqdGkiOiIxMzJkOWMzMy04YmNmLTRmNWMtODYyOS04M2ViYjRmOTdiMzkifQ.vSkX822jdEcXuGckfyre7u96cMTdO-x_bac
+              authentication:
+                strategy: local
+              user:
+                _id: 5e830fcb406cdd05808b571e
+                lastName: user
+                firstName: user
+                email: example.example@insa-cvl.fr
+                yearId: 5e87c721fd53434df496983f
+                departmentId: 5e7babf7e9af1629a471468f
+                favoriteSubjectsIds:
+                  - 5e455e03d04d8937b8396214
+                difficultSubjectsIds:
+                  - 5e455e03d04d8937b8396214
+                createdPostsIds: []
+                year:
+                  _id: 5e87c721fd53434df496983f
+                  name: 3a
+                  __v: 0
+                department:
+                  _id: 5e7babf7e9af1629a471468f
+                  name: sti
+                  __v: 0
+                favoriteSubjects:
+                  - _id: 5e455e03d04d8937b8396214
+                    name: résistance des matériaux
+                    __v: 0
+                difficultSubjects:
+                  - _id: 5e455e03d04d8937b8396214
+                    name: résistance des matériaux
+                    __v: 0
+                __v: 0
+      403:
+        $ref: "#/components/responses/Forbidden"
+      404:
+        $ref: "#/components/responses/NotFound"
+
+  remove:
+    summary: Logout
+    description: Authentication server is stateless so to logout, send a request and set the access token to null
+    parameters:
+      - name: _id
+        in: path
+        description: must be null or with the access token
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: logout
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accessToken:
+                  type: string
+                authentication:
+                  type: object
+                  properties:
+                    strategy:
+                      type: string
+                    accessToken:
+                      type: string
+                    payload:
+                      type: object
+                      properties:
+                        rules:
+                          type: array
+                        iat:
+                          type: number
+                        exp:
+                          typr: number
+                        aud:
+                          type: string
+                        iss:
+                          type: string
+                        sub:
+                          type: string
+                        jti:
+                          type: string
+                user:
+                  $ref: "#/components/schemas/user"
+            example:
+              accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJydWxlcyI6W1siY3JlYXRlIiwidXNlcnMiXSxbInJlYWQiLCJzdWJqZWN0cyx5ZWFycyxkZXBhcnRtZW50cyJdLFsicmVhZCIsInBvc3RzIiwwLDAsIl9pZCxjb21tZW50LHR5cGUsZGF0ZSxkdXJhdGlvbixzdWJqZWN0Il0sWyJyZWFkLHVwZGF0ZSxkZWxldGUiLCJ1c2VycyIseyJfaWQiOiI1ZTgzMGZjYjQwNmNkZDA1ODA4YjU3MWUifV0sWyJyZWFkIiwicm9vbXMiXSxbInJlYWQiLCJjYWxlbmRhciJdLFsidXBkYXRlIiwic3Vic2NyaXB0aW9uIl0sWyJyZWFkLHVwZGF0ZSxkZWxldGUiLCJ1c2VycyJdLFsiY3JlYXRlLHVwZGF0ZSxkZWxldGUiLCJzdWJqZWN0cyx5ZWFycyxkZXBhcnRtZW50cyxyb29tcyxjYWxlbmRhciJdLFsiY3JlYXRlLHVwZGF0ZSxkZWxldGUiLCJwb3N0cyJdXSwiaWF0IjoxNTg2NDcxMTE5LCJleHAiOjE1ODY1NTc1MTksImF1ZCI6Imh0dHBzOi8vYXBpLXR1dG9yaW5zYS5henVyZXdlYnNpdGVzLm5ldC8iLCJpc3MiOiJ0dXRvcmluc2EiLCJzdWIiOiI1ZTgzMGZjYjQwNmNkZDA1ODA4YjU3MWUiLCJqdGkiOiJmMGZlMTdmNC1lNWI3LTQ4YTYtOGU4My0yYjQ4ZGE0OWZhMmYifQ.KAuyUKaPLLTdlw8EAGQWIF1Epb9GiuGX-rhcGqzvsj4
+              authentication:
+                strategy: jwt
+                accessToken: eyJhbGciOiJIUzI1NiIsInR5cCI6ImFjY2VzcyJ9.eyJydWxlcyI6W1siY3JlYXRlIiwidXNlcnMiXSxbInJlYWQiLCJzdWJqZWN0cyx5ZWFycyxkZXBhcnRtZW50cyJdLFsicmVhZCIsInBvc3RzIiwwLDAsIl9pZCxjb21tZW50LHR5cGUsZGF0ZSxkdXJhdGlvbixzdWJqZWN0Il0sWyJyZWFkLHVwZGF0ZSxkZWxldGUiLCJ1c2VycyIseyJfaWQiOiI1ZTgzMGZjYjQwNmNkZDA1ODA4YjU3MWUifV0sWyJyZWFkIiwicm9vbXMiXSxbInJlYWQiLCJjYWxlbmRhciJdLFsidXBkYXRlIiwic3Vic2NyaXB0aW9uIl0sWyJyZWFkLHVwZGF0ZSxkZWxldGUiLCJ1c2VycyJdLFsiY3JlYXRlLHVwZGF0ZSxkZWxldGUiLCJzdWJqZWN0cyx5ZWFycyxkZXBhcnRtZW50cyxyb29tcyxjYWxlbmRhciJdLFsiY3JlYXRlLHVwZGF0ZSxkZWxldGUiLCJwb3N0cyJdXSwiaWF0IjoxNTg2NDcxMTE5LCJleHAiOjE1ODY1NTc1MTksImF1ZCI6Imh0dHBzOi8vYXBpLXR1dG9yaW5zYS5henVyZXdlYnNpdGVzLm5ldC8iLCJpc3MiOiJ0dXRvcmluc2EiLCJzdWIiOiI1ZTgzMGZjYjQwNmNkZDA1ODA4YjU3MWUiLCJqdGkiOiJmMGZlMTdmNC1lNWI3LTQ4YTYtOGU4My0yYjQ4ZGE0OWZhMmYifQ.KAuyUKaPLLTdlw8EAGQWIF1Epb9GiuGX-rhcGqzvsj4
+                payload:
+                  # rules:
+                  #   - - create
+                  #       users
+                  #   - - read
+                  #       subjects,years,departments
+                  #   - - read
+                  #       posts
+                  #       0
+                  #       0
+                  #       _id,comment,type,date,duration,subject
+                  #   - - read
+                  #       rooms
+                  #   - - read
+                  #       calendar
+                  #   - - update
+                  #       subscription
+                  #   - - read,update,delete
+                  #       users
+                  #   - - create,update,delete
+                  #       subjects,years,departments,rooms,calendar
+                  #   - - create,update,delete
+                  #       posts
+                  iat: 1586471119
+                  exp: 1586557519
+                  aud: https://api-tutorinsa.azurewebsites.net/
+                  iss: tutorinsa
+                  sub: 5e830fcb406cdd05808b571e
+                  jti: f0fe17f4-e5b7-48a6-8e83-2b48da49fa2f
+              user:
+                _id: 5e830fcb406cdd05808b571e
+                lastName: user
+                firstName: user
+                email: example.example@insa-cvl.fr
+                yearId: 5e87c721fd53434df496983f
+                departmentId: 5e7babf7e9af1629a471468f
+                favoriteSubjectsIds:
+                  - 5e455e03d04d8937b8396214
+                difficultSubjectsIds:
+                  - 5e455e03d04d8937b8396214
+                createdPostsIds: []
+                year:
+                  _id: 5e87c721fd53434df496983f
+                  name: 3a
+                  __v: 0
+                department:
+                  _id: 5e7babf7e9af1629a471468f
+                  name: sti
+                  __v: 0
+                favoriteSubjects:
+                  - _id: 5e455e03d04d8937b8396214
+                    name: résistance des matériaux
+                    __v: 0
+                difficultSubjects:
+                  - _id: 5e455e03d04d8937b8396214
+                    name: résistance des matériaux
+                    __v: 0
+                __v: 0
+      400:
+        $ref: "#/components/responses/BadRequest"
+      403:
+        $ref: "#/components/responses/Forbidden"
+      404:
+        $ref: "#/components/responses/NotFound"
+    security:
+      - bearerAuth: []

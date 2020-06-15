@@ -22,7 +22,7 @@ operations:
                 data:
                   type: array
                   items:
-                    $ref: "#/components/schemas/room"
+                    $ref: "#/components/schemas/getRoom"
             example:
               total: 2
               limit: 10
@@ -33,28 +33,17 @@ operations:
                   name: e1.98
                   day: mardi
                   startAt: "1970-01-01T17:00:00.000Z"
-                  duration: "1970-01-01T02:30:00.000Z"
-                  createdAt: "2020-04-12T15:02:23.077Z"
-                  updatedAt: "2020-04-12T15:02:23.077Z"
+                  duration: 120
+                  endAt: "1970-01-01T19:00:00.000Z"
                   __v: 0
-                  endAt: "2020-04-13T19:30:00.000Z"
-                  time: "2020-04-13T17:00:00.000Z"
-                  id: 5e932d7f1b38de3e10444b0b
                 - _id: 5e932e901b38de3e10444b0f
                   campus: bourges
                   name: e1.06
                   day: lundi
                   startAt: "1970-01-01T18:00:00.000Z"
-                  duration: "1970-01-01T02:30:00.000Z"
-                  createdAt: "2020-04-12T15:06:56.454Z"
-                  updatedAt: "2020-04-12T15:06:56.454Z"
-                  __v: 0
+                  duration: 150
                   endAt: "1970-01-01T20:30:00.000Z"
-                  time: "2020-04-13T18:00:00.000Z"
-                  id: 5e932e901b38de3e10444b0f
-
-      500:
-        $ref: "#/components/responses/GeneralError"
+                  __v: 0
     security:
       - bearerAuth: []
 
@@ -74,24 +63,18 @@ operations:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/room"
+              $ref: "#/components/schemas/getRoom"
             example:
-              _id: 5e932d7f1b38de3e10444b0b
+              _id: 5e932e901b38de3e10444b0f
               campus: bourges
-              name: e1.98
-              day: mardi
-              startAt: "1970-01-01T17:00:00.000Z"
-              duration: "1970-01-01T02:30:00.000Z"
-              createdAt: "2020-04-12T15:02:23.077Z"
-              updatedAt: "2020-04-12T15:02:23.077Z"
+              name: e1.06
+              day: lundi
+              startAt: "1970-01-01T18:00:00.000Z"
+              duration: 150
+              endAt: "1970-01-01T20:30:00.000Z"
               __v: 0
-              endAt: "2020-04-13T19:30:00.000Z"
-              time: "2020-04-13T17:00:00.000Z"
-              id: 5e932d7f1b38de3e10444b0b
       400:
         $ref: "#/components/responses/BadRequest"
-      500:
-        $ref: "#/components/responses/GeneralError"
     security:
       - bearerAuth: []
 
@@ -110,7 +93,7 @@ operations:
             name: E1.98
             day: lundi
             startAt: "Thu Jan 01 1970 18:00:00 GMT"
-            duration: "Thu Jan 01 1970 02:30:00 GMT"
+            duration: 30
       required: true
     responses:
       201:
@@ -118,24 +101,18 @@ operations:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/room"
+              $ref: "#/components/schemas/getRoom"
             example:
               _id: 5e932d7f1b38de3e10444b0b
               campus: bourges
               name: e1.98
               day: mardi
               startAt: "1970-01-01T17:00:00.000Z"
-              duration: "1970-01-01T02:30:00.000Z"
-              createdAt: "2020-04-12T15:02:23.077Z"
-              updatedAt: "2020-04-12T15:02:23.077Z"
+              duration: 120
+              endAt: "1970-01-01T19:00:00.000Z"
               __v: 0
-              endAt: "2020-04-13T19:30:00.000Z"
-              time: "2020-04-13T17:00:00.000Z"
-              id: 5e932d7f1b38de3e10444b0b
       403:
         $ref: "#/components/responses/Forbidden"
-      500:
-        $ref: "#/components/responses/GeneralError"
 
   update:
     summary: Not allowed
@@ -145,8 +122,6 @@ operations:
     responses:
       405:
         $ref: "#/components/responses/NotAllowed"
-      500:
-        $ref: "#/components/responses/GeneralError"
 
   patch:
     summary: Not allowed
@@ -156,8 +131,6 @@ operations:
     responses:
       405:
         $ref: "#/components/responses/NotAllowed"
-      500:
-        $ref: "#/components/responses/GeneralError"
 
   remove:
     summary: Delete a room
@@ -175,27 +148,21 @@ operations:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/room"
+              $ref: "#/components/schemas/getRoom"
             example:
               _id: 5e932d7f1b38de3e10444b0b
               campus: bourges
               name: e1.98
               day: mardi
               startAt: "1970-01-01T17:00:00.000Z"
-              duration: "1970-01-01T02:30:00.000Z"
-              createdAt: "2020-04-12T15:02:23.077Z"
-              updatedAt: "2020-04-12T15:02:23.077Z"
+              duration: 120
+              endAt: "1970-01-01T19:00:00.000Z"
               __v: 0
-              endAt: "2020-04-13T19:30:00.000Z"
-              time: "2020-04-13T17:00:00.000Z"
-              id: 5e932d7f1b38de3e10444b0b
       400:
         $ref: "#/components/responses/BadRequest"
       403:
         $ref: "#/components/responses/Forbidden"
       404:
         $ref: "#/components/responses/NotFound"
-      500:
-        $ref: "#/components/responses/GeneralError"
     security:
       - bearerAuth: []

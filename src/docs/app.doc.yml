@@ -473,37 +473,103 @@ components:
           format: date-time
         duration:
           type: number
-      getRoom:
-        required:
-          - camppus
-          - name
-          - day
-          - startAt
-          - duration
-        type: object
-        properties:
-          campus:
-            type: string
-            enum: ["blois", "bourges"]
-          name:
-            type: string
-          day:
-            type: string
-            enum:
-              [
-                "lundi",
-                "mardi",
-                "mercredi",
-                "jeudi",
-                "vendredi",
-                "samedi",
-                "dimanche",
-              ]
-          startAt:
-            type: string
-            format: date-time
-          duration:
-            type: number
+    getRoom:
+      type: object
+      properties:
+        campus:
+          type: string
+        name:
+          type: string
+        day:
+          type: string
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        endAt:
+          type: string
+          format: date-time
+        __v:
+          type: number
+    calendars:
+      required:
+        - startAt
+        - duration
+        - roomId
+        - slots.postId
+        - slots.startAt
+        - slots.occupied
+      type: object
+      properties:
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: numer
+        roomId:
+          type: objectId
+          $ref: "#/components/schemas/room"
+        slots:
+          type: array
+          items:
+            type: object
+            properties:
+              postId:
+                type: objectId
+                $ref: "#/components/schemas/post"
+              startAt:
+                type: string
+                format: date-time
+              occupied:
+                type: boolean
+    findGetCalendars:
+      type: object
+      properties:
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: numer
+        roomId:
+          type: objectId
+          $ref: "#/components/schemas/room"
+        slots:
+          type: array
+          items:
+            type: object
+            properties:
+              postId:
+                type: objectId
+                $ref: "#/components/schemas/post"
+              startAt:
+                type: string
+                format: date-time
+              occupied:
+                type: boolean
+    subscription:
+      required:
+        - type
+        - as
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - subscribe
+            - unsubscribe
+        as:
+          type: string
+          enum:
+            - eleve
+            - tuteur
+    findGetSubscription:
+      type: object
+      properties:
+        type:
+          type: string
+        as:
+          type: string
     errors:
       type: object
       properties:
@@ -523,10 +589,17 @@ components:
         errors:
           type: object
     credentials:
+      required:
+        - strategy
+        - email
+        - password
       type: object
       properties:
         strategy:
           type: string
+          enum:
+            - jwt
+            - local
         email:
           type: string
         password:
@@ -542,9 +615,7 @@ components:
             strategy:
               type: string
         user:
-          type: object
-          items:
-            $ref: "#/components/schemas/user"
+          $ref: "#/components/schemas/getUser"
 
   responses:
     BadRequest:
