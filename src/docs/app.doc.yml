@@ -473,37 +473,25 @@ components:
           format: date-time
         duration:
           type: number
-      getRoom:
-        required:
-          - camppus
-          - name
-          - day
-          - startAt
-          - duration
-        type: object
-        properties:
-          campus:
-            type: string
-            enum: ["blois", "bourges"]
-          name:
-            type: string
-          day:
-            type: string
-            enum:
-              [
-                "lundi",
-                "mardi",
-                "mercredi",
-                "jeudi",
-                "vendredi",
-                "samedi",
-                "dimanche",
-              ]
-          startAt:
-            type: string
-            format: date-time
-          duration:
-            type: number
+    getRoom:
+      type: object
+      properties:
+        campus:
+          type: string
+        name:
+          type: string
+        day:
+          type: string
+        startAt:
+          type: string
+          format: date-time
+        duration:
+          type: number
+        endAt:
+          type: string
+          format: date-time
+        __v:
+          type: number
     errors:
       type: object
       properties:
