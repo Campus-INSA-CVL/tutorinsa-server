@@ -589,10 +589,17 @@ components:
         errors:
           type: object
     credentials:
+      required:
+        - strategy
+        - email
+        - password
       type: object
       properties:
         strategy:
           type: string
+          enum:
+            - jwt
+            - local
         email:
           type: string
         password:
@@ -608,9 +615,7 @@ components:
             strategy:
               type: string
         user:
-          type: object
-          items:
-            $ref: "#/components/schemas/user"
+          $ref: "#/components/schemas/getUser"
 
   responses:
     BadRequest:
