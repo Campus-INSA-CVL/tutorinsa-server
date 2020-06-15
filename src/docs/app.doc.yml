@@ -547,6 +547,29 @@ components:
                 format: date-time
               occupied:
                 type: boolean
+    subscription:
+      required:
+        - type
+        - as
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - subscribe
+            - unsubscribe
+        as:
+          type: string
+          enum:
+            - eleve
+            - tuteur
+    findGetSubscription:
+      type: object
+      properties:
+        type:
+          type: string
+        as:
+          type: string
     errors:
       type: object
       properties:

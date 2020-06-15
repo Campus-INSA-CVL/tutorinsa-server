@@ -1,1 +1,102 @@
 description:
+produces:
+  - application/json
+operations:
+  find:
+    summary: Not allowed
+    description: Not allowed
+    parameters:
+    requestBody:
+    responses:
+      405:
+        $ref: "#/components/responses/NotAllowed"
+
+  get:
+    summary: Not allowed
+    description: Not allowed
+    parameters:
+    requestBody:
+    responses:
+      405:
+        $ref: "#/components/responses/NotAllowed"
+
+  create:
+    summary: Not allowed
+    description: Not allowed
+    parameters:
+    requestBody:
+    responses:
+      405:
+        $ref: "#/components/responses/NotAllowed"
+
+  update:
+    summary: Not allowed
+    description: Not allowed
+    parameters:
+    requestBody:
+    responses:
+      405:
+        $ref: "#/components/responses/NotAllowed"
+
+  patch:
+    summary: Update a subscription from a user to a post
+    parameters:
+      - name: _id
+        in: path
+        description: ID of post that need to be subscribe or unsubscribe
+        required: true
+        schema:
+          type: string
+    requestBody:
+      description: Specify (explicitly) if the user want to subscribe or unsubscribe and if it's as a tutor or as a student
+      content:
+        json:
+          schema:
+            $ref: "#/components/schemas/subscription"
+          examples:
+            TutorSub:
+              description:
+              value:
+                type: subscribe
+                as: tuteur
+            StudentUnsub:
+              description:
+              value:
+                type: unsubscribe
+                as: eleve
+      required: true
+    responses:
+      200:
+        description: subscribe or unsubscribe
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/findGetSubscription"
+            examples:
+              TutorSub:
+                description:
+                value:
+                  type: subscribe
+                  as: tuteur
+              StudentUnsub:
+                description:
+                value:
+                  type: unsubscribe
+                  as: eleve
+      400:
+        $ref: "#/components/responses/BadRequest"
+      403:
+        $ref: "#/components/responses/Forbidden"
+      404:
+        $ref: "#/components/responses/NotFound"
+    security:
+      - bearerAuth: []
+
+  remove:
+    summary: Not allowed
+    description: Not allowed
+    parameters:
+    requestBody:
+    responses:
+      405:
+        $ref: "#/components/responses/NotAllowed"
