@@ -26,5 +26,5 @@
       "passwordField": "password"
     }
   },
-  "mongodb": "mongodb://localhost:27017/feathersjs_server"
+  "mongodb": "mongodb+srv://admin:$Esteban$25@esteban-s-website-or8n8.azure.mongodb.net/tutorinsa-server-dev?retryWrites=true&w=majority"
 }

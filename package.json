@@ -40,11 +40,12 @@
     "jest": "jest --forceExit --detectOpenHandles",
     "test": "npm run lint && npm run compile && npm run jest -- --collectCoverage=true",
     "test:ci": "npm run lint && npm run compile && npm run jest -- --collectCoverage=true --ci --reporters=default --reporters=jest-junit",
-    "compile": "shx rm -rf lib/ && tsc",
+    "compile": "shx rm -rf lib/ && tsc && npm run cpy:docs",
     "dev": "ts-node-dev --no-notify --watch src/docs src/",
     "start": "npm run compile && node lib/",
     "populatedb": "ts-node populatedb.ts",
-    "precommit": "npm run lint"
+    "precommit": "npm run lint",
+    "cpy:docs": "cpy docs/* ../lib  --cwd=src --no-overwrite --parents"
   },
   "pre-commit": [
     "precommit"
@@ -102,6 +103,7 @@
     "@types/validator": "^13.0.0",
     "async": "^3.2.0",
     "axios": "^0.19.2",
+    "cpy-cli": "^3.1.1",
     "jest": "^26.0.1",
     "jest-junit": "^10.0.0",
     "nodemon": "^2.0.4",

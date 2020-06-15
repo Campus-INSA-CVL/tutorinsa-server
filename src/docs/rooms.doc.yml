@@ -1,1 +1,201 @@
 description:
+produces:
+  - application/json
+operations:
+  find:
+    summary: Finds all rooms
+    description:
+    responses:
+      200:
+        description: successful operations
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                total:
+                  type: integer
+                limit:
+                  type: integer
+                skip:
+                  type: interger
+                data:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/room"
+            example:
+              total: 2
+              limit: 10
+              skip: 0
+              data:
+                - _id: 5e932d7f1b38de3e10444b0b
+                  campus: bourges
+                  name: e1.98
+                  day: mardi
+                  startAt: "1970-01-01T17:00:00.000Z"
+                  duration: "1970-01-01T02:30:00.000Z"
+                  createdAt: "2020-04-12T15:02:23.077Z"
+                  updatedAt: "2020-04-12T15:02:23.077Z"
+                  __v: 0
+                  endAt: "2020-04-13T19:30:00.000Z"
+                  time: "2020-04-13T17:00:00.000Z"
+                  id: 5e932d7f1b38de3e10444b0b
+                - _id: 5e932e901b38de3e10444b0f
+                  campus: bourges
+                  name: e1.06
+                  day: lundi
+                  startAt: "1970-01-01T18:00:00.000Z"
+                  duration: "1970-01-01T02:30:00.000Z"
+                  createdAt: "2020-04-12T15:06:56.454Z"
+                  updatedAt: "2020-04-12T15:06:56.454Z"
+                  __v: 0
+                  endAt: "1970-01-01T20:30:00.000Z"
+                  time: "2020-04-13T18:00:00.000Z"
+                  id: 5e932e901b38de3e10444b0f
+
+      500:
+        $ref: "#/components/responses/GeneralError"
+    security:
+      - bearerAuth: []
+
+  get:
+    summary: Get one room
+    description:
+    parameters:
+      - name: _id
+        in: path
+        description: ID of room that need to be fetch
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: successful operation
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/room"
+            example:
+              _id: 5e932d7f1b38de3e10444b0b
+              campus: bourges
+              name: e1.98
+              day: mardi
+              startAt: "1970-01-01T17:00:00.000Z"
+              duration: "1970-01-01T02:30:00.000Z"
+              createdAt: "2020-04-12T15:02:23.077Z"
+              updatedAt: "2020-04-12T15:02:23.077Z"
+              __v: 0
+              endAt: "2020-04-13T19:30:00.000Z"
+              time: "2020-04-13T17:00:00.000Z"
+              id: 5e932d7f1b38de3e10444b0b
+      400:
+        $ref: "#/components/responses/BadRequest"
+      500:
+        $ref: "#/components/responses/GeneralError"
+    security:
+      - bearerAuth: []
+
+  create:
+    summary: Create a room
+    description:
+    parameters:
+    requestBody:
+      description: Room object that will be created
+      content:
+        json:
+          schema:
+            $ref: "#/components/schemas/room"
+          example:
+            campus: bourges
+            name: E1.98
+            day: lundi
+            startAt: "Thu Jan 01 1970 18:00:00 GMT"
+            duration: "Thu Jan 01 1970 02:30:00 GMT"
+      required: true
+    responses:
+      201:
+        description: created
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/room"
+            example:
+              _id: 5e932d7f1b38de3e10444b0b
+              campus: bourges
+              name: e1.98
+              day: mardi
+              startAt: "1970-01-01T17:00:00.000Z"
+              duration: "1970-01-01T02:30:00.000Z"
+              createdAt: "2020-04-12T15:02:23.077Z"
+              updatedAt: "2020-04-12T15:02:23.077Z"
+              __v: 0
+              endAt: "2020-04-13T19:30:00.000Z"
+              time: "2020-04-13T17:00:00.000Z"
+              id: 5e932d7f1b38de3e10444b0b
+      403:
+        $ref: "#/components/responses/Forbidden"
+      500:
+        $ref: "#/components/responses/GeneralError"
+
+  update:
+    summary: Not allowed
+    description: Not allowed
+    parameters:
+    requestBody:
+    responses:
+      405:
+        $ref: "#/components/responses/NotAllowed"
+      500:
+        $ref: "#/components/responses/GeneralError"
+
+  patch:
+    summary: Not allowed
+    description: Not allowed
+    parameters:
+    requestBody:
+    responses:
+      405:
+        $ref: "#/components/responses/NotAllowed"
+      500:
+        $ref: "#/components/responses/GeneralError"
+
+  remove:
+    summary: Delete a room
+    description:
+    parameters:
+      - name: _id
+        in: path
+        description: ID of room that need to be fetch
+        required: true
+        schema:
+          type: string
+    responses:
+      200:
+        description: deleted
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/room"
+            example:
+              _id: 5e932d7f1b38de3e10444b0b
+              campus: bourges
+              name: e1.98
+              day: mardi
+              startAt: "1970-01-01T17:00:00.000Z"
+              duration: "1970-01-01T02:30:00.000Z"
+              createdAt: "2020-04-12T15:02:23.077Z"
+              updatedAt: "2020-04-12T15:02:23.077Z"
+              __v: 0
+              endAt: "2020-04-13T19:30:00.000Z"
+              time: "2020-04-13T17:00:00.000Z"
+              id: 5e932d7f1b38de3e10444b0b
+      400:
+        $ref: "#/components/responses/BadRequest"
+      403:
+        $ref: "#/components/responses/Forbidden"
+      404:
+        $ref: "#/components/responses/NotFound"
+      500:
+        $ref: "#/components/responses/GeneralError"
+    security:
+      - bearerAuth: []

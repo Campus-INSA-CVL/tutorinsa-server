@@ -15,7 +15,12 @@ export default (fieldName: string, types: string[]): Hook => {
 
     if (data) {
       const field = data[fieldName]
-      if (field && typeof field !== 'number' && !Array.isArray(field)) {
+      if (
+        field &&
+        typeof field !== 'number' &&
+        !Array.isArray(field) &&
+        typeof field === 'string'
+      ) {
         if (!types.includes(field)) {
           throw new BadRequest(`${field} is an incorrect type`)
         }
