@@ -1,20 +1,27 @@
 // Use this hook to manipulate incoming or outgoing data.
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
-import { Hook, HookContext, Id } from '@feathersjs/feathers'
+import { Hook, HookContext, Id, Params } from '@feathersjs/feathers'
 import { BadRequest, GeneralError } from '@feathersjs/errors'
 import mongoose from 'mongoose'
 import { Subscription, Post, Application } from '../../declarations'
+import { callingParams } from 'feathers-hooks-common'
 
 /**
  * Get a post using his id
  * @param {Id} postId
- * @param {Application} app
+ * @param {HookContext} context
  * @returns {Promise<Post>}
  */
-async function getPost(postId: Id, app: Application): Promise<Post> {
+async function getPost(postId: Id, context: HookContext): Promise<Post> {
   let post: Post
   try {
-    post = await app.service('posts').get(postId, {})
+    post = await context.app.service('posts').get(
+      postId,
+      callingParams({
+        propNames: ['user', 'authenticated', 'ability'],
+        newProps: { provider: null },
+      })(context)
+    )
   } catch (e) {
     throw new GeneralError('get post encountered an error')
   }
@@ -35,7 +42,7 @@ export default (options = {}): Hook => {
     const { id, params, app } = context
 
     if (id && checkObjectId(id)) {
-      params.post = await getPost(id, app as Application)
+      params.post = await getPost(id, context)
     } else {
       throw new BadRequest(`'${id}' is not a correct id`)
     }

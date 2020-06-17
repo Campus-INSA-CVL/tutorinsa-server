@@ -151,12 +151,14 @@ export default {
   },
 
   after: {
-    all: [fastJoin(resolvers)],
-    find: [iff(isProvider('external'), pickResult())],
-    get: [iff(isProvider('external'), pickResult())],
+    all: [],
+    find: [fastJoin(resolvers), iff(isProvider('external'), pickResult())],
+    get: [fastJoin(resolvers), iff(isProvider('external'), pickResult())],
     create: [
       patchUser([['createdPostsIds', '_id', 'array']]),
       iff(isPost('tuteur'), createCalendar(), patchCalendar('create')),
+      // to have the correct user
+      fastJoin(resolvers),
     ],
     update: [],
     patch: [
@@ -167,6 +169,8 @@ export default {
     remove: [
       patchUser([['createdPostsIds', '_id', 'array']]),
       iff(isPost('tuteur'), patchCalendar('remove')),
+      // to have the correct user
+      fastJoin(resolvers),
     ],
   },
 

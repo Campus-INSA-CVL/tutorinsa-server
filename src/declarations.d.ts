@@ -97,10 +97,10 @@ export interface UserCore {
   createdAt?: string
   updatedAt?: string
 
-  year: Year
-  department: Department
-  favoriteSubjects: Subject[]
-  difficultSubjects: Subject[]
+  year?: Year
+  department?: Department
+  favoriteSubjects?: Subject[]
+  difficultSubjects?: Subject[]
 }
 
 export type User = UserCore & {
@@ -138,11 +138,11 @@ export interface PostCore {
   fullStudents?: string
   fullTutors?: string
 
-  subject: Subject
-  room: Room
-  creator: User
-  students: User[]
-  tutors: User[]
+  subject?: Subject
+  room?: Room
+  creator?: User
+  students?: User[]
+  tutors?: User[]
 }
 
 export type Post = PostCore & {

@@ -66,7 +66,6 @@ describe("'add-post' hook", () => {
     } catch (e) {
       // Error
     }
-    params.user = user
 
     let results: Paginated<Post>
 
@@ -83,6 +82,8 @@ describe("'add-post' hook", () => {
       tutorsIds: ['5ccaea940db44157d84e8c93'],
       creatorId: '5ccaea940db44157d84e8c93',
     }
+
+    params.user = user
 
     results = (await app.service('posts').find({
       query: { comment: post.comment },
@@ -153,6 +154,7 @@ describe("'add-post' hook", () => {
     const id = resultPost._id.toString()
 
     context.id = id
+    context.params = params
     try {
       result = (await addPost()(context)) as HookContext
     } catch (e) {
