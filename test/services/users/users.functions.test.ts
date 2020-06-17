@@ -181,6 +181,33 @@ describe("'users.fuctions'", () => {
       )
     })
 
+    it('should not subscribe twice', () => {
+      const data = {
+        studentSubscriptionsIds: ['5ccaea940db44157d84e8c93'],
+      }
+      const params = {
+        subType: 'subscribe' as Subscription['type'],
+      }
+
+      // subscribe once
+      user.studentSubscriptionsIds = [
+        ...user.studentSubscriptionsIds,
+        ...data.studentSubscriptionsIds,
+      ]
+
+      // subscribe twice
+      try {
+        result = updateSubcriptions(data, user, params)
+      } catch (e) {
+        error = e
+      }
+
+      expect(error).toBeNull()
+      expect(result).not.toEqual(
+        expect.arrayContaining([...user.studentSubscriptionsIds])
+      )
+    })
+
     it('should return the correct array (unsubscribe)', () => {
       const data = {
         studentSubscriptionsIds: ['5ccaea940db44157d84e8c93'],
