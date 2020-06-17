@@ -1,5 +1,13 @@
 {
-  "host": "feathersjs-server-app.feathersjs.com",
+  "host": "https://tutorinsa-server.herokuapp.com/",
   "mongodb": "MONGODB",
-  "port": "PORT"
+  "port": "PORT",
+  "authentication": {
+    "secret": "SECRET",
+    "jwtOptions": {
+      "audience": "https://tutorinsa-server.herokuapp.com/",
+      "issuer": "tutorinsa",
+      "expiresIn": "1d"
+    }
+  }
 }
