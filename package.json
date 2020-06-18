@@ -97,7 +97,7 @@
     "@types/jest": "^26.0.0",
     "@types/js-yaml": "^3.12.4",
     "@types/jsonwebtoken": "^8.5.0",
-    "@types/mongoose": "^5.7.24",
+    "@types/mongoose": "^5.7.26",
     "@types/mongoose-lean-virtuals": "^0.5.1",
     "@types/serve-favicon": "^2.5.0",
     "@types/validator": "^13.0.0",
