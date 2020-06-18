@@ -73,7 +73,20 @@ export default function defineAbilitiesFor(user: User): Ability {
     ])
 
     can('get', 'users', { _id: user._id })
-    can('patch', 'users', { _id: user._id })
+    can(
+      'patch',
+      'users',
+      [
+        'lastName',
+        'firstName',
+        'email',
+        'yearId',
+        'departmentId',
+        'favoriteSubjectsIds',
+        'difficultSubjectsIds',
+      ],
+      { _id: user._id }
+    )
     can('remove', 'users', { _id: user._id })
 
     can('get', 'posts', [
