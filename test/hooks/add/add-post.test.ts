@@ -1,11 +1,5 @@
 import { BadRequest, GeneralError } from '@feathersjs/errors'
-import {
-  HookContext,
-  Application,
-  Service,
-  Params,
-  Paginated,
-} from '@feathersjs/feathers'
+import { HookContext, Service, Params, Paginated } from '@feathersjs/feathers'
 import app from '../../../src/app'
 import addPost from '../../../src/hooks/add/add-post'
 import { Post, Room, User } from '../../../src/declarations'
