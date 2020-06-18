@@ -68,7 +68,7 @@ function pickFromResult(
  */
 export default (options = {}): Hook => {
   return async (context: HookContext) => {
-    const { result, method, params, path, app } = context
+    const { result, method, params, path } = context
     const { ability } = params
 
     if (result) {
