@@ -1,6 +1,7 @@
 import { defineAbility } from '@casl/ability'
 
 export default defineAbility((can) => {
+  can('find', 'years', { name: '3a' })
   can(['find', 'get'], 'posts', [
     '_id',
     'comment',
