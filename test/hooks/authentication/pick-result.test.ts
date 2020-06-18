@@ -1,5 +1,5 @@
 import pickResult from '../../../src/hooks/authentication/pick-result'
-import defineAbilityFor from '../../../src/hooks/authentication/ability'
+import ability from '../../utils/ability'
 
 import {
   HookContext,
@@ -30,7 +30,6 @@ describe("'pick-result' hook", () => {
   })
 
   it('should throw an error if result is incorrect', async () => {
-    const ability = defineAbilityFor(undefined)
     const context: HookContext = {
       app: {} as Application,
       service: {} as Service<any>,
@@ -69,8 +68,6 @@ describe("'pick-result' hook", () => {
         tutorsIds: [],
         creatorId: '5ccaea940db44157d84e8c93',
       }
-      const ability = defineAbilityFor(undefined)
-
       context = {
         app: {} as Application,
         service: {} as Service<any>,
@@ -130,7 +127,6 @@ describe("'pick-result' hook", () => {
         tutorsIds: [],
         creatorId: '5ccaea940db44157d84e8c93',
       }
-      const ability = defineAbilityFor(undefined)
 
       context = {
         app: {} as Application,
@@ -189,7 +185,6 @@ describe("'pick-result' hook", () => {
         tutorsIds: [],
         creatorId: '5ccaea940db44157d84e8c93',
       }
-      const ability = defineAbilityFor(undefined)
 
       context = {
         app: {} as Application,
