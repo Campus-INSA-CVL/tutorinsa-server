@@ -3,7 +3,7 @@
 import { Hook, HookContext } from '@feathersjs/feathers'
 import { Forbidden } from '@feathersjs/errors'
 import { callingParams } from 'feathers-hooks-common'
-import { subject, ForbiddenError } from '@casl/ability'
+import { subject } from '@casl/ability'
 import { toMongoQuery } from '@casl/mongoose'
 import util from 'util'
 

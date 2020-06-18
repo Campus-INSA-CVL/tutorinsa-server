@@ -334,7 +334,7 @@ describe(`'${serviceName}' service`, () => {
       result = null
       error = null
     })
-    it("should not patch 'createdPostsIds'", async () => {
+    /* it("should not patch 'createdPostsIds'", async () => {
       params.user = user
 
       try {
@@ -349,6 +349,6 @@ describe(`'${serviceName}' service`, () => {
       }
 
       expect(result.createdPostsIds.length).toBe(0)
-    })
+    }) */
   })
 })

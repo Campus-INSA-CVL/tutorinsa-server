@@ -1,7 +1,7 @@
 import moment from '../../src/utils/moment'
 
 /**
- * Create the perfecte date for the post
+ * Create the perfect date for the post
  * @returns {string}
  */
 export default function createDate(minutes: number = 0): string {

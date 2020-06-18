@@ -43,37 +43,16 @@ export default function defineAbilitiesFor(user: User): Ability {
     'difficultSubjectsIds',
   ])
 
-  can(
-    ['find', 'get'],
-    'posts',
-    [
-      '_id',
-      'comment',
-      'type',
-      'startAt',
-      'duration',
-      'subjectId',
-      'subject',
-      '__v',
-    ],
-    { startAt: { $gte: moment().utc().hours(0) } }
-  )
-
-  can(
-    ['find', 'get'],
-    'posts',
-    [
-      '_id',
-      'comment',
-      'type',
-      'startAt',
-      'duration',
-      'subjectId',
-      'subject',
-      '__v',
-    ],
-    { type: 'eleve' }
-  )
+  can(['find', 'get'], 'posts', [
+    '_id',
+    'comment',
+    'type',
+    'startAt',
+    'duration',
+    'subjectId',
+    'subject',
+    '__v',
+  ])
 
   if (user) {
     can('find', 'users', [
@@ -94,73 +73,60 @@ export default function defineAbilitiesFor(user: User): Ability {
     ])
 
     can('get', 'users', { _id: user._id })
+    can('patch', 'users', { _id: user._id })
     can('remove', 'users', { _id: user._id })
 
-    can(
-      'get',
-      'posts',
-      [
-        '_id',
-        'comment',
-        'type',
-        'startAt',
-        'duration',
-        'studentsCapacity',
-        'tutorsCapacity',
-        'subjectId',
-        'studentsIds',
-        'tutorsIds',
-        'roomId',
-        'creatorId',
-        'endAt',
-        'fullStudents',
-        'fullTutors',
-        'createdAt',
-        'updatedAt',
-        'subject',
-        'room',
-        'creator',
-        'students',
-        'tutors',
-        '__v',
-      ],
-      {
-        startAt: { $gte: moment().utc().hours(0) },
-      }
-    )
+    can('get', 'posts', [
+      '_id',
+      'comment',
+      'type',
+      'startAt',
+      'duration',
+      'studentsCapacity',
+      'tutorsCapacity',
+      'subjectId',
+      'studentsIds',
+      'tutorsIds',
+      'roomId',
+      'creatorId',
+      'endAt',
+      'fullStudents',
+      'fullTutors',
+      'createdAt',
+      'updatedAt',
+      'subject',
+      'room',
+      'creator',
+      'students',
+      'tutors',
+      '__v',
+    ])
 
-    can(
-      'find',
-      'posts',
-      [
-        '_id',
-        'comment',
-        'type',
-        'startAt',
-        'duration',
-        'studentsCapacity',
-        'tutorsCapacity',
-        'subjectId',
-        'studentsIds',
-        'tutorsIds',
-        'roomId',
-        'creatorId',
-        'endAt',
-        'fullStudents',
-        'fullTutors',
-        'createdAt',
-        'updatedAt',
-        'subject',
-        'room',
-        'creator',
-        'students',
-        'tutors',
-        '__v',
-      ],
-      {
-        startAt: { $gte: moment().utc().hours(0) },
-      }
-    )
+    can('find', 'posts', [
+      '_id',
+      'comment',
+      'type',
+      'startAt',
+      'duration',
+      'studentsCapacity',
+      'tutorsCapacity',
+      'subjectId',
+      'studentsIds',
+      'tutorsIds',
+      'roomId',
+      'creatorId',
+      'endAt',
+      'fullStudents',
+      'fullTutors',
+      'createdAt',
+      'updatedAt',
+      'subject',
+      'room',
+      'creator',
+      'students',
+      'tutors',
+      '__v',
+    ])
     can('remove', 'posts', { creatorId: user._id })
 
     can(['find', 'get'], 'rooms', [
@@ -214,6 +180,78 @@ export default function defineAbilitiesFor(user: User): Ability {
     }
 
     if (is('admin', user)) {
+      can(['create', 'patch'], ['subjects', 'years', 'departments'])
+      can('find', 'posts', [
+        '_id',
+        'comment',
+        'type',
+        'startAt',
+        'duration',
+        'studentsCapacity',
+        'tutorsCapacity',
+        'subjectId',
+        'studentsIds',
+        'tutorsIds',
+        'roomId',
+        'creatorId',
+        'endAt',
+        'fullStudents',
+        'fullTutors',
+        'createdAt',
+        'updatedAt',
+        'subject',
+        'room',
+        'creator',
+        'students',
+        'tutors',
+        '__v',
+      ])
+      can('get', 'posts', [
+        '_id',
+        'comment',
+        'type',
+        'startAt',
+        'duration',
+        'studentsCapacity',
+        'tutorsCapacity',
+        'subjectId',
+        'studentsIds',
+        'tutorsIds',
+        'roomId',
+        'creatorId',
+        'endAt',
+        'fullStudents',
+        'fullTutors',
+        'createdAt',
+        'updatedAt',
+        'subject',
+        'room',
+        'creator',
+        'students',
+        'tutors',
+        '__v',
+      ])
+      can(
+        'create',
+        'posts',
+        [
+          'comment',
+          'type',
+          'startAt',
+          'duration',
+          'studentsCapacity',
+          'tutorsCapacity',
+          'subjectId',
+          'roomId',
+        ],
+        {
+          type: { $in: ['eleve', 'tuteur'] },
+        }
+      )
+      can('remove', 'posts')
+
+      can('create', 'rooms')
+
       can('find', 'users', [
         '_id',
         'lastName',
@@ -232,6 +270,7 @@ export default function defineAbilitiesFor(user: User): Ability {
         'difficultSubjects',
         '__v',
       ])
+      can(['patch', 'remove'], 'users')
     }
   }
 

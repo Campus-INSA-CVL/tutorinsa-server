@@ -29,13 +29,13 @@ const options: {
 }
 
 /* istanbul ignore next */
-if (process.env.NODE_ENV === 'test') {
+/* if (process.env.NODE_ENV === 'test') {
   const consoleLogs = new transports.Console({
     format: format.simple(),
   })
 
   options.transports.push(consoleLogs)
-}
+} */
 
 /* istanbul ignore next */
 if (process.env.NODE_ENV === 'development') {
