@@ -73,7 +73,20 @@ export default function defineAbilitiesFor(user: User): Ability {
     ])
 
     can('get', 'users', { _id: user._id })
-    can('patch', 'users', { _id: user._id })
+    can(
+      'patch',
+      'users',
+      [
+        'lastName',
+        'firstName',
+        'email',
+        'yearId',
+        'departmentId',
+        'favoriteSubjectsIds',
+        'difficultSubjectsIds',
+      ],
+      { _id: user._id }
+    )
     can('remove', 'users', { _id: user._id })
 
     can('get', 'posts', [
@@ -151,7 +164,7 @@ export default function defineAbilitiesFor(user: User): Ability {
       '__v',
     ])
 
-    can('patch', 'subscriptions')
+    can(['patch'], 'subscriptions', ['as', 'type'])
 
     if (is('eleve', user)) {
       can('create', 'posts', ['comment', 'type', 'subjectId'], {

@@ -25,7 +25,7 @@ export class Subscriptions implements ServiceMethods<Subscription> {
 
   /* istanbul ignore next */
   async get(id: Id, params?: Params): Promise<any> {
-    return
+    return {}
   }
 
   /* istanbul ignore next */
