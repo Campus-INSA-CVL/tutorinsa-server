@@ -156,7 +156,6 @@ export type Post = PostCore & {
     | Id[]
     | Subject
     | Room
-    | User
 }
 
 export interface SlotCore {
