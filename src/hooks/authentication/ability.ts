@@ -164,7 +164,7 @@ export default function defineAbilitiesFor(user: User): Ability {
       '__v',
     ])
 
-    can(['update', 'patch'], 'subscriptions', ['as', 'type'])
+    can(['patch'], 'subscriptions', ['as', 'type'])
 
     if (is('eleve', user)) {
       can('create', 'posts', ['comment', 'type', 'subjectId'], {
