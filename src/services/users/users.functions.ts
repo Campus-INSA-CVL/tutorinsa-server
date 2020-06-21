@@ -1,26 +1,11 @@
-import {
-  User,
-  UserCore,
-  Subscription,
-  Post,
-  PostCore,
-} from '../../declarations'
-import { GeneralError, BadRequest } from '@feathersjs/errors'
+import { User, Subscription, Post } from '../../declarations'
+import { GeneralError } from '@feathersjs/errors'
 import { Id, Params } from '@feathersjs/feathers'
-
-type AllowedFieldsWithType<Obj, Type> = {
-  [K in keyof Obj]: Obj[K] extends Type ? K : never
-}
-
-type ExtractFieldsOfType<Obj, Type> = AllowedFieldsWithType<
-  Obj,
-  Type
->[keyof Obj]
 
 /**
  * Return an array without the post id using the user data
  * @param {T} previous
- * @param {ExtractFieldsOfType<T, Id[]>} field
+ * @param {'studentsIds' | 'tutorsIds' | 'studentSubscriptionsIds'  | 'tutorSubscriptionsIds' | 'createdPostsIds'} field
  * @param {Id} id
  * @returns {Id[]} an array without the post id but with the other from the user
  */
