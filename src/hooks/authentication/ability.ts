@@ -84,6 +84,7 @@ export default function defineAbilitiesFor(user: User): Ability {
         'departmentId',
         'favoriteSubjectsIds',
         'difficultSubjectsIds',
+        'permissions',
       ],
       { _id: user._id }
     )
