@@ -51,7 +51,7 @@ function pickFromResult(
       const data = pickElements((result as Paginated<object>).data, fields)
 
       ;(rawResult as Paginated<object>).data = data as object[]
-      ;(rawResult as Paginated<object>).total = (data as object[]).length
+      // ;(rawResult as Paginated<object>).total = (data as object[]).length
     } else if (Array.isArray(result)) {
       rawResult = pickElements(result, fields)
     } else {
