@@ -68,7 +68,6 @@ describe("'posts' service", () => {
       await app.get('mongooseClient').model(serviceName).find().deleteMany()
       await app.get('mongooseClient').model('rooms').find().deleteMany()
       await app.get('mongooseClient').model('users').find().deleteMany()
-      await app.get('mongooseClient').model('calendars').find().deleteMany()
 
       try {
         room = await app.service('rooms').create(dataRoom)

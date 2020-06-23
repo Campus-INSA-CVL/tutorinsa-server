@@ -21,38 +21,17 @@ async function getRoom(app: Application, roomId: Id): Promise<Room> {
 }
 
 /**
- * Get a post using the id
- * @param {Application} app
- * @param {Id} postId
- * @returns The post
- */
-async function getPost(app: Application, postId: Id): Promise<Post> {
-  let post: Post
-  try {
-    post = (await app.service('posts').get(postId)) as Post
-  } catch (error) {
-    throw new GeneralError('impossible to get post')
-  }
-  return post
-}
-
-/**
  * Add a room to the data using the room id
  */
 export default (options = {}): Hook => {
   return async (context: HookContext) => {
-    const { app, data, method, id } = context
+    const { app, data, method, id, params } = context
 
-    if (data?.roomId) {
-      data.room = await getRoom(app, data.roomId)
-    } else if (method === 'remove') {
-      if (!id) {
-        throw new BadRequest('an id is required to add a room')
-      }
-      const post = await getPost(app, id)
-      context.data = {}
-      context.data.startAt = post.startAt
-      context.data.room = await getRoom(app, post.roomId as Id)
+    if (data?.roomId || (params.post as Post).roomId) {
+      params.room = await getRoom(
+        app,
+        data.roomId ?? (params.post as Post).roomId
+      )
     }
     return context
   }

@@ -213,6 +213,7 @@ components:
           format: date-time
         duration:
           type: number
+          minimum: 30
         studentsCapacity:
           type: number
           minimum: 5
@@ -473,6 +474,7 @@ components:
           format: date-time
         duration:
           type: number
+          minimum: 30
     getRoom:
       type: object
       properties:
@@ -492,67 +494,6 @@ components:
           format: date-time
         __v:
           type: number
-    calendars:
-      required:
-        - startAt
-        - duration
-        - roomId
-        - slots.postId
-        - slots.startAt
-        - slots.occupied
-      type: object
-      properties:
-        startAt:
-          type: string
-          format: date-time
-        duration:
-          type: number
-        roomId:
-          type: objectId
-          $ref: "#/components/schemas/room"
-        slots:
-          type: array
-          items:
-            type: object
-            properties:
-              postId:
-                type: objectId
-                $ref: "#/components/schemas/post"
-              startAt:
-                type: string
-                format: date-time
-              occupied:
-                type: boolean
-    findGetCalendars:
-      type: object
-      properties:
-        startAt:
-          type: string
-          format: date-time
-        duration:
-          type: number
-        roomId:
-          type: objectId
-        room:
-          $ref: "#/components/schemas/getRoom"
-        full:
-          type: boolean
-        slots:
-          type: array
-          items:
-            type: object
-            properties:
-              postId:
-                type: objectId
-              startAt:
-                type: string
-                format: date-time
-              occupied:
-                type: boolean
-              post:
-                $ref: "#/components/schemas/findGetAuthTutorPost"
-              id:
-                type: objectId
     subscription:
       required:
         - type

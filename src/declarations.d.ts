@@ -170,22 +170,6 @@ export type Slot = SlotCore & {
   [key: string]: string | undefined | Id | boolean | Post
 }
 
-export interface CalendarCore {
-  _id?: Id
-  startAt: string
-  roomId: Id
-  duration: number
-  slots?: Slot[]
-
-  full?: boolean
-
-  room?: Room
-}
-
-export type Calendar = CalendarCore & {
-  [key: string]: string | undefined | Id | Slot[] | boolean | Room
-}
-
 export type SubscriptionType = 'subscribe' | 'unsubscribe'
 
 export interface SubscriptionCore {

@@ -19,15 +19,15 @@ function isSameDay(startAtPost: string, dayRoom: string): boolean {
  * Check that the day of the post is the same that the day of the room
  */
 export default (options = {}): Hook => {
-  return async (context: HookContext<Post & { room: Room }>) => {
-    const { data } = context
+  return async (context: HookContext<Post>) => {
+    const { data, params } = context
 
-    if (data?.room && data?.startAt) {
-      if (!isSameDay(data.startAt, data.room.day)) {
+    if (params?.room && data?.startAt) {
+      if (!isSameDay(data.startAt, params.room.day)) {
         throw new BadRequest(
-          `day of post (${new Date(data.startAt).getUTCDay()}) and the room (${
-            data.room.day
-          }) must be the same`
+          `day of post (${
+            moment.weekdays()[new Date(data.startAt).getUTCDay()]
+          }) and the room (${params.room.day}) must be the same`
         )
       }
     }

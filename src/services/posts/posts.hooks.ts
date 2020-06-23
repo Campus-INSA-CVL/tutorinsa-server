@@ -26,29 +26,27 @@ import checkCapacity from '../../hooks/check/check-post/check-capacity'
 
 import normalizeDate from '../../hooks/normalize-date'
 
+import addPost from '../../hooks/add/add-post'
+
 import addRoom from '../../hooks/add/add-room'
 
 import checkConcordanceDay from '../../hooks/check/check-post/check-concordance-day'
 
-import checkTimeCompaibility from '../../hooks/check/check-post/check-time-compatibility'
-
-import checkCalendars from '../../hooks/check/check-post/check-calendars'
+import checkTimeCompatibility from '../../hooks/check/check-post/check-time-compatibility'
 
 import removeUnwantedFields from '../../hooks/remove-unwanted-fields'
 
 import patchUser from '../../hooks/user/patch-user'
-
-import createCalendar from '../../hooks/calendar/create-calendar'
-
-import patchCalendar from '../../hooks/calendar/patch-calendar'
-
-import addCalendar from '../../hooks/add/add-calendar'
 
 import isPost from '../../hooks/post/is-post'
 
 import pickResult from '../../hooks/authentication/pick-result'
 
 import resolvers from './posts.populate'
+
+import checkDisponibility from '../../hooks/check/check-post/check-disponibility'
+
+import checkMinDuration from '../../hooks/check/check-min-duration'
 
 const checkDataTutorOptions: CheckDataOptions<PostCore> = {
   fields: [
@@ -93,7 +91,6 @@ export default {
     find: [],
     get: [],
     create: [
-      authenticate('jwt'),
       iffElse(
         isPost('tuteur'),
         removeUnwantedFields(unwantedTutorFields),
@@ -106,48 +103,52 @@ export default {
       ),
       checkDuplicate(),
       checkIds(),
-      checkTime(),
-      checkDate(),
+      checkMinDuration(),
       checkType('type', typesOptions),
       checkLength(),
-      checkCapacity(),
       normalizeDate(['startAt']),
       iff(
         isPost('tuteur'),
+        checkCapacity(),
+        checkTime(),
+        // checkDate(),
         addRoom(),
-        addCalendar(),
         checkConcordanceDay(),
-        checkTimeCompaibility(),
-        checkCalendars()
+        checkTimeCompatibility(),
+        checkDisponibility()
       ),
     ],
     update: [disallow()],
     patch: [
-      disallow('external'),
-      // iff(
-      //   isProvider('external'),
-      //   removeUnwantedFields(['startAt', ...unwantedFields])
-      // ),
-      // checkData(checkDataOptions),
-      // checkDuplicate(),
-      // checkIds(),
-      // checkDate(),
-      // checkType(),
-      // checkTime(),
-      // checkLength(),
-      // checkCapacity(),
-      // normalizeDate(['startAt']),
-      // addRoom(),
-      // addCalendar(),
-      // checkConcordanceDay(),
-      // checkTimeCompaibility(),
-      // checkCalendars(),
-      // ,
+      addPost(),
+      iffElse(
+        isPost('tuteur'),
+        removeUnwantedFields([...unwantedTutorFields, 'type']),
+        removeUnwantedFields(unwantedStudentFields)
+      ),
+      iffElse(
+        isPost('tuteur'),
+        checkData(checkDataTutorOptions),
+        checkData(checkDataStudentOptions)
+      ),
+      checkDuplicate(),
+      checkIds(),
+      checkMinDuration(),
+      checkType('type', typesOptions),
+      checkLength(),
+      normalizeDate(['startAt']),
+      iff(
+        isPost('tuteur'),
+        checkCapacity(),
+        checkTime(),
+        // checkDate(),
+        addRoom(),
+        checkConcordanceDay(),
+        checkTimeCompatibility(),
+        checkDisponibility()
+      ),
     ],
-    remove: [
-      authenticate('jwt'),
-      iff(isPost('tuteur'), addRoom(), addCalendar()),
-    ],
+    remove: [],
   },
 
   after: {
@@ -156,7 +157,6 @@ export default {
     get: [fastJoin(resolvers), iff(isProvider('external'), pickResult())],
     create: [
       patchUser([['createdPostsIds', '_id', 'array']]),
-      iff(isPost('tuteur'), createCalendar(), patchCalendar('create')),
       // to have the correct user
       fastJoin(resolvers),
     ],
@@ -168,7 +168,6 @@ export default {
     ],
     remove: [
       patchUser([['createdPostsIds', '_id', 'array']]),
-      iff(isPost('tuteur'), patchCalendar('remove')),
       // to have the correct user
       fastJoin(resolvers),
     ],

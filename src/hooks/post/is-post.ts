@@ -9,13 +9,13 @@ import { Post, PostType } from '../../declarations'
  */
 export default (options: PostType): ((hook: HookContext) => boolean) => {
   return (context: HookContext<Post>) => {
-    const { data } = context
+    const { data, params } = context
 
-    if (data) {
-      if (!data?.type) {
-        throw new BadRequest(`a type is required`)
-      }
-      return data.type === options
+    if (!data?.type && !(params.post as Post)?.type) {
+      throw new BadRequest(`a type is required`)
+    } else {
+      const type = data?.type ?? (params.post as Post)?.type
+      return type === options
     }
     return false
   }

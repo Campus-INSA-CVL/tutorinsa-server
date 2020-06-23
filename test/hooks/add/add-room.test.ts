@@ -120,7 +120,6 @@ describe("'add-room' hook", () => {
     beforeAll(async () => {
       await app.get('mongooseClient').model('posts').find().deleteMany()
       await app.get('mongooseClient').model('users').find().deleteMany()
-      await app.get('mongooseClient').model('calendars').find().deleteMany()
 
       const dataUser: User = {
         lastName: 'fakeLastName',
