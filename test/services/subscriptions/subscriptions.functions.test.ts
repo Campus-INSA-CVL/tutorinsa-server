@@ -120,9 +120,15 @@ describe("'subscriptions.functions'", () => {
       error = null
     })
 
-    it('shoud patch without erreur', async () => {
+    it('shoud patch without error', async () => {
       try {
-        await patchSubcription(app, 'posts', result._id, {}, {})
+        await patchSubcription(
+          app,
+          'posts',
+          result._id.toString(),
+          {},
+          { provider: null }
+        )
       } catch (e) {
         error = e
       }
@@ -130,7 +136,7 @@ describe("'subscriptions.functions'", () => {
       expect(error).toBeNull()
     })
 
-    it('shoud patch with an erreur', async () => {
+    it('shoud patch with an error', async () => {
       try {
         await patchSubcription(app, 'posts', '5ed7aeea6d584e73604499', {}, {})
       } catch (e) {

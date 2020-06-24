@@ -22,16 +22,9 @@ describe("'is-post' hook", () => {
     result = null
     error = null
   })
-  it('should throw an error if there is no type', () => {
+  it("should throw an error if there is no type and methode is 'create'", () => {
     const options = 'tuteur'
-    context.data = Object.assign(
-      {},
-      {
-        data: {
-          type: 'tuteur',
-        },
-      }
-    )
+    context.data = {}
     try {
       isPost(options)(context)
     } catch (e) {
@@ -42,7 +35,22 @@ describe("'is-post' hook", () => {
     expect(error.message).toBe('a type is required')
   })
 
-  it('should return true', () => {
+  it("nothing should happend without type and method different that 'create'", () => {
+    const options = 'tuteur'
+
+    // @ts-ignore
+    context.method = 'patch'
+    context.data = {}
+    try {
+      isPost(options)(context)
+    } catch (e) {
+      error = e
+    }
+
+    expect(error).toBeNull()
+  })
+
+  it('should return true, data', () => {
     const options = 'tuteur'
     context.data = Object.assign(
       {},
@@ -56,12 +64,48 @@ describe("'is-post' hook", () => {
     expect(bool).toBe(true)
   })
 
-  it('should return false', () => {
+  it('should return false, data', () => {
     const options = 'tuteur'
     context.data = Object.assign(
       {},
       {
         type: 'eleve',
+      }
+    )
+
+    const bool = isPost(options)(context)
+
+    expect(bool).toBe(false)
+  })
+
+  it('should return true, params', () => {
+    // @ts-ignore
+    context.method = 'patch'
+    const options = 'tuteur'
+    context.params = Object.assign(
+      {},
+      {
+        post: {
+          type: 'tuteur',
+        },
+      }
+    )
+
+    const bool = isPost(options)(context)
+
+    expect(bool).toBe(true)
+  })
+
+  it('should return false, params', () => {
+    // @ts-ignore
+    context.method = 'patch'
+    const options = 'tuteur'
+    context.params = Object.assign(
+      {},
+      {
+        post: {
+          type: 'eleve',
+        },
       }
     )
 

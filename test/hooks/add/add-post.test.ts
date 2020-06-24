@@ -9,7 +9,6 @@ import moment from '../../../src/utils/moment'
 
 describe("'add-post' hook", () => {
   let context: HookContext<any>
-
   let result: HookContext<any>
   let error: Error | null
 

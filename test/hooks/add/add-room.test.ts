@@ -2,16 +2,14 @@ import addRoom from '../../../src/hooks/add/add-room'
 import app from '../../../src/app'
 
 import { HookContext, Service, Paginated, Params } from '@feathersjs/feathers'
-import { GeneralError, BadRequest } from '@feathersjs/errors'
+import { GeneralError } from '@feathersjs/errors'
 
-import { Room, User, Post } from '../../../src/declarations'
-import addDataToUser from '../../utils/addDataToUser'
-import createDate from '../../utils/createDate'
+import { Room, Post } from '../../../src/declarations'
 
 describe("'add-room' hook", () => {
-  let context: HookContext<Room>
+  let context: HookContext<Post>
 
-  let result: HookContext<Room>
+  let result: HookContext<Post>
   let error: Error | null
 
   let room: Room = {
@@ -21,6 +19,8 @@ describe("'add-room' hook", () => {
     startAt: 'Tue May 12 2020 20:00:00 GMT+0000',
     duration: 120,
   }
+
+  const post: Partial<Post> = { roomId: '' }
 
   beforeAll(async () => {
     try {
@@ -36,12 +36,14 @@ describe("'add-room' hook", () => {
     } catch (error) {
       // There is a real error
     }
+
+    post.roomId = room._id
   })
 
   beforeEach(async () => {
     context = {
       app,
-      service: {} as Service<Room>,
+      service: {} as Service<Post>,
       method: 'create',
       params: {},
       path: '',
@@ -55,7 +57,7 @@ describe("'add-room' hook", () => {
   it('nothing should happend without data', async () => {
     expect.assertions(2)
     try {
-      result = (await addRoom()(context)) as HookContext<Room>
+      result = (await addRoom()(context)) as HookContext<Post>
     } catch (e) {
       error = e
     }
@@ -67,10 +69,8 @@ describe("'add-room' hook", () => {
   it('nothing should happend without a room id', async () => {
     expect.assertions(2)
 
-    context.data = Object.assign({}, room)
-
     try {
-      result = (await addRoom()(context)) as HookContext<Room>
+      result = (await addRoom()(context)) as HookContext<Post>
     } catch (e) {
       error = e
     }
@@ -82,127 +82,48 @@ describe("'add-room' hook", () => {
   it('should work with correct data', async () => {
     expect.assertions(2)
 
-    context.data = Object.assign({}, room)
-    context.data.roomId = room._id
+    context.data = { roomId: room._id } as Post
 
     try {
-      result = (await addRoom()(context)) as HookContext<Room>
+      result = (await addRoom()(context)) as HookContext<Post>
     } catch (e) {
       error = e
     }
 
-    expect(result.data.room).toEqual(room)
+    expect(result.params.room).toEqual(room)
     expect(error).toBeNull()
+  })
+
+  it('should work with correct params', async () => {
+    expect.assertions(2)
+
+    context.params = Object.assign({}, { post })
+    context.data = {} as Post
+
+    try {
+      result = (await addRoom()(context)) as HookContext<Post>
+    } catch (e) {
+      error = e
+    }
+
+    expect(error).toBeNull()
+    expect(result.params.room).toEqual(room)
   })
 
   it('should throw an error if a problem appear', async () => {
     expect.assertions(2)
 
-    context.data = Object.assign({}, room)
-    context.data.roomId = 'data'
+    // @ts-ignore
+    context.params = Object.assign(context.params, room)
+    context.data = { roomId: 'data' } as Post
 
     try {
-      result = (await addRoom()(context)) as HookContext<Room>
+      result = (await addRoom()(context)) as HookContext<Post>
     } catch (e) {
       error = e
     }
 
     expect(error).toBeInstanceOf(GeneralError)
     expect(error.message).toBe('impossible to add a room to data')
-  })
-
-  describe("method 'remove'", () => {
-    let post: Post
-    let user: User
-
-    const params: Params = {}
-
-    beforeAll(async () => {
-      await app.get('mongooseClient').model('posts').find().deleteMany()
-      await app.get('mongooseClient').model('users').find().deleteMany()
-
-      const dataUser: User = {
-        lastName: 'fakeLastName',
-        firstName: 'username',
-        email: 'username@insa-cvl.fr',
-        password: '$Azerty1',
-        permissions: ['tuteur'],
-        yearId: '',
-        departmentId: '',
-        favoriteSubjectsIds: [],
-        difficultSubjectsIds: [],
-        createdPostsIds: [],
-      }
-
-      try {
-        await addDataToUser(dataUser)
-        user = await app.service('users').create(dataUser)
-      } catch (e) {
-        // Error
-      }
-      params.user = user
-
-      post = {
-        comment: 'hello there',
-        type: 'tuteur',
-        startAt: createDate(),
-        duration: 60,
-        studentsCapacity: 15,
-        tutorsCapacity: 2,
-        subjectId: '5ccaea940db44157d84e8c93',
-        roomId: room._id.toString(),
-        studentsIds: [],
-        tutorsIds: [],
-        creatorId: '5ccaea940db44157d84e8c93',
-      }
-      try {
-        post = await app.service('posts').create(post, params)
-      } catch (error) {
-        // An error?
-      }
-    })
-
-    beforeEach(() => {
-      // @ts-ignore
-      context.method = 'remove'
-    })
-
-    it('should throw an error if there is no id', async () => {
-      try {
-        await addRoom()(context)
-      } catch (e) {
-        error = e
-      }
-
-      expect(error).toBeInstanceOf(BadRequest)
-      expect(error.message).toBe('an id is required to add a room')
-    })
-
-    it('should thow an error if the getPost failed', async () => {
-      context.id = 'a fake id !'
-
-      try {
-        await addRoom()(context)
-      } catch (e) {
-        error = e
-      }
-
-      expect(error).toBeInstanceOf(GeneralError)
-      expect(error.message).toBe('impossible to get post')
-    })
-
-    it('should add startAt from the post and the room the data', async () => {
-      context.id = post._id
-
-      try {
-        result = (await addRoom()(context)) as HookContext<Room>
-      } catch (e) {
-        error = e
-      }
-
-      expect(error).toBeNull()
-      expect(result.data).toHaveProperty('startAt')
-      expect(result.data.room).toEqual(room)
-    })
   })
 })

@@ -1,5 +1,5 @@
 import app from '../../../src/app'
-import { MethodNotAllowed } from '@feathersjs/errors'
+import { MethodNotAllowed, Forbidden } from '@feathersjs/errors'
 import addDataToUser from '../../utils/addDataToUser'
 import createDate from '../../utils/createDate'
 import { Paginated, Params } from '@feathersjs/feathers'
@@ -118,14 +118,16 @@ describe(`'${serviceName}' service`, () => {
       expect(error).toBeInstanceOf(MethodNotAllowed)
     })
 
-    it('should not get (disallow)', async () => {
+    it('should not get (disallow external)', async () => {
       expect.assertions(1)
       try {
-        await app.service(serviceName).get('5ed7aeea6d584e7360449989')
+        await app
+          .service(serviceName)
+          .get('5ed7aeea6d584e7360449989', { provider: 'external' })
       } catch (e) {
         error = e
       }
-      expect(error).toBeInstanceOf(MethodNotAllowed)
+      expect(error).toBeInstanceOf(Forbidden)
     })
 
     it('should not create (disallow)', async () => {

@@ -22,6 +22,7 @@ describe("'check-array-content' hook", () => {
       departmentId: '5cdf048e53bc6b09a4b6fbbd',
       favoriteSubjectsIds: ['5cdf048e53bc6b09a4b6fbbd'],
       difficultSubjectsIds: ['5cdf048e53bc6b09a4b6fbbd'],
+      createdPostsIds: [],
     }
     context = {
       app: {} as Application,

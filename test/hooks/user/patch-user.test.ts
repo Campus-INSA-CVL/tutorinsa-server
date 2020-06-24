@@ -1,32 +1,14 @@
 import patchUser from '../../../src/hooks/user/patch-user'
 import app from '../../../src/app'
-import {
-  Post,
-  Room,
-  Calendar,
-  User,
-  UserCore,
-  PostCore,
-} from '../../../src/declarations'
+import { Post, Room, User, UserCore, PostCore } from '../../../src/declarations'
 import addDataToUser from '../../utils/addDataToUser'
 import createDate from '../../utils/createDate'
 import { HookContext, Service, Params, Paginated } from '@feathersjs/feathers'
 import { GeneralError, NotAuthenticated } from '@feathersjs/errors'
 
 describe("'patch-user' hook", () => {
-  let context: HookContext<
-    Post & {
-      room: Room
-      calendar?: Calendar
-    }
-  >
-
-  let result: HookContext<
-    Post & {
-      room: Room
-      calendar?: Calendar
-    }
-  >
+  let context: HookContext<Post>
+  let result: HookContext<Post>
 
   let post: Post
   let user: User
