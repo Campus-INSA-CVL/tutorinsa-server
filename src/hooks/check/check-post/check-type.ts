@@ -13,7 +13,7 @@ export default (fieldName: string, types: string[]): Hook => {
   return async (context: HookContext<Post>) => {
     const { data } = context
 
-    if (data) {
+    if (data?.type) {
       const field = data[fieldName]
       if (
         field &&

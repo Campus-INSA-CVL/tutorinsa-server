@@ -7,7 +7,9 @@ import mongooseLeanVirtuals from 'mongoose-lean-virtuals'
 import moment from '../utils/moment'
 import mongoose from 'mongoose'
 
-import { checkMinutes, checkDate, checkDuration } from './validation/validate'
+import {
+  /* checkMinutes, checkDuration, */ checkDate,
+} from './validation/validate'
 
 const objSchema = {
   comment: {
@@ -22,11 +24,12 @@ const objSchema = {
   },
   startAt: {
     type: Date,
-    validate: [checkMinutes, checkDate],
+    validate: [/* checkMinutes, */ checkDate],
   },
   duration: {
     type: Number,
-    validate: checkDuration,
+    min: 30,
+    // validate: checkDuration,
   },
   studentsCapacity: {
     type: Number,

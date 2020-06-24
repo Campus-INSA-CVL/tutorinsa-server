@@ -1,11 +1,5 @@
 import app from '../../../src/app'
-import {
-  Post,
-  Room,
-  User,
-  Calendar,
-  Subscription,
-} from '../../../src/declarations'
+import { Post, Room, User, Subscription } from '../../../src/declarations'
 import addDataToUser from '../../utils/addDataToUser'
 import createDate from '../../utils/createDate'
 
@@ -68,7 +62,6 @@ describe("'posts' service", () => {
       await app.get('mongooseClient').model(serviceName).find().deleteMany()
       await app.get('mongooseClient').model('rooms').find().deleteMany()
       await app.get('mongooseClient').model('users').find().deleteMany()
-      await app.get('mongooseClient').model('calendars').find().deleteMany()
 
       try {
         room = await app.service('rooms').create(dataRoom)
@@ -224,16 +217,6 @@ describe("'posts' service", () => {
       expect(smallPostResult).toHaveProperty('updatedAt')
     })
 
-    it('should not create a calendar with a small post', async () => {
-      const calendars = (await app
-        .service('calendars')
-        .find({ query: { 'slots.postId': smallPostResult._id } })) as Paginated<
-        Calendar
-      >
-
-      expect(calendars.total).toBe(0)
-    })
-
     it("should have an 'endAt' property", async () => {
       const data = (await app.service(serviceName).find({})) as Paginated<Post>
       expect(data.data[0].endAt).toBeDefined()
@@ -260,7 +243,7 @@ describe("'posts' service", () => {
       try {
         patchedPost = await app
           .service(serviceName)
-          .patch(result._id, data, params)
+          .patch(result._id.toString(), data, params)
       } catch (e) {
         error = e
       }

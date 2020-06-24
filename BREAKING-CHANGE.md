@@ -7,7 +7,7 @@
 - date devient startAt
 - typeof duration string devient number
 
-# calendar become calendars
+# Calendars disapears !
 
 # subscription
 

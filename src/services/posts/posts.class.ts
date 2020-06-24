@@ -1,11 +1,5 @@
 import { Service, MongooseServiceOptions } from 'feathers-mongoose'
-import {
-  Application,
-  Post,
-  Calendar,
-  Room,
-  Subscription,
-} from '../../declarations'
+import { Application, Post, Room, Subscription } from '../../declarations'
 import { Params, Id, NullableId } from '@feathersjs/feathers'
 import { getUserId } from './posts.functions'
 import { updateSubcriptions } from '../users/users.functions'
@@ -20,10 +14,7 @@ export class Posts extends Service {
   async get(id: Id, params: Params) {
     return super.get(id, params)
   }
-  async create(
-    data: Post & { calendar?: Calendar; room?: Room },
-    params: Params
-  ) {
+  async create(data: Post & { room?: Room }, params: Params) {
     const userId = getUserId(params)
     // Add the creator to the correct fields
     data.creatorId = userId

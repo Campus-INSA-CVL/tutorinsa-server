@@ -307,7 +307,7 @@ describe("'ability' hook", () => {
         } as User)
       })
 
-      it.each(['find', 'get'])('should %s', (key) => {
+      it.each(['find', 'get', 'patch'])('should %s', (key) => {
         expect(
           ability.can(key, addSubject(name, { type: 'eleve' }))
         ).toBeTruthy()
@@ -341,7 +341,7 @@ describe("'ability' hook", () => {
         ).toBeTruthy()
       })
 
-      it.each(['update', 'patch'])('should not %s', (key) => {
+      it.each(['update'])('should not %s', (key) => {
         expect(ability.can(key, addSubject(name, post))).toBeFalsy()
       })
 
@@ -362,7 +362,7 @@ describe("'ability' hook", () => {
         } as User)
       })
 
-      it.each(['find', 'get'])('should %s', (key) => {
+      it.each(['find', 'get', 'patch'])('should %s', (key) => {
         expect(
           ability.can(key, addSubject(name, { type: 'eleve' }))
         ).toBeTruthy()
@@ -396,7 +396,7 @@ describe("'ability' hook", () => {
         ).toBeTruthy()
       })
 
-      it.each(['update', 'patch'])('should not %s', (key) => {
+      it.each(['update'])('should not %s', (key) => {
         expect(ability.can(key, addSubject(name, post))).toBeFalsy()
       })
 
@@ -414,7 +414,7 @@ describe("'ability' hook", () => {
         ability = defineAbilityFor({ permissions: ['admin'] } as User)
       })
 
-      it.each(['find', 'get'])('should %s', (key) => {
+      it.each(['find', 'get', 'patch'])('should %s', (key) => {
         expect(
           ability.can(
             key,
@@ -458,7 +458,7 @@ describe("'ability' hook", () => {
         ).toBeTruthy()
       })
 
-      it.each(['update', 'patch'])('should not %s', (key) => {
+      it.each(['update'])('should not %s', (key) => {
         expect(ability.can(key, addSubject(name, post))).toBeFalsy()
       })
 
@@ -526,72 +526,6 @@ describe("'ability' hook", () => {
       it.each(['patch', 'update', 'remove'])('should not %s', (key) => {
         expect(ability.can(key, addSubject(name, room))).toBeFalsy()
       })
-    })
-  })
-
-  describe("'calendars' service", () => {
-    const name = 'calendars'
-    describe('anonymous', () => {
-      beforeAll(() => {
-        ability = defineAbilityFor(undefined)
-      })
-
-      it.each(['find', 'get', 'create', 'update', 'patch', 'remove'])(
-        'should not %s',
-        (key) => {
-          expect(ability.can(key, addSubject(name, {}))).toBeFalsy()
-        }
-      )
-    })
-    describe('student', () => {
-      beforeAll(() => {
-        ability = defineAbilityFor({ permissions: ['eleve'] } as User)
-      })
-
-      it.each(['find', 'get'])('should %s', (key) => {
-        expect(ability.can(key, addSubject(name, {}))).toBeTruthy()
-      })
-
-      it.each(['create', 'update', 'patch', 'remove'])(
-        'should not %s',
-        (key) => {
-          expect(ability.can(key, addSubject(name, {}))).toBeFalsy()
-        }
-      )
-    })
-
-    describe('tutor', () => {
-      beforeAll(() => {
-        ability = defineAbilityFor({ permissions: ['tuteur'] } as User)
-      })
-
-      it.each(['find', 'get'])('should %s', (key) => {
-        expect(ability.can(key, addSubject(name, {}))).toBeTruthy()
-      })
-
-      it.each(['create', 'update', 'patch', 'remove'])(
-        'should not %s',
-        (key) => {
-          expect(ability.can(key, addSubject(name, {}))).toBeFalsy()
-        }
-      )
-    })
-
-    describe('admin', () => {
-      beforeAll(() => {
-        ability = defineAbilityFor({ permissions: ['admin'] } as User)
-      })
-
-      it.each(['find', 'get'])('should %s', (key) => {
-        expect(ability.can(key, addSubject(name, {}))).toBeTruthy()
-      })
-
-      it.each(['create', 'patch', 'update', 'remove'])(
-        'should not %s',
-        (key) => {
-          expect(ability.can(key, addSubject(name, {}))).toBeFalsy()
-        }
-      )
     })
   })
 

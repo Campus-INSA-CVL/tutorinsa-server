@@ -37,9 +37,12 @@ function checkObjectId(value: unknown): boolean {
   return typeof value === 'string' && mongoose.Types.ObjectId.isValid(value)
 }
 
+/**
+ * Add the post using id to the params
+ */
 export default (options = {}): Hook => {
   return async (context: HookContext<Subscription>) => {
-    const { id, params, app } = context
+    const { id, params } = context
 
     if (id && checkObjectId(id)) {
       params.post = await getPost(id, context)

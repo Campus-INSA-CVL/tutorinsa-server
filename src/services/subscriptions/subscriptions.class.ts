@@ -47,10 +47,10 @@ export class Subscriptions implements ServiceMethods<Subscription> {
     data: Subscription,
     params: Params
   ): Promise<Subscription> {
-    const { user } = params
+    const { user, post } = params
 
     // Patch the post and the user for the subcription
-    const options = { subType: data.type, post: params.post, user }
+    const options = { subType: data.type, post, user, provider: null }
 
     const userData = createUserData(data.as, id)
     await patchSubcription(
@@ -63,9 +63,6 @@ export class Subscriptions implements ServiceMethods<Subscription> {
 
     const postData = createPostData(data.as, user._id)
     await patchSubcription(this.app, 'posts', id, postData, options)
-
-    // maybe use makeParams
-    // do all tests
 
     return data
   }

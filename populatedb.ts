@@ -21,7 +21,6 @@ import * as Departments from './src/models/departments.model'
 import * as Rooms from './src/models/rooms.model'
 import * as Users from './src/models/users.model'
 import * as Posts from './src/models/posts.model'
-import * as Calendars from './src/models/calendars.model'
 
 import {
   RoomCampus,
@@ -35,7 +34,7 @@ import {
   User,
   Room,
 } from './src/declarations'
-import { createSlots } from './src/services/calendars/calendars.functions'
+
 /**
  * Connect to the database
  */
@@ -67,7 +66,6 @@ const DepartmentSchema = new Schema(
 const RoomSchema = new Schema(Rooms.objSchema, Rooms.objOptions)
 const UserSchema = new Schema(Users.objSchema, Users.objOptions)
 const PostSchema = new Schema(Posts.objSchema, Posts.objOptions)
-const CalendarSchema = new Schema(Calendars.objSchema, Calendars.objOptions)
 
 /**
  * Add model to mongoose
@@ -78,7 +76,6 @@ const Department = mongoose.model('departments', DepartmentSchema)
 const Room = mongoose.model('rooms', RoomSchema)
 const User = mongoose.model('users', UserSchema)
 const Post = mongoose.model('posts', PostSchema)
-const Calendar = mongoose.model('calendars', CalendarSchema)
 
 /**
  * Store all the data
@@ -169,13 +166,11 @@ function createRoom(
 function createUser(
   lastName: string,
   firstName: string,
-  email: string,
   permissions: UserPermission[],
   year: mongoose.Document,
   department: mongoose.Document,
   favoriteSubjects: mongoose.Document[],
   difficultSubjects: mongoose.Document[],
-  createdPostsIds: mongoose.Document[],
   cb: (e: Error | null, department: mongoose.Document | null) => void
 ) {
   const password =
@@ -183,14 +178,13 @@ function createUser(
   const user = new User({
     lastName,
     firstName,
-    email,
+    email: `${firstName}.${lastName}@insa-cvl.fr`,
     password,
     permissions,
     yearId: year,
     departmentId: department,
     favoriteSubjectsIds: favoriteSubjects,
     difficultSubjectsIds: difficultSubjects,
-    createdPostsIds,
   })
 
   user.save((err) => {
@@ -214,8 +208,6 @@ async function createPost(
   duration?: number,
   studentsCapacity?: number,
   tutorsCapacity?: number,
-  students?: mongoose.Document[],
-  tutors?: mongoose.Document[],
   room?: mongoose.Document
 ) {
   let post: mongoose.Document
@@ -236,8 +228,8 @@ async function createPost(
       duration,
       studentsCapacity,
       tutorsCapacity,
-      studentsIds: students,
-      tutorsIds: tutors,
+      studentsIds: [],
+      tutorsIds: [creator],
       roomId: room,
     })
   }
@@ -272,35 +264,6 @@ async function createPost(
     }
   })
   cb(null, post)
-}
-function createCalendar(
-  room: mongoose.Document | Room,
-  post: mongoose.Document | Post,
-  cb: (e: Error | null, department: mongoose.Document | null) => void
-) {
-  const slots = createSlots(
-    (post as Post).startAt as string,
-    (post as Post).duration as number,
-    (post as Post)._id
-  )
-
-  const calendar = new Calendar({
-    startAt: (room as Room).startAt,
-    duration: (room as Room).duration,
-    roomId: (room as Room)._id,
-    slots,
-  })
-
-  calendar.save((err) => {
-    if (err) {
-      console.error(err)
-      cb(err, null)
-      return
-    }
-    // console.log('New Calendar: ' + calendar)
-    calendars.push(calendar)
-    cb(null, calendar)
-  })
 }
 async function createSubscription(
   post: mongoose.Document | Post,
@@ -390,13 +353,16 @@ function postSubject(cb: () => void) {
   async.series(
     [
       (callback) => {
-        createSubject('eps', callback)
-      },
-      (callback) => {
         createSubject('mathématiques', callback)
       },
       (callback) => {
-        createSubject('lv2', callback)
+        createSubject('algorithme et programmation', callback)
+      },
+      (callback) => {
+        createSubject('thermochimie', callback)
+      },
+      (callback) => {
+        createSubject('optique ondulatoire', callback)
       },
       (callback) => {
         createSubject('résistance des matériaux', callback)
@@ -405,7 +371,55 @@ function postSubject(cb: () => void) {
         createSubject('électronique analogique', callback)
       },
       (callback) => {
+        createSubject('analyse fonctionnelle', callback)
+      },
+      (callback) => {
+        createSubject('anglais', callback)
+      },
+      (callback) => {
+        createSubject('lv2', callback)
+      },
+      (callback) => {
+        createSubject('culture et communication', callback)
+      },
+      (callback) => {
         createSubject('introduction au droit', callback)
+      },
+      (callback) => {
+        createSubject('eps', callback)
+      },
+      (callback) => {
+        createSubject('traitement du signal', callback)
+      },
+      (callback) => {
+        createSubject('introduction aux bases de données', callback)
+      },
+      (callback) => {
+        createSubject('sensibilisation à la sécurité informatique', callback)
+      },
+      (callback) => {
+        createSubject('circuits programmables', callback)
+      },
+      (callback) => {
+        createSubject('électromagnétisme', callback)
+      },
+      (callback) => {
+        createSubject('mécanique des systèmes de solides', callback)
+      },
+      (callback) => {
+        createSubject('cao', callback)
+      },
+      (callback) => {
+        createSubject('électronique numérique', callback)
+      },
+      (callback) => {
+        createSubject('électrotechnique', callback)
+      },
+      (callback) => {
+        createSubject("introduction à l'économie", callback)
+      },
+      (callback) => {
+        createSubject('desssin industriel', callback)
       },
     ],
     cb
@@ -440,16 +454,19 @@ function postDepartment(cb: () => void) {
         createDepartment('stpi', callback)
       },
       (callback) => {
-        createDepartment('sti', callback)
-      },
-      (callback) => {
         createDepartment('gsi', callback)
       },
       (callback) => {
-        createDepartment('enp', callback)
+        createDepartment('sti', callback)
+      },
+      (callback) => {
+        createDepartment('mri', callback)
       },
       (callback) => {
         createDepartment('ere', callback)
+      },
+      (callback) => {
+        createDepartment('enp', callback)
       },
     ],
     cb
@@ -460,10 +477,161 @@ function postRoom(cb: () => void) {
     [
       (callback) => {
         createRoom(
-          'bourges',
-          'e.101',
+          'blois',
+          'b04',
           'lundi',
-          '1970-01-01T16:00:00.000Z',
+          '1970-01-01T18:30:00.000Z',
+          90,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'blois',
+          'b04',
+          'lundi',
+          '1970-01-01T20:00:00.000Z',
+          120,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'blois',
+          'b04',
+          'mardi',
+          '1970-01-01T18:30:00.000Z',
+          90,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'blois',
+          'b04',
+          'mardi',
+          '1970-01-01T20:00:00.000Z',
+          120,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'blois',
+          'b04',
+          'mercredi',
+          '1970-01-01T18:30:00.000Z',
+          90,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'blois',
+          'b04',
+          'mercredi',
+          '1970-01-01T20:00:00.000Z',
+          120,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'blois',
+          'b04',
+          'jeudi',
+          '1970-01-01T14:00:00.000Z',
+          120,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'blois',
+          'b03',
+          'lundi',
+          '1970-01-01T18:30:00.000Z',
+          90,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'blois',
+          'b03',
+          'lundi',
+          '1970-01-01T20:00:00.000Z',
+          120,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'blois',
+          'b03',
+          'mardi',
+          '1970-01-01T18:30:00.000Z',
+          90,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'blois',
+          'b03',
+          'mardi',
+          '1970-01-01T20:00:00.000Z',
+          120,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'blois',
+          'b03',
+          'mercredi',
+          '1970-01-01T18:30:00.000Z',
+          90,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'blois',
+          'b03',
+          'mercredi',
+          '1970-01-01T20:00:00.000Z',
+          120,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'blois',
+          'b03',
+          'jeudi',
+          '1970-01-01T14:00:00.000Z',
+          120,
+          callback
+        )
+      },
+      // 14
+      (callback) => {
+        createRoom(
+          'bourges',
+          'e07',
+          'lundi',
+          '1970-01-01T18:30:00.000Z',
+          90,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'bourges',
+          'e07',
+          'lundi',
+          '1970-01-01T20:00:00.000Z',
           120,
           callback
         )
@@ -471,30 +639,120 @@ function postRoom(cb: () => void) {
       (callback) => {
         createRoom(
           'bourges',
-          'a.001',
+          'e07',
           'mardi',
-          '1970-01-01T18:00:00.000Z',
-          180,
+          '1970-01-01T18:30:00.000Z',
+          90,
           callback
         )
       },
       (callback) => {
         createRoom(
-          'blois',
-          'd.1',
+          'bourges',
+          'e07',
+          'mardi',
+          '1970-01-01T20:00:00.000Z',
+          120,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'bourges',
+          'e07',
+          'mercredi',
+          '1970-01-01T18:30:00.000Z',
+          90,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'bourges',
+          'e07',
+          'mercredi',
+          '1970-01-01T20:00:00.000Z',
+          120,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'bourges',
+          'e07',
           'jeudi',
           '1970-01-01T14:00:00.000Z',
-          150,
+          120,
           callback
         )
       },
       (callback) => {
         createRoom(
-          'blois',
-          'a1.01',
-          'vendredi',
-          '1970-01-01T19:30:00.000Z',
-          60,
+          'bourges',
+          'e106',
+          'lundi',
+          '1970-01-01T18:30:00.000Z',
+          90,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'bourges',
+          'e106',
+          'lundi',
+          '1970-01-01T20:00:00.000Z',
+          120,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'bourges',
+          'e106',
+          'mardi',
+          '1970-01-01T18:30:00.000Z',
+          90,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'bourges',
+          'e106',
+          'mardi',
+          '1970-01-01T20:00:00.000Z',
+          120,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'bourges',
+          'e106',
+          'mercredi',
+          '1970-01-01T18:30:00.000Z',
+          90,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'bourges',
+          'e106',
+          'mercredi',
+          '1970-01-01T20:00:00.000Z',
+          120,
+          callback
+        )
+      },
+      (callback) => {
+        createRoom(
+          'bourges',
+          'e106',
+          'jeudi',
+          '1970-01-01T14:00:00.000Z',
+          120,
           callback
         )
       },
@@ -507,71 +765,313 @@ function postUser(cb: () => void) {
     [
       (callback) => {
         createUser(
-          'Park',
-          'Paul',
-          'paul.park@insa-cvl.fr',
+          'Dustriel',
+          'Firmin',
+          ['tuteur'],
+          years[0],
+          departments[0],
+          [subjects[0], subjects[1], subjects[2]],
+          [],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Sicard',
+          'Damiane',
           ['eleve'],
           years[0],
           departments[0],
-          [subjects[0], subjects[1]],
-          [subjects[2]],
+          [subjects[1], subjects[2]],
+          [subjects[3]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Arnoux',
+          'Pauline',
+          ['eleve', 'tuteur'],
+          years[0],
+          departments[0],
+          [subjects[3]],
+          [subjects[4], subjects[5]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Lazare',
+          'Garcin',
+          ['eleve'],
+          years[0],
+          departments[0],
+          [],
+          [subjects[4], subjects[5], subjects[6]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Hic',
+          'Hyppolite',
+          ['tuteur'],
+          years[0],
+          departments[0],
+          [subjects[5], subjects[6], subjects[7]],
           [],
           callback
         )
       },
       (callback) => {
         createUser(
-          'Simmons',
-          'Amber',
-          'amber.simmons@insa-cvl.fr',
-          ['tuteur', 'eleve'],
+          'Duffet',
+          'André',
+          ['eleve'],
           years[1],
           departments[1],
-          [subjects[1], subjects[2]],
-          [subjects[3], subjects[4]],
+          [subjects[6], subjects[7], subjects[8]],
           [],
           callback
         )
       },
       (callback) => {
         createUser(
-          'Hill',
-          'Jake',
-          'jake.hill@insa-cvl.fr',
+          'Hépipioli',
+          'Jeff',
+          ['eleve', 'tuteur'],
+          years[1],
+          departments[2],
+          [subjects[7]],
+          [subjects[8], subjects[9]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Thibodeau',
+          'Verrill',
+          ['eleve'],
+          years[1],
+          departments[3],
+          [subjects[8], subjects[9]],
+          [subjects[10]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Porte',
+          'Matéo',
+          ['tuteur'],
+          years[1],
+          departments[5],
+          [],
+          [subjects[9], subjects[10], subjects[11]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Bazinet',
+          'Suzette',
+          ['eleve'],
+          years[1],
+          departments[5],
+          [subjects[10], subjects[11], subjects[12]],
+          [],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Roïd',
+          'Paula',
+          ['eleve', 'tuteur'],
+          years[2],
+          departments[1],
+          [subjects[11], subjects[12]],
+          [subjects[13]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Gaillou',
+          'Langley',
           ['eleve'],
           years[2],
           departments[2],
-          [subjects[2]],
-          [subjects[4], subjects[5]],
-          [],
+          [subjects[12]],
+          [subjects[13], subjects[14]],
           callback
         )
       },
       (callback) => {
         createUser(
-          'admin',
-          'admin',
-          'admin.admin@insa-cvl.fr',
-          ['admin'],
+          'Moïse',
+          'Archaimbau',
+          ['tuteur'],
+          years[2],
+          departments[3],
+          [subjects[13], subjects[14]],
+          [subjects[15]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Fecteau',
+          'Afrodille',
+          ['eleve'],
+          years[2],
+          departments[4],
+          [],
+          [subjects[14], subjects[15], subjects[16]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Édouard',
+          'Christiane',
+          ['eleve', 'tuteur'],
+          years[2],
+          departments[5],
+          [subjects[15], subjects[16]],
+          [subjects[17]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Troijours',
+          'Adam',
+          ['eleve'],
+          years[3],
+          departments[1],
+          [subjects[16], subjects[17]],
+          [subjects[18]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Épan',
+          'Ahmed',
+          ['tuteur'],
+          years[3],
+          departments[2],
+          [subjects[17]],
+          [subjects[18], subjects[19]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Allard',
+          'Felicien',
+          ['eleve'],
+          years[3],
+          departments[3],
+          [subjects[18], subjects[19]],
+          [subjects[20]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Pique',
+          'Sam',
+          ['eleve', 'tuteur'],
           years[3],
           departments[4],
-          [subjects[2]],
-          [subjects[4], subjects[5]],
           [],
+          [subjects[19], subjects[20], subjects[21]],
           callback
         )
       },
       (callback) => {
         createUser(
-          'Chester',
-          'Wilson',
-          'wilson.chester@insa-cvl.fr',
+          'Turcotte',
+          'Odo',
+          ['eleve'],
+          years[3],
+          departments[5],
+          [subjects[20], subjects[21]],
+          [subjects[22]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Denis',
+          'Pansy',
           ['tuteur'],
-          years[1],
-          departments[0],
-          [subjects[2]],
-          [subjects[4], subjects[3]],
+          years[4],
+          departments[1],
+          [subjects[2], subjects[4]],
+          [subjects[6]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'René',
+          'Vaden',
+          ['eleve'],
+          years[4],
+          departments[2],
+          [subjects[8]],
+          [subjects[10], subjects[12]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Fréchit',
+          'Sarah',
+          ['eleve', 'tuteur'],
+          years[4],
+          departments[3],
+          [subjects[14], subjects[16]],
+          [subjects[18]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Pariseau',
+          'Oriel',
+          ['eleve'],
+          years[4],
+          departments[4],
           [],
+          [subjects[20], subjects[22], subjects[1]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'Akepourlui',
+          'Yann',
+          ['tuteur'],
+          years[4],
+          departments[5],
+          [subjects[3], subjects[5]],
+          [subjects[7]],
+          callback
+        )
+      },
+      (callback) => {
+        createUser(
+          'admin',
+          'admin',
+          ['admin'],
+          years[0],
+          departments[0],
+          [subjects[0]],
+          [subjects[0]],
           callback
         )
       },
@@ -582,18 +1082,19 @@ function postUser(cb: () => void) {
 function postPost(cb: () => void) {
   async.series(
     [
+      // Tuteur
       (callback) => {
         createPost(
-          'so cool!',
+          'Be careful you might learn here!',
           'tuteur',
           subjects[0],
-          users[1],
+          users[0],
           callback,
           moment
             .utc()
             .day('lundi')
             .weekday(7)
-            .hour(18)
+            .hour(19)
             .minutes(0)
             .seconds(0)
             .milliseconds(0)
@@ -601,65 +1102,212 @@ function postPost(cb: () => void) {
           60,
           15,
           2,
-          [],
-          [users[1]],
           rooms[0]
         )
       },
       (callback) => {
         createPost(
-          'love to teach to other students!',
+          'TutorINSA is so funny !',
           'tuteur',
           subjects[2],
-          users[1],
+          users[2],
           callback,
           moment
             .utc()
-            .day('jeudi')
-            .weekday(7)
-            .hour(14)
-            .minutes(0)
+            .day('mardi')
+            .weekday(8)
+            .hour(18)
+            .minutes(30)
             .seconds(0)
             .milliseconds(0)
             .toISOString(),
           90,
           20,
-          5,
-          [],
-          [users[1]],
-          rooms[3]
+          3,
+          rooms[2]
         )
       },
       (callback) => {
         createPost(
-          "you're welcome to learn new things !",
-          'eleve',
+          'Yeah yeah you seem knowledgeable you!',
+          'tuteur',
           subjects[4],
+          users[4],
+          callback,
+          moment
+            .utc()
+            .day('mercredi')
+            .weekday(9)
+            .hour(20)
+            .minutes(20)
+            .seconds(0)
+            .milliseconds(0)
+            .toISOString(),
+          70,
+          14,
+          1,
+          rooms[5]
+        )
+      },
+      (callback) => {
+        createPost(
+          'You will learn so many things!',
+          'tuteur',
+          subjects[6],
+          users[6],
+          callback,
+          moment
+            .utc()
+            .day('lundi')
+            .weekday(14)
+            .hour(18)
+            .minutes(45)
+            .seconds(0)
+            .milliseconds(0)
+            .toISOString(),
+          75,
+          18,
+          5,
+          rooms[14]
+        )
+      },
+      (callback) => {
+        createPost(
+          'Here, we save some semesters!',
+          'tuteur',
+          subjects[8],
+          users[8],
+          callback,
+          moment
+            .utc()
+            .day('jeudi')
+            .weekday(10)
+            .hour(14)
+            .minutes(0)
+            .seconds(0)
+            .milliseconds(0)
+            .toISOString(),
+          60,
+          20,
+          5,
+          rooms[20]
+        )
+      },
+      (callback) => {
+        createPost(
+          'Just because we are the best!',
+          'tuteur',
+          subjects[10],
+          users[10],
+          callback,
+          moment
+            .utc()
+            .day('lundi')
+            .weekday(21)
+            .hour(20)
+            .minutes(15)
+            .seconds(0)
+            .milliseconds(0)
+            .toISOString(),
+          45,
+          20,
+          4,
+          rooms[24]
+        )
+      },
+      // Eleve
+      (callback) => {
+        createPost(
+          'please I need help to undersantd this subject !',
+          'eleve',
+          subjects[1],
           users[1],
           callback
         )
       },
       (callback) => {
         createPost(
-          'please I need help to undersantd this subject !',
+          'can someone explain me this ?',
           'eleve',
-          subjects[5],
-          users[2],
+          subjects[3],
+          users[3],
           callback
         )
       },
-    ],
-    cb
-  )
-}
-function postCalendar(cb: () => void) {
-  async.series(
-    [
       (callback) => {
-        createCalendar(rooms[0], posts[0], callback)
+        createPost(
+          'can someone save my year, pls !',
+          'eleve',
+          subjects[5],
+          users[5],
+          callback
+        )
       },
       (callback) => {
-        createCalendar(rooms[3], posts[1], callback)
+        createPost(
+          'I think your better than me !',
+          'eleve',
+          subjects[7],
+          users[7],
+          callback
+        )
+      },
+      (callback) => {
+        createPost(
+          'Will I be able to complete this semester ?',
+          'eleve',
+          subjects[9],
+          users[9],
+          callback
+        )
+      },
+      (callback) => {
+        createPost(
+          "I 'm not the best, so I need help",
+          'eleve',
+          subjects[11],
+          users[11],
+          callback
+        )
+      },
+      (callback) => {
+        createPost(
+          'Can you help me to understand this subject ?',
+          'eleve',
+          subjects[13],
+          users[13],
+          callback
+        )
+      },
+      (callback) => {
+        createPost(
+          'Heho ! Need help',
+          'eleve',
+          subjects[15],
+          users[15],
+          callback
+        )
+      },
+      (callback) => {
+        createPost('Please ?', 'eleve', subjects[19], users[19], callback)
+      },
+      (callback) => {
+        createPost(
+          "I now, I'm late but please !",
+          'eleve',
+          subjects[21],
+          users[21],
+          callback
+        )
+      },
+      (callback) => {
+        createPost(
+          'Your mission is to save my semester !',
+          'eleve',
+          subjects[22],
+          users[23],
+          callback
+        )
       },
     ],
     cb
@@ -668,17 +1316,128 @@ function postCalendar(cb: () => void) {
 function subscribe(cb: () => void) {
   async.series(
     [
+      // 0
       (callback) => {
-        createSubscription(posts[0], users[0], 'eleve', callback)
+        createSubscription(posts[0], users[9], 'eleve', callback)
       },
       (callback) => {
-        createSubscription(posts[0], users[2], 'eleve', callback)
+        createSubscription(posts[0], users[10], 'eleve', callback)
       },
       (callback) => {
-        createSubscription(posts[1], users[2], 'eleve', callback)
+        createSubscription(posts[0], users[11], 'eleve', callback)
       },
       (callback) => {
-        createSubscription(posts[0], users[4], 'tuteur', callback)
+        createSubscription(posts[0], users[13], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[0], users[14], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[0], users[12], 'tuteur', callback)
+      },
+      // 1
+      (callback) => {
+        createSubscription(posts[1], users[15], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[1], users[17], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[1], users[18], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[1], users[19], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[1], users[21], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[1], users[12], 'tuteur', callback)
+      },
+      (callback) => {
+        createSubscription(posts[1], users[14], 'tuteur', callback)
+      },
+      // 2
+      (callback) => {
+        createSubscription(posts[2], users[22], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[2], users[23], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[2], users[1], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[2], users[2], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[2], users[3], 'eleve', callback)
+      },
+      // 3
+      (callback) => {
+        createSubscription(posts[3], users[5], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[3], users[23], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[3], users[7], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[3], users[9], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[3], users[10], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[3], users[16], 'tuteur', callback)
+      },
+      (callback) => {
+        createSubscription(posts[3], users[18], 'tuteur', callback)
+      },
+      (callback) => {
+        createSubscription(posts[3], users[20], 'tuteur', callback)
+      },
+      // 4
+      (callback) => {
+        createSubscription(posts[4], users[11], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[4], users[13], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[4], users[14], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[4], users[15], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[4], users[17], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[4], users[24], 'tuteur', callback)
+      },
+      // 5
+      (callback) => {
+        createSubscription(posts[5], users[18], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[5], users[19], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[5], users[21], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[5], users[22], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[5], users[23], 'eleve', callback)
+      },
+      (callback) => {
+        createSubscription(posts[5], users[0], 'tuteur', callback)
+      },
+      (callback) => {
+        createSubscription(posts[5], users[2], 'tuteur', callback)
       },
     ],
     cb
@@ -733,13 +1492,6 @@ function removeAll(cb: () => void): void {
         })
         callback(null, 'All Posts deleted')
       },
-      (callback) => {
-        Calendar.deleteMany({}).catch((err) => {
-          callback(err, null)
-          return
-        })
-        callback(null, 'All Calendar deleted')
-      },
     ],
     cb
   )
@@ -757,7 +1509,6 @@ async.series(
     postRoom,
     postUser,
     postPost,
-    postCalendar,
     subscribe,
   ], // Optional callback
   (err, results) => {

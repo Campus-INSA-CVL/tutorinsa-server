@@ -84,6 +84,7 @@ export default function defineAbilitiesFor(user: User): Ability {
         'departmentId',
         'favoriteSubjectsIds',
         'difficultSubjectsIds',
+        'permissions',
       ],
       { _id: user._id }
     )
@@ -140,6 +141,15 @@ export default function defineAbilitiesFor(user: User): Ability {
       'tutors',
       '__v',
     ])
+    can('patch', 'posts', [
+      'comment',
+      'startAt',
+      'duration',
+      'studentsCapacity',
+      'tutorsCapacity',
+      'subjectId',
+      'roomId',
+    ])
     can('remove', 'posts', { creatorId: user._id })
 
     can(['find', 'get'], 'rooms', [
@@ -150,17 +160,6 @@ export default function defineAbilitiesFor(user: User): Ability {
       'startAt',
       'duration',
       'endAt',
-      '__v',
-    ])
-
-    can(['find', 'get'], 'calendars', [
-      '_id',
-      'startAt',
-      'duration',
-      'roomId',
-      'slots',
-      'full',
-      'room',
       '__v',
     ])
 

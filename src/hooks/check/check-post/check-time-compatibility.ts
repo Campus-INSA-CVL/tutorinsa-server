@@ -90,32 +90,29 @@ function endAt(startAt: string, duration: number): string {
  * Check that time from post and the room provided are compatible
  */
 export default (options = {}): Hook => {
-  return async (context: HookContext<Post & { room: Room }>) => {
-    const { data, method } = context
+  return async (context: HookContext<Post>) => {
+    const { data, method, params } = context
 
-    if (data) {
-      switch (method) {
-        case 'create':
-          if (!data.room) {
-            throw new GeneralError('no room provided to check calendars')
-          }
-
-          const time: Time = {
-            startRoom: moment.utc(data.room.startAt).toDate(),
-            endRoom: moment.utc(data.room.endAt as string).toDate(),
-            startPost: moment.utc(data.startAt).toDate(),
-            endPost: moment.utc(endAt(data.startAt!, data.duration!)).toDate(),
-          }
-
-          checkStartTime(time)
-
-          checkEndTime(time)
-
-          break
-        /* istanbul ignore next */
-        default:
-          break
+    if (data?.startAt || data?.duration || data?.roomId) {
+      if (!params.room) {
+        throw new GeneralError(
+          'no room provided to check the time compatibility'
+        )
       }
+
+      const startPost = data.startAt ?? params.post.startAt
+      const durationPost = data.duration ?? params.post.duration
+
+      const time: Time = {
+        startRoom: moment.utc(params.room.startAt).toDate(),
+        endRoom: moment.utc(params.room.endAt as string).toDate(),
+        startPost: moment.utc(startPost).toDate(),
+        endPost: moment.utc(endAt(startPost, durationPost)).toDate(),
+      }
+
+      checkStartTime(time)
+
+      checkEndTime(time)
     }
     return context
   }

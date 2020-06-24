@@ -22,7 +22,7 @@ const options: {
     format.label({
       label: path.basename(process.mainModule!?.filename ?? 'test'),
     }),
-    format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' })
+    format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' })
   ),
   transports: [],
   exitOnError: false,

@@ -126,14 +126,12 @@ operations:
                   #       _id,comment,type,date,duration,subject
                   #   - - read
                   #       rooms
-                  #   - - read
-                  #       calendar
                   #   - - update
                   #       subscription
                   #   - - read,update,delete
                   #       users
                   #   - - create,update,delete
-                  #       subjects,years,departments,rooms,calendar
+                  #       subjects,years,departments,rooms
                   #   - - create,update,delete
                   #       posts
                   iat: 1586471119

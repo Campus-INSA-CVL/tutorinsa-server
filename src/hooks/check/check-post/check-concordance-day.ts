@@ -2,7 +2,7 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import { Hook, HookContext } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
-import { Post, Room } from '../../../declarations'
+import { Post } from '../../../declarations'
 
 import moment from '../../../utils/moment'
 /**
@@ -19,15 +19,18 @@ function isSameDay(startAtPost: string, dayRoom: string): boolean {
  * Check that the day of the post is the same that the day of the room
  */
 export default (options = {}): Hook => {
-  return async (context: HookContext<Post & { room: Room }>) => {
-    const { data } = context
+  return async (context: HookContext<Post>) => {
+    const { data, params } = context
 
-    if (data?.room && data?.startAt) {
-      if (!isSameDay(data.startAt, data.room.day)) {
+    const roomDay = params.room?.day
+    const postStartAt = data?.startAt ?? params.post?.startAt
+
+    if (roomDay && postStartAt) {
+      if (!isSameDay(postStartAt, roomDay)) {
         throw new BadRequest(
-          `day of post (${new Date(data.startAt).getUTCDay()}) and the room (${
-            data.room.day
-          }) must be the same`
+          `day of post (${
+            moment.weekdays()[new Date(postStartAt).getUTCDay()]
+          }) and the room (${roomDay}) must be the same`
         )
       }
     }

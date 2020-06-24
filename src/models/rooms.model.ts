@@ -6,7 +6,7 @@ import { Application, Room } from '../declarations'
 import mongooseLeanVirtuals from 'mongoose-lean-virtuals'
 import moment from '../utils/moment'
 
-import { checkMinutes, checkDuration } from './validation/validate'
+// import /* checkMinutes, checkDuration */ './validation/validate'
 
 const objSchema = {
   campus: {
@@ -29,12 +29,13 @@ const objSchema = {
   startAt: {
     type: Date,
     required: true,
-    validate: checkMinutes,
+    // validate: checkMinutes,
   },
   duration: {
     type: Number,
     required: true,
-    validate: checkDuration,
+    min: 30,
+    // validate: checkDuration,
   },
 }
 
