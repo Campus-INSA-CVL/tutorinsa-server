@@ -25,9 +25,9 @@ async function getRoom(app: Application, roomId: Id): Promise<Room> {
  */
 export default (options = {}): Hook => {
   return async (context: HookContext) => {
-    const { app, data, method, id, params } = context
+    const { app, data, params } = context
 
-    if (data?.roomId || (params.post as Post).roomId) {
+    if (data?.roomId || (params.post as Post)?.roomId) {
       params.room = await getRoom(
         app,
         data.roomId ?? (params.post as Post).roomId

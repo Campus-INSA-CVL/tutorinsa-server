@@ -120,32 +120,35 @@ export default {
     ],
     update: [disallow()],
     patch: [
-      addPost(),
-      iffElse(
-        isPost('tuteur'),
-        removeUnwantedFields([...unwantedTutorFields, 'type']),
-        removeUnwantedFields(unwantedStudentFields)
-      ),
-      iffElse(
-        isPost('tuteur'),
-        checkData(checkDataTutorOptions),
-        checkData(checkDataStudentOptions)
-      ),
-      checkDuplicate(),
-      checkIds(),
-      checkMinDuration(),
-      checkType('type', typesOptions),
-      checkLength(),
-      normalizeDate(['startAt']),
       iff(
-        isPost('tuteur'),
-        checkCapacity(),
-        checkTime(),
-        // checkDate(),
-        addRoom(),
-        checkConcordanceDay(),
-        checkTimeCompatibility(),
-        checkDisponibility()
+        isProvider('external'),
+        addPost(),
+        iffElse(
+          isPost('tuteur'),
+          removeUnwantedFields([...unwantedTutorFields, 'type']),
+          removeUnwantedFields(unwantedStudentFields)
+        ),
+        iffElse(
+          isPost('tuteur'),
+          checkData(checkDataTutorOptions),
+          checkData(checkDataStudentOptions)
+        ),
+        checkDuplicate(),
+        checkIds(),
+        checkMinDuration(),
+        checkType('type', typesOptions),
+        checkLength(),
+        normalizeDate(['startAt']),
+        iff(
+          isPost('tuteur'),
+          checkCapacity(),
+          checkTime(),
+          // checkDate(),
+          addRoom(),
+          checkConcordanceDay(),
+          checkTimeCompatibility(),
+          checkDisponibility()
+        )
       ),
     ],
     remove: [],
@@ -163,8 +166,6 @@ export default {
     update: [],
     patch: [
       // patchUser([['createdPostsIds', '_id', 'array']]),
-      // createCalendar(),
-      // patchCalendar('patch'),
     ],
     remove: [
       patchUser([['createdPostsIds', '_id', 'array']]),

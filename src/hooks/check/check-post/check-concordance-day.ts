@@ -2,7 +2,7 @@
 // For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
 import { Hook, HookContext } from '@feathersjs/feathers'
 import { BadRequest } from '@feathersjs/errors'
-import { Post, Room } from '../../../declarations'
+import { Post } from '../../../declarations'
 
 import moment from '../../../utils/moment'
 /**
@@ -22,12 +22,15 @@ export default (options = {}): Hook => {
   return async (context: HookContext<Post>) => {
     const { data, params } = context
 
-    if (params?.room && data?.startAt) {
-      if (!isSameDay(data.startAt, params.room.day)) {
+    const roomDay = params.room?.day
+    const postStartAt = data?.startAt ?? params.post?.startAt
+
+    if (roomDay && postStartAt) {
+      if (!isSameDay(postStartAt, roomDay)) {
         throw new BadRequest(
           `day of post (${
-            moment.weekdays()[new Date(data.startAt).getUTCDay()]
-          }) and the room (${params.room.day}) must be the same`
+            moment.weekdays()[new Date(postStartAt).getUTCDay()]
+          }) and the room (${roomDay}) must be the same`
         )
       }
     }
