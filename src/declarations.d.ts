@@ -124,7 +124,7 @@ export interface PostCore {
   type: PostType
   startAt?: string
   duration?: number
-  campus: Campus
+  campus?: Campus
   studentsCapacity?: number
   tutorsCapacity?: number
   subjectId: Id
