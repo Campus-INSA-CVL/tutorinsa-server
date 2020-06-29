@@ -116,8 +116,8 @@ export default {
       await joinId(context, 'room', post, 'roomId', 'room'),
     creator: () => async (post: Post, context: LoaderContext) =>
       await joinId(context, 'user', post, 'creatorId', 'creator'),
-    students: () => async (post: Post, context: LoaderContext) =>
-      await joinId(context, 'user', post, 'studentsIds', 'students'),
+    // students: () => async (post: Post, context: LoaderContext) =>
+    //   await joinId(context, 'user', post, 'studentsIds', 'students'),
     tutors: () => async (post: Post, context: LoaderContext) =>
       await joinId(context, 'user', post, 'tutorsIds', 'tutors'),
   },

@@ -49,8 +49,11 @@ export default function defineAbilitiesFor(user: User): Ability {
     'type',
     'startAt',
     'duration',
+    'campus',
     'subjectId',
     'subject',
+    'createdAt',
+    'endAt',
     '__v',
   ])
 
@@ -96,6 +99,7 @@ export default function defineAbilitiesFor(user: User): Ability {
       'type',
       'startAt',
       'duration',
+      'campus',
       'studentsCapacity',
       'tutorsCapacity',
       'subjectId',
@@ -122,6 +126,7 @@ export default function defineAbilitiesFor(user: User): Ability {
       'type',
       'startAt',
       'duration',
+      'campus',
       'studentsCapacity',
       'tutorsCapacity',
       'subjectId',
@@ -145,6 +150,7 @@ export default function defineAbilitiesFor(user: User): Ability {
       'comment',
       'startAt',
       'duration',
+      'campus',
       'studentsCapacity',
       'tutorsCapacity',
       'subjectId',
@@ -166,7 +172,7 @@ export default function defineAbilitiesFor(user: User): Ability {
     can(['patch'], 'subscriptions', ['as', 'type'])
 
     if (is('eleve', user)) {
-      can('create', 'posts', ['comment', 'type', 'subjectId'], {
+      can('create', 'posts', ['comment', 'type', 'subjectId', 'campus'], {
         type: 'eleve',
       })
     }
@@ -199,6 +205,7 @@ export default function defineAbilitiesFor(user: User): Ability {
         'type',
         'startAt',
         'duration',
+        'campus',
         'studentsCapacity',
         'tutorsCapacity',
         'subjectId',
@@ -224,6 +231,7 @@ export default function defineAbilitiesFor(user: User): Ability {
         'type',
         'startAt',
         'duration',
+        'campus',
         'studentsCapacity',
         'tutorsCapacity',
         'subjectId',
@@ -251,6 +259,7 @@ export default function defineAbilitiesFor(user: User): Ability {
           'type',
           'startAt',
           'duration',
+          'campus',
           'studentsCapacity',
           'tutorsCapacity',
           'subjectId',
