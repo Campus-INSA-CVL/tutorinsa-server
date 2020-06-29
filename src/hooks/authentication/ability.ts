@@ -51,11 +51,15 @@ export default function defineAbilitiesFor(user: User): Ability {
     'duration',
     'campus',
     'subjectId',
+    'roomId',
     'subject',
+    'room',
     'createdAt',
     'endAt',
     '__v',
   ])
+
+  can('find', 'rooms', ['_id', 'campus', '__v'])
 
   if (user) {
     can('find', 'users', [
