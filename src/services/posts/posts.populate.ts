@@ -36,7 +36,10 @@ function createBatchLoader(
       try {
         result = await app.service(serviceName).find(
           callingParams({
-            query: { _id: { $in: getUniqueKeys(keys) } },
+            query: {
+              _id: { $in: getUniqueKeys(keys) },
+              $limit: app.get('paginate').max,
+            },
             propNames: ['user', 'authentication', 'ability'],
             newProps: { provider: 'external' },
           })(context)
