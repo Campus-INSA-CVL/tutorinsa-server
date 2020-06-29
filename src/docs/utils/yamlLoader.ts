@@ -16,7 +16,7 @@ const loader = (name: string): object => {
   try {
     const filename = path.join(__dirname, '..', name)
     const contents = fs.readFileSync(filename, 'utf8')
-    data = yaml.safeLoad(contents)
+    data = yaml.safeLoad(contents) as object
   } catch (e) {
     logger.error(e)
     data = {}
