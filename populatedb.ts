@@ -12,7 +12,7 @@ if (!userArgs.length) {
 }
 
 import async from 'async'
-import mongoose from 'mongoose'
+import mongoose, { Mongoose } from 'mongoose'
 import moment from 'moment'
 
 import * as Subjects from './src/models/subjects.model'
@@ -23,7 +23,6 @@ import * as Users from './src/models/users.model'
 import * as Posts from './src/models/posts.model'
 
 import {
-  RoomCampus,
   RoomDays,
   UserPermission,
   Year,
@@ -33,6 +32,7 @@ import {
   PostType,
   User,
   Room,
+  Campus,
 } from './src/declarations'
 
 /**
@@ -86,7 +86,6 @@ const departments: mongoose.Document[] = []
 const rooms: mongoose.Document[] = []
 const users: mongoose.Document[] = []
 const posts: mongoose.Document[] = []
-const calendars: mongoose.Document[] = []
 
 /**
  * Create a document
@@ -143,7 +142,7 @@ function createDepartment(
   })
 }
 function createRoom(
-  campus: RoomCampus,
+  campus: Campus,
   name: string,
   day: RoomDays,
   startAt: string,
@@ -204,6 +203,7 @@ async function createPost(
   subject: mongoose.Document,
   creator: mongoose.Document | User,
   cb: (e: Error | null, department: mongoose.Document | null) => void,
+  campus?: Campus,
   startAt?: string,
   duration?: number,
   studentsCapacity?: number,
@@ -217,6 +217,7 @@ async function createPost(
       type,
       subjectId: subject,
       creatorId: creator,
+      campus,
     })
   } else {
     post = new Post({
@@ -1090,6 +1091,7 @@ function postPost(cb: () => void) {
           subjects[0],
           users[0],
           callback,
+          '' as Campus,
           moment
             .utc()
             .day('lundi')
@@ -1112,6 +1114,7 @@ function postPost(cb: () => void) {
           subjects[2],
           users[2],
           callback,
+          '' as Campus,
           moment
             .utc()
             .day('mardi')
@@ -1134,6 +1137,7 @@ function postPost(cb: () => void) {
           subjects[4],
           users[4],
           callback,
+          '' as Campus,
           moment
             .utc()
             .day('mercredi')
@@ -1156,6 +1160,7 @@ function postPost(cb: () => void) {
           subjects[6],
           users[6],
           callback,
+          '' as Campus,
           moment
             .utc()
             .day('lundi')
@@ -1178,6 +1183,7 @@ function postPost(cb: () => void) {
           subjects[8],
           users[8],
           callback,
+          '' as Campus,
           moment
             .utc()
             .day('jeudi')
@@ -1200,6 +1206,7 @@ function postPost(cb: () => void) {
           subjects[10],
           users[10],
           callback,
+          '' as Campus,
           moment
             .utc()
             .day('lundi')
@@ -1222,7 +1229,8 @@ function postPost(cb: () => void) {
           'eleve',
           subjects[1],
           users[1],
-          callback
+          callback,
+          'bourges'
         )
       },
       (callback) => {
@@ -1231,7 +1239,8 @@ function postPost(cb: () => void) {
           'eleve',
           subjects[3],
           users[3],
-          callback
+          callback,
+          'bourges'
         )
       },
       (callback) => {
@@ -1240,7 +1249,8 @@ function postPost(cb: () => void) {
           'eleve',
           subjects[5],
           users[5],
-          callback
+          callback,
+          'bourges'
         )
       },
       (callback) => {
@@ -1249,7 +1259,8 @@ function postPost(cb: () => void) {
           'eleve',
           subjects[7],
           users[7],
-          callback
+          callback,
+          'bourges'
         )
       },
       (callback) => {
@@ -1258,7 +1269,8 @@ function postPost(cb: () => void) {
           'eleve',
           subjects[9],
           users[9],
-          callback
+          callback,
+          'bourges'
         )
       },
       (callback) => {
@@ -1267,7 +1279,8 @@ function postPost(cb: () => void) {
           'eleve',
           subjects[11],
           users[11],
-          callback
+          callback,
+          'bourges'
         )
       },
       (callback) => {
@@ -1285,7 +1298,8 @@ function postPost(cb: () => void) {
           'eleve',
           subjects[15],
           users[15],
-          callback
+          callback,
+          'blois'
         )
       },
       (callback) => {
@@ -1297,7 +1311,8 @@ function postPost(cb: () => void) {
           'eleve',
           subjects[21],
           users[21],
-          callback
+          callback,
+          'blois'
         )
       },
       (callback) => {
@@ -1306,7 +1321,8 @@ function postPost(cb: () => void) {
           'eleve',
           subjects[22],
           users[23],
-          callback
+          callback,
+          'blois'
         )
       },
     ],
