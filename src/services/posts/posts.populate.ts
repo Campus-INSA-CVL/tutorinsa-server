@@ -36,7 +36,10 @@ function createBatchLoader(
       try {
         result = await app.service(serviceName).find(
           callingParams({
-            query: { _id: { $in: getUniqueKeys(keys) } },
+            query: {
+              _id: { $in: getUniqueKeys(keys) },
+              $limit: app.get('paginate').max,
+            },
             propNames: ['user', 'authentication', 'ability'],
             newProps: { provider: 'external' },
           })(context)
@@ -113,8 +116,8 @@ export default {
       await joinId(context, 'room', post, 'roomId', 'room'),
     creator: () => async (post: Post, context: LoaderContext) =>
       await joinId(context, 'user', post, 'creatorId', 'creator'),
-    students: () => async (post: Post, context: LoaderContext) =>
-      await joinId(context, 'user', post, 'studentsIds', 'students'),
+    // students: () => async (post: Post, context: LoaderContext) =>
+    //   await joinId(context, 'user', post, 'studentsIds', 'students'),
     tutors: () => async (post: Post, context: LoaderContext) =>
       await joinId(context, 'user', post, 'tutorsIds', 'tutors'),
   },

@@ -50,7 +50,7 @@ export type Department = DepartmentCore & {
   [key: string]: Id | string | undefined
 }
 
-export type RoomCampus = 'blois' | 'bourges'
+export type Campus = 'blois' | 'bourges'
 
 export type RoomDays =
   | 'lundi'
@@ -63,7 +63,7 @@ export type RoomDays =
 
 export interface RoomCore {
   _id?: Id
-  campus: RoomCampus
+  campus: Campus
   name: string
   day: RoomDays
   startAt: string
@@ -76,7 +76,7 @@ export interface RoomCore {
 }
 
 export type Room = RoomCore & {
-  [key: string]: string | number | RoomCampus | RoomDays | undefined | Id
+  [key: string]: string | number | Campus | RoomDays | undefined | Id
 }
 
 export type UserPermission = 'eleve' | 'tuteur' | 'admin'
@@ -124,6 +124,7 @@ export interface PostCore {
   type: PostType
   startAt?: string
   duration?: number
+  campus?: Campus
   studentsCapacity?: number
   tutorsCapacity?: number
   subjectId: Id

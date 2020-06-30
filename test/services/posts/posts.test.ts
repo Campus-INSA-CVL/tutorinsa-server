@@ -96,6 +96,7 @@ describe("'posts' service", () => {
         comment: 'hello small',
         type: 'eleve',
         subjectId: '5ccaea940db44157d84e8c93',
+        campus: 'blois',
       }
 
       results = (await app.service(serviceName).find({

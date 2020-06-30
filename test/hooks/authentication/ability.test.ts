@@ -475,12 +475,16 @@ describe("'ability' hook", () => {
         ability = defineAbilityFor(undefined)
       })
 
-      it.each(['find', 'get', 'create', 'update', 'patch', 'remove'])(
+      it.each(['get', 'create', 'update', 'patch', 'remove'])(
         'should not %s',
         (key) => {
           expect(ability.can(key, addSubject(name, room))).toBeFalsy()
         }
       )
+
+      it.each(['find'])('should %s', (key) => {
+        expect(ability.can(key, addSubject(name, room))).toBeTruthy()
+      })
     })
     describe('student', () => {
       beforeAll(() => {

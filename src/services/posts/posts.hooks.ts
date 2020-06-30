@@ -48,6 +48,8 @@ import checkDisponibility from '../../hooks/check/check-post/check-disponibility
 
 import checkMinDuration from '../../hooks/check/check-min-duration'
 
+import checkCampus from '../../hooks/check/check-room/check-campus'
+
 const checkDataTutorOptions: CheckDataOptions<PostCore> = {
   fields: [
     'comment',
@@ -65,10 +67,10 @@ const checkDataTutorOptions: CheckDataOptions<PostCore> = {
 }
 
 const checkDataStudentOptions: CheckDataOptions<PostCore> = {
-  fields: ['comment', 'type', 'subjectId'],
+  fields: ['comment', 'type', 'subjectId', 'campus'],
 }
 
-const unwantedTutorFields = ['studentsIds', 'tutorsIds', 'creatorId']
+const unwantedTutorFields = ['campus', 'studentsIds', 'tutorsIds', 'creatorId']
 const unwantedStudentFields = [
   'startAt',
   'duration',
@@ -103,6 +105,7 @@ export default {
       ),
       checkDuplicate(),
       checkIds(),
+      checkCampus(),
       checkMinDuration(),
       checkType('type', typesOptions),
       checkLength(),
@@ -135,6 +138,7 @@ export default {
         ),
         checkDuplicate(),
         checkIds(),
+        checkCampus(),
         checkMinDuration(),
         checkType('type', typesOptions),
         checkLength(),

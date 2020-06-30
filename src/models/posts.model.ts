@@ -31,6 +31,10 @@ const objSchema = {
     min: 30,
     // validate: checkDuration,
   },
+  campus: {
+    type: String,
+    enum: ['bourges', 'blois'],
+  },
   studentsCapacity: {
     type: Number,
     min: 5,

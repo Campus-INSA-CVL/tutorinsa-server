@@ -49,10 +49,17 @@ export default function defineAbilitiesFor(user: User): Ability {
     'type',
     'startAt',
     'duration',
+    'campus',
     'subjectId',
+    'roomId',
     'subject',
+    'room',
+    'createdAt',
+    'endAt',
     '__v',
   ])
+
+  can('find', 'rooms', ['_id', 'campus', '__v'])
 
   if (user) {
     can('find', 'users', [
@@ -96,6 +103,7 @@ export default function defineAbilitiesFor(user: User): Ability {
       'type',
       'startAt',
       'duration',
+      'campus',
       'studentsCapacity',
       'tutorsCapacity',
       'subjectId',
@@ -122,6 +130,7 @@ export default function defineAbilitiesFor(user: User): Ability {
       'type',
       'startAt',
       'duration',
+      'campus',
       'studentsCapacity',
       'tutorsCapacity',
       'subjectId',
@@ -145,6 +154,7 @@ export default function defineAbilitiesFor(user: User): Ability {
       'comment',
       'startAt',
       'duration',
+      'campus',
       'studentsCapacity',
       'tutorsCapacity',
       'subjectId',
@@ -166,7 +176,7 @@ export default function defineAbilitiesFor(user: User): Ability {
     can(['patch'], 'subscriptions', ['as', 'type'])
 
     if (is('eleve', user)) {
-      can('create', 'posts', ['comment', 'type', 'subjectId'], {
+      can('create', 'posts', ['comment', 'type', 'subjectId', 'campus'], {
         type: 'eleve',
       })
     }
@@ -199,6 +209,7 @@ export default function defineAbilitiesFor(user: User): Ability {
         'type',
         'startAt',
         'duration',
+        'campus',
         'studentsCapacity',
         'tutorsCapacity',
         'subjectId',
@@ -224,6 +235,7 @@ export default function defineAbilitiesFor(user: User): Ability {
         'type',
         'startAt',
         'duration',
+        'campus',
         'studentsCapacity',
         'tutorsCapacity',
         'subjectId',
@@ -251,6 +263,7 @@ export default function defineAbilitiesFor(user: User): Ability {
           'type',
           'startAt',
           'duration',
+          'campus',
           'studentsCapacity',
           'tutorsCapacity',
           'subjectId',
