@@ -170,6 +170,7 @@ export default {
     update: [],
     patch: [
       // patchUser([['createdPostsIds', '_id', 'array']]),
+      fastJoin(resolvers),
     ],
     remove: [
       patchUser([['createdPostsIds', '_id', 'array']]),
