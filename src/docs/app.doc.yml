@@ -364,6 +364,11 @@ components:
         - comment
         - type
         - subjectId
+        - startAt
+        - duration
+        - tutorsCapacity
+        - studentsCapacity
+        - roomId
       type: object
       properties:
         comment:
@@ -396,6 +401,7 @@ components:
         - comment
         - type
         - subjectId
+        - campus
       type: object
       properties:
         comment:
