@@ -1,14 +1,14 @@
 import { Application } from '../declarations'
 
-import limiter from './limiter'
+import limiter from './limiter/limiter'
 
-import slower from './slower'
+import slower from './slower/slower'
 
-import authenticationLimiter from './authentication-limiter'
+import authenticationLimiter from './limiter/authentication-limiter'
 
-import authenticationSlower from './authentication-slower'
+import authenticationSlower from './slower/authentication-slower'
 
-import logger from './logger'
+import logger from './logger/logger'
 
 // Don't remove this comment. It's needed to format import lines nicely.
 

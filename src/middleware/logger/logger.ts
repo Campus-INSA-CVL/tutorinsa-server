@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { SlowDownRequestAugmentation } from 'express-slow-down'
 import util from 'util'
-import logger from '../logger'
+import logger from '../../logger'
 
 export default () => {
   return (
