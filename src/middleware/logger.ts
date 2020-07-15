@@ -17,6 +17,14 @@ export default () => {
         true
       )}`
     )
+    logger.info(
+      `rate limiter request on ${req.path}:\ninfo: ${util.inspect(
+        req.rateLimit,
+        false,
+        2,
+        true
+      )}`
+    )
     next()
   }
 }
