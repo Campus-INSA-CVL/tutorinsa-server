@@ -75,25 +75,36 @@ function checkTypeofFields<T>(
   const keys: string[] = Object.keys(data)
 
   keys.forEach((key) => {
+    if ((options.excludeFields as string[])?.includes(key)) {
+      return
+    }
     // Must be an array
     if ((options.arrayFields as string[])?.includes(key)) {
       // But it's not
       if (!Array.isArray(data[key])) {
         throw new BadRequest(`type of '${key}' is incorrect, must be an array`)
       }
-      // Must be an number
-    } else if ((options.numberFields as string[])?.includes(key)) {
+    }
+    // Must be an number
+    else if ((options.numberFields as string[])?.includes(key)) {
       // But it's not
       if (typeof data[key] !== 'number') {
         throw new BadRequest(`type of '${key}' is incorrect, must be a number`)
       }
-      // Must be an date
-    } else if ((options.dateFields as string[])?.includes(key)) {
+    }
+    // Must be an date
+    else if ((options.dateFields as string[])?.includes(key)) {
       if (
         !moment(new Date(data[key] as string)).isValid() ||
         typeof data[key] === 'number'
       ) {
         throw new BadRequest(`type of '${key}' is incorrect, must be a date`)
+      }
+    }
+    // Must be a boolean
+    else if ((options.booleanFields as string[])?.includes(key)) {
+      if (typeof data[key] !== 'boolean') {
+        throw new BadRequest(`type of '${key}' is incorrect, must be a boolean`)
       }
     }
     // So, it's a string !

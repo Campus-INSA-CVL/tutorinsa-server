@@ -2,7 +2,7 @@ import rateLimit, { Options } from 'express-rate-limit'
 
 const options: Options = {
   windowMs: 30 * 60 * 1000,
-  max: 500,
+  max: 1800,
   statusCode: 429,
   message: 'Too many request, please try again later !',
   handler(req, res) {

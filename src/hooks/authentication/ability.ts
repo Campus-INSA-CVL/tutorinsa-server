@@ -5,7 +5,7 @@ import { User, ServiceTypes, UserPermission } from '../../declarations'
 import moment from '../../utils/moment'
 
 export type Actions = HookContext['method']
-export type Services = keyof ServiceTypes
+export type Services = Exclude<keyof ServiceTypes, 'mailer'>
 type AppAbility = Ability<[Actions, Services]>
 
 /**
@@ -25,6 +25,9 @@ function is(role: UserPermission, user: User): boolean {
  */
 export default function defineAbilitiesFor(user: User): Ability {
   const { rules, can } = new AbilityBuilder<AppAbility>()
+
+  can('create', 'authManagement', ['action', 'value'])
+
   can(
     ['find', 'get'],
     ['subjects', 'departments', 'years'],

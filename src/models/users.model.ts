@@ -69,6 +69,12 @@ const objSchema = {
       ref: 'post',
     },
   ],
+  isVerified: { type: Boolean },
+  verifyToken: { type: String },
+  verifyExpires: { type: Date },
+  verifyChanges: { type: Object },
+  resetToken: { type: String },
+  resetExpires: { type: Date },
 }
 
 const objOptions = {
