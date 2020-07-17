@@ -5,7 +5,7 @@ import { BadRequest } from '@feathersjs/errors'
 import { User } from '../../../declarations'
 
 /**
- * Check that the password is strong enougth
+ * Check that the password is strong enough
  */
 export default (options = {}): Hook => {
   return async (context: HookContext<User>) => {
