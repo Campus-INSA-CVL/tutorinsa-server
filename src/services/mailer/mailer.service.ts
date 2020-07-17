@@ -20,6 +20,8 @@ export default function (app: Application) {
     Mailer(
       stmpTransport({
         service: 'gmail',
+        // host: 'smtp.mailtrap.io',
+        // port: 2525,
         auth: {
           user: process.env.STMP_EMAIL,
           pass: process.env.STMP_PASSWORD,

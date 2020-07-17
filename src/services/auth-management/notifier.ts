@@ -85,47 +85,69 @@ export default function (app: Application) {
 
         case 'sendResetPwd':
           tokenLink = getLink('reset', user.resetToken as string)
+
+          html = pug.renderFile(
+            path.join(
+              __dirname,
+              '..',
+              '/mailer',
+              '/template',
+              'sendResetPwd.pug'
+            ),
+            { user, tokenLink }
+          )
+
           email = {
             from: process.env.STMP_EMAIL as string,
             to: user.email,
-            subject: 'Reset Password',
-            html: tokenLink,
+            subject: 'TutorINSA: Réinitialisation du mot de passe',
+            html,
           }
           return sendEmail(email)
           break
 
         case 'resetPwd':
-          tokenLink = getLink('reset', user.resetToken as string)
-          email = {} as Email
-          return sendEmail(email)
-          break
+          // tokenLink = getLink('reset', user.resetToken as string)
+          html = pug.renderFile(
+            path.join(__dirname, '..', '/mailer', '/template', 'resetPwd.pug'),
+            { user }
+          )
 
-        case 'passwordChange':
           email = {
             from: process.env.STMP_EMAIL as string,
             to: user.email,
-            subject: 'Confirm Signup',
-            html: `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Test</title>
-</head>
-<body>
-  <h1>Hello</h1>
-  <p>I'm here to test if email is working !</p>
-</body>
-</html>`,
+            subject: 'TutorINSA: Confirmation de modification du mot de passe',
+            html,
           }
           return sendEmail(email)
           break
 
-        case 'identityChange':
-          tokenLink = getLink('verifyChanges', user.verifyToken as string)
-          email = {} as Email
+        case 'passwordChange':
+          html = pug.renderFile(
+            path.join(
+              __dirname,
+              '..',
+              '/mailer',
+              '/template',
+              'passwordChange.pug'
+            ),
+            { user }
+          )
+
+          email = {
+            from: process.env.STMP_EMAIL as string,
+            to: user.email,
+            subject: 'TutorINSA: Confirmation de modification du mot de passe',
+            html,
+          }
           return sendEmail(email)
           break
+
+        // case 'identityChange':
+        //   tokenLink = getLink('verifyChanges', user.verifyToken as string)
+        //   email = {} as Email
+        //   return sendEmail(email)
+        //   break
 
         default:
           break

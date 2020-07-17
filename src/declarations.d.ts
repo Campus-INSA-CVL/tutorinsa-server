@@ -200,6 +200,7 @@ export interface Email {
 }
 
 export type Action =
+  | 'options'
   | 'checkUnique'
   | 'resendVerifySignup'
   | 'verifySignupLong'
