@@ -92,7 +92,7 @@ function updateCreatedPostsIds(data: Partial<User>, user: User): Partial<User> {
     }
 
     if (
-      user.createdPostsIds.find(
+      user.createdPostsIds?.find(
         (createdPostId) =>
           createdPostId.toString() === data.createdPostsIds!.toString()
       )
