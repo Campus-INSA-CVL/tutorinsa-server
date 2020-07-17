@@ -18,6 +18,8 @@ import removeUnwantedFields from '../../hooks/remove-unwanted-fields'
 
 import pickResult from '../../hooks/authentication/pick-result'
 
+import checkAppTheme from '../../hooks/check/check-user/check-app-theme'
+
 import resolvers from './users.populate'
 import {
   CheckPermissionsOptions,
@@ -85,6 +87,7 @@ export default {
       checkIds(),
       checkEmail(),
       checkPassword(),
+      checkAppTheme(),
       checkPermissions(permissionsOptions),
       hashPassword('password'),
     ],
