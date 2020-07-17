@@ -110,7 +110,7 @@
     "pre-commit": "^1.2.2",
     "prettier": "^2.0.5",
     "shx": "^0.3.2",
-    "ts-jest": "^26.1.2",
+    "ts-jest": "^26.1.3",
     "ts-node": "^8.10.2",
     "ts-node-dev": "^1.0.0-pre.51",
     "tslib": "^2.0.0",
