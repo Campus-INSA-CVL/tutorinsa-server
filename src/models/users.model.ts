@@ -69,6 +69,9 @@ const objSchema = {
       ref: 'post',
     },
   ],
+  appTheme: {
+    type: String,
+  },
 }
 
 const objOptions = {

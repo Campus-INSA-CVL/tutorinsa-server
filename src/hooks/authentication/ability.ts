@@ -2,7 +2,6 @@ import { AbilityBuilder, Ability } from '@casl/ability'
 import { HookContext } from '@feathersjs/feathers'
 
 import { User, ServiceTypes, UserPermission } from '../../declarations'
-import moment from '../../utils/moment'
 
 export type Actions = HookContext['method']
 export type Services = keyof ServiceTypes
@@ -92,6 +91,7 @@ export default function defineAbilitiesFor(user: User): Ability {
         'favoriteSubjectsIds',
         'difficultSubjectsIds',
         'permissions',
+        'appTheme',
       ],
       { _id: user._id }
     )
@@ -293,6 +293,7 @@ export default function defineAbilitiesFor(user: User): Ability {
         'department',
         'favoriteSubjects',
         'difficultSubjects',
+        'appTheme',
         '__v',
       ])
       can(['patch', 'remove'], 'users')
