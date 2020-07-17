@@ -1,5 +1,7 @@
 import { HookContext, Service } from '@feathersjs/feathers'
 import BatchLoader from '@feathers-plus/batch-loader'
+// @ts-ignore
+import cache from '@feathers-plus/cache'
 import { callingParams } from 'feathers-hooks-common'
 
 import { ServiceTypes, Post, PostCore } from '../../declarations'
@@ -54,7 +56,7 @@ function createBatchLoader(
         return getResultsByKey(keys, result, (data) => data._id, '!')
       }
     },
-    { context }
+    { context, cacheMap: cache({ max: 60 }) }
   )
 }
 /**
