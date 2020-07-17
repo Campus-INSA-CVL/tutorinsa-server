@@ -197,3 +197,16 @@ export interface Email {
   subject: string
   html: string
 }
+
+export type Action =
+  | 'checkUnique'
+  | 'resendVerifySignup'
+  | 'verifySignupLong'
+  | 'verifySignupShort'
+  | 'verifySignupSetPasswordLong'
+  | 'verifySignupSetPasswordShort'
+  | 'sendResetPwd'
+  | 'resetPwdLong'
+  | 'resetPwdShort'
+  | 'passwordChange'
+  | 'identityChange'

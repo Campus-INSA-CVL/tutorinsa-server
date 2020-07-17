@@ -89,7 +89,6 @@ export default function defineAbilitiesFor(user: User): Ability {
       [
         'lastName',
         'firstName',
-        'email',
         'yearId',
         'departmentId',
         'favoriteSubjectsIds',
