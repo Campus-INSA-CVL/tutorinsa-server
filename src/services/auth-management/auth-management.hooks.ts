@@ -1,6 +1,7 @@
 import checkAction from '../../hooks/check/check-auth-management/check-action'
 import { Action } from '../../declarations'
 import { iff, isProvider } from 'feathers-hooks-common'
+import checkPassword from '../../hooks/check/check-user/check-password'
 
 const authorizedActions: Action[] = [
   'resendVerifySignup',
@@ -16,7 +17,11 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [iff(isProvider('external')), checkAction(authorizedActions)],
+    create: [
+      iff(isProvider('external')),
+      checkAction(authorizedActions),
+      checkPassword(),
+    ],
     update: [],
     patch: [],
     remove: [],

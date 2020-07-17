@@ -15,8 +15,12 @@ export default (options = {}): Hook => {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/
     )
 
-    if (data?.password && !regex.test(data.password))
-      throw new BadRequest('this password is not strong enought')
+    if (
+      (data?.password && !regex.test(data.password)) ||
+      // Field for authManagement
+      (data as any)?.value?.password
+    )
+      throw new BadRequest('this password is not strong enough')
 
     return context
   }
