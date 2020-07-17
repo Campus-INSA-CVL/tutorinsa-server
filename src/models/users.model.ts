@@ -75,6 +75,9 @@ const objSchema = {
   verifyChanges: { type: Object },
   resetToken: { type: String },
   resetExpires: { type: Date },
+  appTheme: {
+    type: String,
+  },
 }
 
 const objOptions = {

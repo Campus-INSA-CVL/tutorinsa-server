@@ -93,9 +93,10 @@ export interface UserCore {
   departmentId: Id
   favoriteSubjectsIds: Id[]
   difficultSubjectsIds: Id[]
-  createdPostsIds: Id[]
+  createdPostsIds?: Id[]
   studentSubscriptionsIds?: Id[]
   tutorSubscriptionsIds?: Id[]
+  appTheme?: string
   createdAt?: string
   updatedAt?: string
 

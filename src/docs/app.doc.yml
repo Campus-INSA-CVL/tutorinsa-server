@@ -69,6 +69,8 @@ components:
           items:
             type: objectId
             $ref: "#/components/schemas/post"
+        appTheme:
+          type: string
     findUser:
       type: object
       properties:
@@ -155,6 +157,8 @@ components:
           type: array
           items:
             type: objectId
+        appTheme:
+          type: string
         year:
           $ref: "#/components/schemas/getYear"
         department:
@@ -192,6 +196,37 @@ components:
           type: array
           items:
             type: objectId
+    patchUser:
+      type: object
+      properties:
+        lastName:
+          type: string
+        firstName:
+          type: string
+        email:
+          type: string
+        permissions:
+          type: array
+          items:
+            type: string
+            enum:
+              - eleve
+              - tuteur
+              - admin
+        yearId:
+          type: objectId
+        departmentId:
+          type: objectId
+        favoriteSubjectsIds:
+          type: array
+          items:
+            type: objectId
+        difficultSubjectsIds:
+          type: array
+          items:
+            type: objectId
+        appTheme:
+          type: string
     post:
       required:
         - comment
