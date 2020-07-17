@@ -4,29 +4,35 @@ import { Application, Email } from '../../declarations'
 import hooks from './mailer.hooks'
 // @ts-ignore
 import Mailer from 'feathers-mailer'
-import stmpTransport from 'nodemailer-smtp-transport'
+import smtpTransport from 'nodemailer-smtp-transport'
+
+import yml from '../../docs/utils/yamlLoader'
 
 // Add this service to the service type index
 declare module '../../declarations' {
   interface ServiceTypes {
-    mailer: ServiceMethods<Email> & ServiceAddons<any>
+    mailer: ServiceMethods<Email> & ServiceAddons<any> & { docs: object }
   }
 }
 
 export default function (app: Application) {
+  const docs = yml('mailer.doc.yml')
   // Initialize our service with any options it requires
   app.use(
     '/mailer',
-    Mailer(
-      stmpTransport({
-        service: 'gmail',
-        // host: 'smtp.mailtrap.io',
-        // port: 2525,
-        auth: {
-          user: process.env.STMP_EMAIL,
-          pass: process.env.STMP_PASSWORD,
-        },
-      })
+    Object.assign(
+      Mailer(
+        smtpTransport({
+          service: 'gmail',
+          // host: 'smtp.mailtrap.io',
+          // port: 2525,
+          auth: {
+            user: process.env.SMTP_EMAIL,
+            pass: process.env.SMTP_PASSWORD,
+          },
+        })
+      ),
+      { docs }
     )
   )
 

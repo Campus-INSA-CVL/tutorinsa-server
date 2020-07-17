@@ -621,6 +621,68 @@ components:
           type: string
         as:
           type: string
+    resendVerifySignup:
+      type: object
+      properties:
+        action:
+          description: resendVerifySignup
+          type: string
+        value:
+          type: object
+          properties:
+            email:
+              type: string
+    verifySignupLong:
+      type: object
+      properties:
+        action:
+          description: verifySignupLong
+          type: string
+        value:
+          description: user token
+          type: string
+    sendResetPwd:
+      type: object
+      properties:
+        action:
+          description: sendResetPwd
+          type: string
+        value:
+          type: object
+          properties:
+            email:
+              type: string
+    resetPwdLong:
+      type: object
+      properties:
+        action:
+          description: resetPwdLong
+          type: string
+        value:
+          type: object
+          properties:
+            token:
+              type: string
+            password:
+              type: string
+    passwordChange:
+      type: object
+      properties:
+        action:
+          description: passwordChange
+          type: string
+        value:
+          type: object
+          properties:
+            user:
+              type: object
+              properties:
+                email:
+                  type: string
+            oldPassword:
+              type: string
+            password:
+              type: string
     errors:
       type: object
       properties:

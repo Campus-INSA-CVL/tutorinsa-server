@@ -1,8 +1,8 @@
 import swagger from 'feathers-swagger'
-import app from './app'
 import yml from './docs/utils/yamlLoader'
 
 const specs: any = yml('app.doc.yml')
+const authManagement = yml('authManagement.doc.yml')
 
 const options: swagger.SwaggerInitOptions = {
   openApiVersion: 3,
