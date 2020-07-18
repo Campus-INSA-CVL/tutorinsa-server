@@ -212,3 +212,11 @@ export type Action =
   | 'resetPwdShort'
   | 'passwordChange'
   | 'identityChange'
+
+export type NotifierType =
+  | 'resendVerifySignup'
+  | 'verifySignup'
+  | 'sendResetPwd'
+  | 'resetPwd'
+  | 'passwordChange'
+  | 'identityChange'
