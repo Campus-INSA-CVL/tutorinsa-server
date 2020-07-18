@@ -30,7 +30,7 @@ app.configure(configuration())
 app.use(helmet())
 app.use(
   cors({
-    origin: process.env.FRONT_URL,
+    origin: '*',
   })
 )
 app.use(compress())
