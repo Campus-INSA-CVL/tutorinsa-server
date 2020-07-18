@@ -126,6 +126,7 @@ export type User = UserCore & {
     | Year
     | Department
     | Subject[]
+    | boolean
 }
 
 export type PostType = 'eleve' | 'tuteur'

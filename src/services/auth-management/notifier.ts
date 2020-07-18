@@ -1,17 +1,18 @@
 import path from 'path'
 import { errors } from '@feathersjs/errors'
 import pug from 'pug'
-import { Application, User, Email } from '../../declarations'
+import { Application, User, Email, NotifierType } from '../../declarations'
 
-type NotifierTypes =
-  | 'resendVerifySignup'
-  | 'verifySignup'
-  | 'sendResetPwd'
-  | 'resetPwd'
-  | 'passwordChange'
-  | 'identityChange'
+/**
+ * Send email
+ */
+export default function (
+  app: Application
+): {
+  notifier: (type: NotifierType, user: User, notifierOptions?: any) => void
+} {
+  const from = process.env.STMP_EMAIL || 'fake@mail.com'
 
-export default function (app: Application) {
   function getLink(type: string, hash: string): string {
     let url: string
     if (process.env.NODE_ENV === 'production') {
@@ -35,7 +36,7 @@ export default function (app: Application) {
 
   let html
   return {
-    notifier(type: NotifierTypes, user: User, notifierOptions?: any) {
+    notifier(type: NotifierType, user: User, notifierOptions?: any) {
       let tokenLink: string
       let email: Email
       switch (type) {
@@ -54,9 +55,9 @@ export default function (app: Application) {
           )
 
           email = {
-            from: process.env.STMP_EMAIL as string,
+            from,
             to: user.email,
-            subject: "TutorINSA: Confirmer l'insacription",
+            subject: "TutorINSA: Confirmer l'inscription",
             html,
           }
           return sendEmail(email)
@@ -75,7 +76,7 @@ export default function (app: Application) {
           )
 
           email = {
-            from: process.env.STMP_EMAIL as string,
+            from,
             to: user.email,
             subject: 'TutorINSA: Inscription validée',
             html,
@@ -98,7 +99,7 @@ export default function (app: Application) {
           )
 
           email = {
-            from: process.env.STMP_EMAIL as string,
+            from,
             to: user.email,
             subject: 'TutorINSA: Réinitialisation du mot de passe',
             html,
@@ -114,7 +115,7 @@ export default function (app: Application) {
           )
 
           email = {
-            from: process.env.STMP_EMAIL as string,
+            from,
             to: user.email,
             subject: 'TutorINSA: Confirmation de modification du mot de passe',
             html,
@@ -135,7 +136,7 @@ export default function (app: Application) {
           )
 
           email = {
-            from: process.env.STMP_EMAIL as string,
+            from,
             to: user.email,
             subject: 'TutorINSA: Confirmation de modification du mot de passe',
             html,
