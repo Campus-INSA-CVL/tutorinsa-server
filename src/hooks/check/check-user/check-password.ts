@@ -18,7 +18,8 @@ export default (options = {}): Hook => {
     if (
       (data?.password && !regex.test(data.password)) ||
       // Field for authManagement
-      (data as any)?.value?.password
+      ((data as any)?.value?.password &&
+        !regex.test((data as any).value.password))
     )
       throw new BadRequest('this password is not strong enough')
 
