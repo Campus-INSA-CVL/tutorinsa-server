@@ -69,6 +69,6 @@ describe("'check-campus' hook", () => {
     }
 
     expect(error).toBeInstanceOf(BadRequest)
-    expect(error.message).toBe(`${data.campus} is unknow`)
+    expect(error.message).toBe(`${data.campus} is unknown`)
   })
 })

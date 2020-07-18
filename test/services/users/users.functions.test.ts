@@ -154,7 +154,7 @@ describe("'users.functions'", () => {
       }
       expect(error).toBeInstanceOf(GeneralError)
       expect(error.message).toBe(
-        `'${params.subType}' this type is unknow (subscription service)`
+        `'${params.subType}' this type is unknown (subscription service)`
       )
     })
 

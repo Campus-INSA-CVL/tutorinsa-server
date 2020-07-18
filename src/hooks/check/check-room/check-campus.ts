@@ -15,7 +15,7 @@ export default (options = {}): Hook => {
 
     if (data?.campus) {
       if (!campus.includes(data.campus.toLowerCase() as Campus)) {
-        throw new BadRequest(`${data.campus} is unknow`)
+        throw new BadRequest(`${data.campus} is unknown`)
       }
     }
 
