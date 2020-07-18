@@ -15,12 +15,7 @@ export default function (
 
   function getLink(type: string, hash: string): string {
     let url: string
-    if (process.env.NODE_ENV === 'production') {
-      url = `${app.get('front_url')}/${type}?token=${hash}`
-    } else {
-      url = `http://${app.get('host')}:${app.get('port')}/${type}?token=${hash}`
-    }
-
+    url = `${app.get('front_url')}/${type}?token=${hash}`
     return url
   }
 
