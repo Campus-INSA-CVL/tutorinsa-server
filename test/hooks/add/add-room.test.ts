@@ -54,7 +54,7 @@ describe("'add-room' hook", () => {
     error = null
   })
 
-  it('nothing should happend without data', async () => {
+  it('nothing should happens without data', async () => {
     expect.assertions(2)
     try {
       result = (await addRoom()(context)) as HookContext<Post>
@@ -66,7 +66,7 @@ describe("'add-room' hook", () => {
     expect(error).toBeNull()
   })
 
-  it('nothing should happend without a room id', async () => {
+  it('nothing should happens without a room id', async () => {
     expect.assertions(2)
 
     try {

@@ -36,7 +36,7 @@ describe("'check-app-theme' hook", () => {
     error = null
   })
 
-  it('nothing should happend without appTheme property', async () => {
+  it('nothing should happens without appTheme property', async () => {
     try {
       result = (await checkAppTheme()(context)) as HookContext<User>
     } catch (e) {
@@ -46,7 +46,7 @@ describe("'check-app-theme' hook", () => {
     expect(error).toBeNull()
     expect(result).toEqual(context)
   })
-  it('nothing should happend with correct property', async () => {
+  it('nothing should happens with correct property', async () => {
     context.data = Object.assign({}, user)
 
     try {

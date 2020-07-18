@@ -21,7 +21,7 @@ describe("'check-min-duration' hook", () => {
     error = null
   })
 
-  it('nothing should happend without duration', async () => {
+  it('nothing should happens without duration', async () => {
     try {
       result = (await checkMinDuration()(context)) as HookContext<Partial<Post>>
     } catch (e) {

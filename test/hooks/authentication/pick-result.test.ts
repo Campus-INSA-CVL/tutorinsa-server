@@ -13,7 +13,7 @@ import { GeneralError } from '@feathersjs/errors'
 
 // in theorie we have to define new ability here
 describe("'pick-result' hook", () => {
-  it('nothing should happend without result', async () => {
+  it('nothing should happens without result', async () => {
     let result: HookContext
     let error: Error | null = null
     try {

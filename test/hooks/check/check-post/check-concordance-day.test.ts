@@ -24,7 +24,7 @@ describe("'check-concordance-day' hook", () => {
     error = null
   })
 
-  it('nothing should happend without data', async () => {
+  it('nothing should happens without data', async () => {
     expect.assertions(2)
 
     try {
@@ -39,7 +39,7 @@ describe("'check-concordance-day' hook", () => {
     expect(error).toBeNull()
   })
 
-  it('nothing should happend without room in params', async () => {
+  it('nothing should happens without room in params', async () => {
     expect.assertions(2)
 
     const data = {
@@ -61,7 +61,7 @@ describe("'check-concordance-day' hook", () => {
   })
 
   it.each(['data', 'params'])(
-    'nothing should happend without startAt in %s',
+    'nothing should happens without startAt in %s',
     async (value) => {
       expect.assertions(2)
 

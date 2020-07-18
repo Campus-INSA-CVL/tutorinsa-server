@@ -25,7 +25,7 @@ describe("'check-type' hook", () => {
     error = null
   })
 
-  it('nothing should happends without data', async () => {
+  it('nothing should happenss without data', async () => {
     expect.assertions(2)
 
     try {
@@ -42,7 +42,7 @@ describe("'check-type' hook", () => {
   })
 
   it.each(['eleve', 'tuteur'])(
-    'nothing should happends with correct data (%s)',
+    'nothing should happenss with correct data (%s)',
     async (value) => {
       expect.assertions(2)
 

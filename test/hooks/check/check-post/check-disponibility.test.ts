@@ -90,7 +90,7 @@ describe("'check-disponibility' hook", () => {
     error = null
   })
 
-  it('nothing should happend without data', async () => {
+  it('nothing should happens without data', async () => {
     try {
       result = (await checkDisponibility()(context)) as HookContext<Post>
     } catch (e) {
@@ -101,7 +101,7 @@ describe("'check-disponibility' hook", () => {
     expect(result).toEqual(context)
   })
 
-  it('nothing should happend without a room in params', async () => {
+  it('nothing should happens without a room in params', async () => {
     context.data = {}
     try {
       result = (await checkDisponibility()(context)) as HookContext<Post>

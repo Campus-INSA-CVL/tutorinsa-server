@@ -1,11 +1,11 @@
 import {
   updateCreatedPostsIds,
-  updateSubcriptions,
+  updateSubscriptions,
 } from '../../../src/services/users/users.functions'
 import { User, Post, Subscription } from '../../../src/declarations'
 import { GeneralError } from '@feathersjs/errors'
 
-describe("'users.fuctions'", () => {
+describe("'users.functions'", () => {
   describe("'updateCreatedPostsIds' function", () => {
     let user: User
     let error: Error | null
@@ -27,7 +27,7 @@ describe("'users.fuctions'", () => {
       error = null
     })
 
-    it('nothing should happend without createdPostsJds', () => {
+    it('nothing should happens without createdPostsJds', () => {
       let data: Partial<User>
       try {
         data = updateCreatedPostsIds({}, user)
@@ -91,7 +91,7 @@ describe("'users.fuctions'", () => {
     })
   })
 
-  describe("'updateSubcriptions' function", () => {
+  describe("'updateSubscriptions' function", () => {
     let user: User
     let error: Error | null
     let result
@@ -119,18 +119,18 @@ describe("'users.fuctions'", () => {
       result = null
     })
 
-    it('nothing should happend without data', () => {
+    it('nothing should happens without data', () => {
       try {
-        result = updateSubcriptions(undefined as User, user, {})
+        result = updateSubscriptions(undefined as User, user, {})
       } catch (e) {
         error = e
       }
       expect(result).toBeUndefined()
       expect(error).toBeNull()
     })
-    it('nothing should happend without subType in params', () => {
+    it('nothing should happens without subType in params', () => {
       try {
-        result = updateSubcriptions({} as User, user, {})
+        result = updateSubscriptions({} as User, user, {})
       } catch (e) {
         error = e
       }
@@ -148,7 +148,7 @@ describe("'users.fuctions'", () => {
       }
 
       try {
-        result = updateSubcriptions(data, user, params)
+        result = updateSubscriptions(data, user, params)
       } catch (e) {
         error = e
       }
@@ -167,7 +167,7 @@ describe("'users.fuctions'", () => {
       }
 
       try {
-        result = updateSubcriptions(data, user, params)
+        result = updateSubscriptions(data, user, params)
       } catch (e) {
         error = e
       }
@@ -197,7 +197,7 @@ describe("'users.fuctions'", () => {
 
       // subscribe twice
       try {
-        result = updateSubcriptions(data, user, params)
+        result = updateSubscriptions(data, user, params)
       } catch (e) {
         error = e
       }
@@ -221,7 +221,7 @@ describe("'users.fuctions'", () => {
       }
 
       try {
-        result = updateSubcriptions(data, user, params)
+        result = updateSubscriptions(data, user, params)
       } catch (e) {
         error = e
       }

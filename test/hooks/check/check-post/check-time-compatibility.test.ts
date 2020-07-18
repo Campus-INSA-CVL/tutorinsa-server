@@ -34,7 +34,7 @@ describe("'check-time-compatibility' hook", () => {
     error = null
   })
 
-  it('nothing should happend without data', async () => {
+  it('nothing should happens without data', async () => {
     expect.assertions(2)
     try {
       result = (await checkTimeCompatibility()(context)) as HookContext<Post>
