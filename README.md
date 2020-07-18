@@ -23,19 +23,21 @@ This project need, to run correctly:
 You can change the development database in the "config/default.json" at the "mongodb" field.
 You have to create a ".env" file using the ".local.env" as a pattern, and fill it. ".env" is used for production. In development, some generic settings are provided, but can be change in "config/default.json". "config/production.json" will merge and overwrite settings from "config/default.json".
 
-### Install the dependancies
+### Install the dependencies
 
 ```bash
-# install the dependancies
+# install the dependencies
 npm install
 ```
 
 ### Start the server
 
+You be able to send mail, you have to create a `.env` file and add _SMTP_ keys from `.local.env`. Mailer actually uses Gmail, and the password must be an [App Password](https://myaccount.google.com/apppasswords)
+
 ```bash
-# strart the server in development mode
+# start the server in development mode
 npm run dev
-# strart the server in production mode
+# start the server in production mode
 npm run start
 ```
 

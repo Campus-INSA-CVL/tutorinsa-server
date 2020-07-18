@@ -9,5 +9,6 @@
       "issuer": "tutorinsa",
       "expiresIn": "1d"
     }
-  }
+  },
+  "front_url": "FRONT_URL"
 }
