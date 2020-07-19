@@ -121,10 +121,10 @@ describe("'check-permissions' hook", () => {
     expect(result.data.permissions).toEqual(expect.arrayContaining(['admin']))
   })
 
-  it('should remove the unknow permission', async () => {
+  it('should remove the unknown permission', async () => {
     expect.assertions(3)
 
-    context.data = Object.assign({}, { permissions: ['unknow'] }) as User
+    context.data = Object.assign({}, { permissions: ['unknown'] }) as User
     context.params.user = Object.assign({}, adminUser)
 
     try {
@@ -138,7 +138,7 @@ describe("'check-permissions' hook", () => {
     expect(result.data.permissions.length).toBe(1)
     expect(result.data.permissions).toEqual(expect.arrayContaining(['eleve']))
     expect(result.data.permissions).toEqual(
-      expect.not.arrayContaining(['unknow'])
+      expect.not.arrayContaining(['unknown'])
     )
   })
 })

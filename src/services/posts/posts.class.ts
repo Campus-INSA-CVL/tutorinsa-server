@@ -2,7 +2,7 @@ import { Service, MongooseServiceOptions } from 'feathers-mongoose'
 import { Application, Post, Room, Subscription } from '../../declarations'
 import { Params, Id, NullableId } from '@feathersjs/feathers'
 import { getUserId } from './posts.functions'
-import { updateSubcriptions } from '../users/users.functions'
+import { updateSubscriptions } from '../users/users.functions'
 
 export class Posts extends Service {
   constructor(options: Partial<MongooseServiceOptions>, app: Application) {
@@ -33,7 +33,7 @@ export class Posts extends Service {
 
     patchedData = Object.assign(
       patchedData,
-      updateSubcriptions(data, params.post as Post, params)
+      updateSubscriptions(data, params.post as Post, params)
     )
 
     return super.patch(id, patchedData, {})

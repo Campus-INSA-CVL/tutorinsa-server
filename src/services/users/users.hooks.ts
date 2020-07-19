@@ -1,6 +1,12 @@
 import * as feathersAuthentication from '@feathersjs/authentication'
 import * as local from '@feathersjs/authentication-local'
-import { disallow, iff, isProvider, fastJoin } from 'feathers-hooks-common'
+import {
+  disallow,
+  iff,
+  isProvider,
+  fastJoin,
+  preventChanges,
+} from 'feathers-hooks-common'
 // Don't remove this comment. It's needed to format import lines nicely.
 import checkData from '../../hooks/check/check-data'
 
@@ -22,10 +28,18 @@ import checkAppTheme from '../../hooks/check/check-user/check-app-theme'
 
 import resolvers from './users.populate'
 import {
+  Application,
   CheckPermissionsOptions,
   CheckDataOptions,
   UserCore,
+  User,
 } from '../../declarations'
+
+import accountService from '../auth-management/notifier'
+// @ts-ignore
+import { hooks as verifyHooks } from 'feathers-authentication-management'
+import { HookContext } from '@feathersjs/feathers'
+const { addVerification, removeVerification } = verifyHooks
 
 const { hashPassword, protect } = local.hooks
 
@@ -49,7 +63,17 @@ const checkDataOptions: CheckDataOptions<UserCore> = {
     'studentSubscriptionsIds',
     'tutorSubscriptionsIds',
   ],
-  unwantedFields: ['permissions', 'email'],
+  unwantedFields: ['permissions', 'email', 'password', 'resetToken'],
+  excludeFields: [
+    'isVerified',
+    'verifyToken',
+    'verifyShortToken',
+    'verifyExpires',
+    'verifyChanges',
+    'resetExpires',
+    'resetToken',
+    'resetShortToken',
+  ],
 }
 
 const unwantedFields = [
@@ -78,18 +102,33 @@ export default {
       checkPassword(),
       checkPermissions(permissionsOptions),
       hashPassword('password'),
+      addVerification(),
     ],
     update: [disallow()],
     patch: [
-      iff(isProvider('external'), removeUnwantedFields(unwantedFields)),
+      iff(
+        isProvider('external'),
+        removeUnwantedFields(unwantedFields),
+        preventChanges(
+          false,
+          'isVerified',
+          'verifyToken',
+          'verifyShortToken',
+          'verifyExpires',
+          'verifyChanges',
+          'resetToken',
+          'resetShortToken',
+          'resetExpires'
+        )
+      ),
       checkData(checkDataOptions),
       checkDuplicate(),
       checkIds(),
-      checkEmail(),
-      checkPassword(),
+      // checkEmail(),
+      // checkPassword(),
       checkAppTheme(),
       checkPermissions(permissionsOptions),
-      hashPassword('password'),
+      // hashPassword('password'),
     ],
     remove: [],
   },
@@ -103,7 +142,15 @@ export default {
     ],
     find: [iff(isProvider('external'), pickResult())],
     get: [iff(isProvider('external'), pickResult())],
-    create: [],
+    create: [
+      (context: HookContext<User>) => {
+        accountService(context.app as Application).notifier(
+          'resendVerifySignup',
+          context.result as User
+        )
+      },
+      removeVerification(),
+    ],
     update: [],
     patch: [],
     remove: [],

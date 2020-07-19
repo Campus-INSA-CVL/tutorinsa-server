@@ -20,7 +20,7 @@ operations:
                     limit:
                       type: integer
                     skip:
-                      type: interger
+                      type: integer
                     data:
                       type: array
                       items:
@@ -36,7 +36,7 @@ operations:
                     limit:
                       type: integer
                     skip:
-                      type: interger
+                      type: integer
                     data:
                       type: array
                       items:
@@ -379,9 +379,9 @@ operations:
                   startAt: "2020-06-15T18:00:00.000Z"
                   duration: 60
                   room:
-                      _id: 3cc3828a5616bea3f0aabab6
-                      campus: blois
-                      __v: 0
+                    _id: 3cc3828a5616bea3f0aabab6
+                    campus: blois
+                    __v: 0
                   subjectId: 5ee3828a5616bea3f0aabab7
                   subject:
                     _id: 5ee3828a5616bea3f0aabab7
@@ -394,7 +394,7 @@ operations:
                   _id: 5ee3828a5616bea3f0aabad1
                   comment: love to teach to other students!
                   type: eleve
-                  campus: 'blois'
+                  campus: "blois"
                   subjectId: 5ee3828a5616bea3f0aabab9
                   subject:
                     _id: 5ee3828a5616bea3f0aabab9

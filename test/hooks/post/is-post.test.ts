@@ -35,7 +35,7 @@ describe("'is-post' hook", () => {
     expect(error.message).toBe('a type is required')
   })
 
-  it("nothing should happend without type and method different that 'create'", () => {
+  it("nothing should happens without type and method different that 'create'", () => {
     const options = 'tuteur'
 
     // @ts-ignore

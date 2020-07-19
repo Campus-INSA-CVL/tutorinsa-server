@@ -19,7 +19,7 @@ export default (options = {}): Hook => {
         `${type} | ${method} ${path}:\nid: ${id}\ndata: ${util.inspect(
           data,
           false,
-          10,
+          2,
           true
         )}\nparams: ${util.inspect(params, false, 2, true)}`
       )
@@ -37,14 +37,14 @@ export default (options = {}): Hook => {
         `${type} | ${method} ${path}:\nid: ${id}\ndata: ${util.inspect(
           data,
           false,
-          10,
+          2,
           true
         )}\nparams: ${util.inspect(
           params,
           false,
           1,
           true
-        )}\nresult: ${util.inspect(result, false, 10, true)}`
+        )}\nresult: ${util.inspect(result, false, 2, true)}`
       )
     }
 

@@ -21,7 +21,7 @@ describe("'pickData' hook", () => {
 
     error = null
   })
-  it('nothing should happend without ability', async () => {
+  it('nothing should happens without ability', async () => {
     context.params = {}
 
     try {
@@ -33,7 +33,7 @@ describe("'pickData' hook", () => {
     expect(error).toBeNull()
     expect(result).toEqual(context)
   })
-  it('nothing should happend without data', async () => {
+  it('nothing should happens without data', async () => {
     context.params = { ability }
 
     try {

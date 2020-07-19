@@ -184,6 +184,7 @@ function createUser(
     departmentId: department,
     favoriteSubjectsIds: favoriteSubjects,
     difficultSubjectsIds: difficultSubjects,
+    isVerified: true,
   })
 
   user.save((err) => {
@@ -247,6 +248,7 @@ async function createPost(
 
   const user = await User.findOneAndUpdate(
     { _id: creator._id },
+    // @ts-ignore
     { createdPostsIds: [...(creator as User).createdPostsIds, post._id] },
     { new: true },
     (e) => {

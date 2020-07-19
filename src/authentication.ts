@@ -20,24 +20,25 @@ declare module './declarations' {
   }
 }
 
-// class AbilitiesAuthService extends AuthenticationService {
-//   async getPayload(authResult: AuthenticationResult, params: Params) {
-//     const payload = await super.getPayload(authResult, params)
-//     const { user } = authResult
+class AbilitiesAuthService extends AuthenticationService {
+  async getPayload(authResult: AuthenticationResult, params: Params) {
+    const payload = await super.getPayload(authResult, params)
+    const { user } = authResult
 
-//     if (user) {
-//       const rules = defineAbilitiesFor(user)
-//       console.log('rules:', rules)
-//       // @ts-ignore
-//       payload.rules = packRules(rules)
-//     }
+    if (user) {
+      payload.permissions = user.permissions
+      // const rules = defineAbilitiesFor(user)
+      // console.log('rules:', rules)
+      // @ts-ignore
+      // payload.rules = packRules(rules)
+    }
 
-//     return payload
-//   }
-// }
+    return payload
+  }
+}
 
 export default function (app: Application) {
-  const authentication = new AuthenticationService(
+  const authentication = new AbilitiesAuthService(
     app
   ) as AuthenticationService & { docs: object }
 

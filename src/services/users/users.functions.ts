@@ -120,7 +120,7 @@ function updateCreatedPostsIds(data: Partial<User>, user: User): Partial<User> {
  * @param {object} params
  * @returns {Partial<User>} the updated data
  */
-function updateSubcriptions(
+function updateSubscriptions(
   data: Partial<User | Post>,
   previous: User | Post,
   params: Params & { subType?: Subscription['type'] }
@@ -150,7 +150,7 @@ function updateSubcriptions(
           )
         } else {
           throw new GeneralError(
-            `'${params.subType}' this type is unknow (subscription service)`
+            `'${params.subType}' this type is unknown (subscription service)`
           )
         }
       }
@@ -159,4 +159,4 @@ function updateSubcriptions(
   return data
 }
 
-export { updateCreatedPostsIds, updateSubcriptions }
+export { updateCreatedPostsIds, updateSubscriptions }

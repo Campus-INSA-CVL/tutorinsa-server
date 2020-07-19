@@ -1,0 +1,12 @@
+description:
+produces:
+  - application/json
+operations:
+  create:
+    summary: Not allowed
+    description: Not allowed
+    parameters:
+    requestBody:
+    responses:
+      405:
+        $ref: "#/components/responses/NotAllowed"

@@ -12,7 +12,9 @@ export interface CheckDataOptions<T> {
   arrayFields?: (keyof T)[]
   numberFields?: (keyof T)[]
   dateFields?: (keyof T)[]
+  booleanFields?: (keyof T)[]
   unwantedFields?: (keyof T)[]
+  excludeFields?: (keyof T)[]
 }
 
 export interface CheckPermissionsOptions {
@@ -102,6 +104,15 @@ export interface UserCore {
   department?: Department
   favoriteSubjects?: Subject[]
   difficultSubjects?: Subject[]
+
+  isVerified?: boolean
+  verifyToken?: string
+  verifyShortToken?: string
+  verifyExpires?: string
+  verifyChanges?: object
+  resetToken?: string
+  resetExpires?: string
+  resetShortToken?: string
 }
 
 export type User = UserCore & {
@@ -115,6 +126,7 @@ export type User = UserCore & {
     | Year
     | Department
     | Subject[]
+    | boolean
 }
 
 export type PostType = 'eleve' | 'tuteur'
@@ -180,3 +192,32 @@ export interface SubscriptionCore {
 }
 
 export type Subscription = SubscriptionCore
+
+export interface Email {
+  from: string
+  to: string
+  subject: string
+  html: string
+}
+
+export type Action =
+  | 'options'
+  | 'checkUnique'
+  | 'resendVerifySignup'
+  | 'verifySignupLong'
+  | 'verifySignupShort'
+  | 'verifySignupSetPasswordLong'
+  | 'verifySignupSetPasswordShort'
+  | 'sendResetPwd'
+  | 'resetPwdLong'
+  | 'resetPwdShort'
+  | 'passwordChange'
+  | 'identityChange'
+
+export type NotifierType =
+  | 'resendVerifySignup'
+  | 'verifySignup'
+  | 'sendResetPwd'
+  | 'resetPwd'
+  | 'passwordChange'
+  | 'identityChange'

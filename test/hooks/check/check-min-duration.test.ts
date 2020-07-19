@@ -1,7 +1,7 @@
-import checkMinDuration from '../../../src/hooks/check/check-min-duration'
 import { HookContext, Service } from '@feathersjs/feathers'
-import { Application, Post } from '../../../src/declarations'
 import { BadRequest } from '@feathersjs/errors'
+import checkMinDuration from '../../../src/hooks/check/check-min-duration'
+import { Application, Post } from '../../../src/declarations'
 
 describe("'check-min-duration' hook", () => {
   let context: HookContext<Partial<Post>>
@@ -21,7 +21,7 @@ describe("'check-min-duration' hook", () => {
     error = null
   })
 
-  it('nothing should happend without duration', async () => {
+  it('nothing should happens without duration', async () => {
     try {
       result = (await checkMinDuration()(context)) as HookContext<Partial<Post>>
     } catch (e) {

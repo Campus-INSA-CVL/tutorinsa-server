@@ -1,0 +1,26 @@
+description:
+produces:
+  - application/json
+operations:
+  create:
+    summary: Authentication Management
+    description: This service is used to manage sign up verification, password reset, etc... using a mailer as notifier.
+    parameters:
+    requestBody:
+      description: Object to gie action and value to server. See Schema for more information.
+      content:
+        json:
+          schema:
+            oneOf:
+              - $ref: "#/components/schemas/resendVerifySignup"
+              - $ref: "#/components/schemas/verifySignupLong"
+              - $ref: "#/components/schemas/sendResetPwd"
+              - $ref: "#/components/schemas/resetPwdLong"
+              - $ref: "#/components/schemas/passwordChange"
+    responses:
+      201:
+        description: created
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/getUser"
