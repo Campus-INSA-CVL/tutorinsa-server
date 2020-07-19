@@ -47,7 +47,9 @@ app.configure(socketio())
 app.configure(mongoose)
 
 // Configure the documentation
-app.configure(swagger)
+if (process.env.NODE_ENV !== 'production') {
+  app.configure(swagger)
+}
 
 // Configure other middleware (see `middleware/index.js`)
 app.configure(middleware)
