@@ -5,7 +5,7 @@ import { BadRequest } from '@feathersjs/errors'
 import { User } from '../../../declarations'
 
 /**
- * Check that the password is strong enougth
+ * Check that the password is strong enough
  */
 export default (options = {}): Hook => {
   return async (context: HookContext<User>) => {
@@ -15,8 +15,13 @@ export default (options = {}): Hook => {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/
     )
 
-    if (data?.password && !regex.test(data.password))
-      throw new BadRequest('this password is not strong enought')
+    if (
+      (data?.password && !regex.test(data.password)) ||
+      // Field for authManagement
+      ((data as any)?.value?.password &&
+        !regex.test((data as any).value.password))
+    )
+      throw new BadRequest('this password is not strong enough')
 
     return context
   }

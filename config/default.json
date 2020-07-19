@@ -26,5 +26,6 @@
       "passwordField": "password"
     }
   },
-  "mongodb": "mongodb://localhost:27017/feathersjs_server"
+  "mongodb": "mongodb://localhost:27017/feathersjs_server",
+  "front_url": "http://localhost:3000"
 }

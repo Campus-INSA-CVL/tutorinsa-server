@@ -1,13 +1,14 @@
 {
-  "host": "https://tutorinsa-server.herokuapp.com/",
+  "host": "HOST",
   "mongodb": "MONGODB",
   "port": "PORT",
   "authentication": {
     "secret": "SECRET",
     "jwtOptions": {
-      "audience": "https://tutorinsa-server.herokuapp.com/",
+      "audience": "HOST",
       "issuer": "tutorinsa",
       "expiresIn": "1d"
     }
-  }
+  },
+  "front_url": "FRONT_URL"
 }

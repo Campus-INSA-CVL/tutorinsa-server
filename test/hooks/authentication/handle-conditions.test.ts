@@ -36,7 +36,7 @@ describe("'handle-conditions' hook", () => {
 
     error = null
   })
-  it('nothing should happend without ability', async () => {
+  it('nothing should happens without ability', async () => {
     context.params = {}
     try {
       result = (await handleConditions()(context)) as HookContext

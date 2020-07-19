@@ -67,7 +67,7 @@ describe("'check-is-post-full' hook", () => {
     )
   })
 
-  it('nothing should happend is there is no data', async () => {
+  it('nothing should happens is there is no data', async () => {
     context.params = Object.assign({}, { post: { fullStudents: true } })
 
     try {
@@ -80,7 +80,7 @@ describe("'check-is-post-full' hook", () => {
     expect(result).toEqual(context)
   })
 
-  it('nothing should happend if this is not a subscription', async () => {
+  it('nothing should happens if this is not a subscription', async () => {
     context.params = Object.assign({}, { post: { fullStudents: true } })
     context.data = Object.assign({}, { as: 'eleve', type: 'unsubscribe' })
 
@@ -94,7 +94,7 @@ describe("'check-is-post-full' hook", () => {
     expect(result).toEqual(context)
   })
 
-  it('nothing should happend if there is still places', async () => {
+  it('nothing should happens if there is still places', async () => {
     context.params = Object.assign({}, { post: { fullStudents: false } })
     context.data = Object.assign({}, { as: 'eleve', type: 'unsubscribe' })
 

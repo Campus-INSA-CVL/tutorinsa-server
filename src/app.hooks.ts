@@ -9,6 +9,8 @@ import pickData from './hooks/authentication/pick-data'
 
 import handleConditions from './hooks/authentication/handle-conditions'
 
+import checkUserIsVerified from './hooks/check/check-user-is-verified'
+
 export default {
   before: {
     all: [
@@ -18,6 +20,7 @@ export default {
           !!context.params.provider &&
           `/${context.path}` !== context.app.get('authentication').path,
         authenticate(),
+        checkUserIsVerified(),
         authorize()
       ),
       iff(isProvider('external'), handleConditions()),

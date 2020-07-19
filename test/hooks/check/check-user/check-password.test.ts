@@ -1,6 +1,6 @@
 import checkPassword from '../../../../src/hooks/check/check-user/check-password'
 import { HookContext, Service, Application } from '@feathersjs/feathers'
-import { BadRequest, FeathersErrorJSON } from '@feathersjs/errors'
+import { BadRequest } from '@feathersjs/errors'
 import { User } from '../../../../src/declarations'
 
 describe("'check-password' hook", () => {
@@ -16,7 +16,7 @@ describe("'check-password' hook", () => {
       lastName: 'PASSWORD',
       firstName: 'user',
       email: 'password@insa-cvl.fr',
-      password: 'azer',
+      password: 'fake',
       permissions: ['eleve'],
       yearId: '',
       departmentId: '',
@@ -39,7 +39,7 @@ describe("'check-password' hook", () => {
     result = null
   })
 
-  it('should not create user beacause of a weak password', async () => {
+  it('should not create user because of a weak password', async () => {
     expect.assertions(2)
 
     try {
@@ -49,10 +49,10 @@ describe("'check-password' hook", () => {
     }
 
     expect(error).toBeInstanceOf(BadRequest)
-    expect(error.message).toBe('this password is not strong enought')
+    expect(error.message).toBe('this password is not strong enough')
   })
 
-  it('should be created beacause of a strong password', async () => {
+  it('should be created because of a strong password', async () => {
     expect.assertions(2)
 
     // a strong password

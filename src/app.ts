@@ -28,7 +28,11 @@ const app: Application = express(feathers())
 app.configure(configuration())
 // Enable security, CORS, compression, favicon and body parsing
 app.use(helmet())
-app.use(cors())
+app.use(
+  cors({
+    origin: '*',
+  })
+)
 app.use(compress())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -61,6 +65,8 @@ app.use(
     html: {
       403: path.join(__dirname, '..', 'public/403.html'),
       404: path.join(__dirname, '..', 'public/404.html'),
+      405: path.join(__dirname, '..', 'public/405.html'),
+      500: path.join(__dirname, '..', 'public/500.html'),
     },
   } as any)
 )
