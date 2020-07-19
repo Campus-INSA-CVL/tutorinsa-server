@@ -3,6 +3,9 @@
   <a href="https://github.com/Campus-INSA-CVL/tutorinsa-server/workflows/CI/badge.svg">
     <img src="https://github.com/Campus-INSA-CVL/tutorinsa-server/workflows/CI/badge.svg" alt="tests status" />
   </a>
+  <a href="https://dev.azure.com/esoubiran25/tutorinsa-server/_build/latest?definitionId=26&branchName=master">
+    <img src="https://dev.azure.com/esoubiran25/tutorinsa-server/_apis/build/status/Campus-INSA-CVL.tutorinsa-server?branchName=master&jobName=Job" alt="Build Status" />
+  </a>
 </p>
  
 # API TutorINSA
