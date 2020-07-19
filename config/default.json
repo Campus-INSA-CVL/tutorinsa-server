@@ -27,5 +27,5 @@
     }
   },
   "mongodb": "mongodb://localhost:27017/feathersjs_server",
-  "front_url": "FRONT_URL"
+  "front_url": "http://localhost:3000"
 }
