@@ -65,6 +65,8 @@ app.use(
     html: {
       403: path.join(__dirname, '..', 'public/403.html'),
       404: path.join(__dirname, '..', 'public/404.html'),
+      405: path.join(__dirname, '..', 'public/405.html'),
+      500: path.join(__dirname, '..', 'public/500.html'),
     },
   } as any)
 )
