@@ -63,7 +63,7 @@ const checkDataOptions: CheckDataOptions<UserCore> = {
     'studentSubscriptionsIds',
     'tutorSubscriptionsIds',
   ],
-  unwantedFields: ['permissions', 'email', 'password'],
+  unwantedFields: ['permissions', 'email', 'password', 'resetToken'],
   excludeFields: [
     'isVerified',
     'verifyToken',
