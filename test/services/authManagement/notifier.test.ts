@@ -55,7 +55,7 @@ describe("'notifier' function", () => {
     ])('should send email, %s', async (action, type, subject) => {
       const options = {
         user,
-        tokenLink: `http://localhost:3030/${type}?token=${
+        tokenLink: `${app.get('front_url')}/${type}?token=${
           user[type + 'Token']
         }`,
       }
