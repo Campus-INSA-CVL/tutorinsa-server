@@ -152,16 +152,21 @@ export default function defineAbilitiesFor(user: User): Ability {
       'tutors',
       '__v',
     ])
-    can('patch', 'posts', [
-      'comment',
-      'startAt',
-      'duration',
-      'campus',
-      'studentsCapacity',
-      'tutorsCapacity',
-      'subjectId',
-      'roomId',
-    ])
+    can(
+      'patch',
+      'posts',
+      [
+        'comment',
+        'startAt',
+        'duration',
+        'campus',
+        'studentsCapacity',
+        'tutorsCapacity',
+        'subjectId',
+        'roomId',
+      ],
+      { creatorId: user._id }
+    )
     can('remove', 'posts', { creatorId: user._id })
 
     can(['find', 'get'], 'rooms', [
