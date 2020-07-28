@@ -138,7 +138,14 @@ export default {
       fastJoin(resolvers),
       // Make sure the password field is never sent to the client
       // Always must be the last hook
-      protect('password'),
+      protect(
+        'password',
+        'verifyChanges',
+        'resetToken',
+        'resetExpires',
+        'verifyToken',
+        'verifyExpires'
+      ),
     ],
     find: [iff(isProvider('external'), pickResult())],
     get: [iff(isProvider('external'), pickResult())],
