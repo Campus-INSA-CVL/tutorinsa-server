@@ -8,6 +8,9 @@ import posts from './posts/posts.service'
 import subscription from './subscriptions/subscriptions.service'
 import mailer from './mailer/mailer.service'
 import authManagement from './auth-management/auth-management.service'
+import push from './push/push.service'
+import subscriptionsNotifications from './subscriptions-notifications/subscriptions-notifications.service'
+import notifications from './notifications/notifications.service'
 // Don't remove this comment. It's needed to format import lines nicely.
 
 export default function (app: Application) {
@@ -20,4 +23,7 @@ export default function (app: Application) {
   app.configure(subscription)
   app.configure(mailer)
   app.configure(authManagement)
+  app.configure(push)
+  app.configure(subscriptionsNotifications)
+  app.configure(notifications)
 }
