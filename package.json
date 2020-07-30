@@ -37,6 +37,7 @@
   },
   "scripts": {
     "lint": "tslint 'src/**/*.ts' 'test/**/*.ts'",
+    "lint:fix": "npm run lint -- --fix",
     "jest": "jest --forceExit --detectOpenHandles",
     "test": "npm run lint && npm run compile && npm run jest -- --collectCoverage=true",
     "test:ci": "npm run lint && npm run compile && npm run jest -- --collectCoverage=true --ci --reporters=default --reporters=jest-junit",
