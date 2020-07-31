@@ -221,3 +221,13 @@ export type NotifierType =
   | 'resetPwd'
   | 'passwordChange'
   | 'identityChange'
+
+export type NotificationId = { notificationId: Id }
+
+export type NotificationData = {
+  title: string
+  body: string
+  image: string
+  icon: string
+  data: object
+}

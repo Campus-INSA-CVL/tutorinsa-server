@@ -1,3 +1,5 @@
+import webpush from '../../hooks/push/webpush'
+
 export default {
   before: {
     all: [],
@@ -13,7 +15,7 @@ export default {
     all: [],
     find: [],
     get: [],
-    create: [],
+    create: [webpush()],
     update: [],
     patch: [],
     remove: [],
