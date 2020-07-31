@@ -27,5 +27,10 @@
     }
   },
   "mongodb": "mongodb://localhost:27017/feathersjs_server",
-  "front_url": "http://localhost:3000"
+  "front_url": "http://localhost:3000",
+  "vapid": {
+    "publicKey": "BCw1KIzZjH4E5KJsNX7NPDwwufSWB5eMkHp3nA35rFPn9FxWNdNuB-mk8e_MSyvvP4s2D4XO3ZelhVpWf8tu8Q4",
+    "privateKey": "heyJ-Ly85K1DxymYSBgHQie58FwtTgzc80ncvARPHv0",
+    "subject": "mailto:a_valid_email"
+  }
 }

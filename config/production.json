@@ -10,5 +10,10 @@
       "expiresIn": "1d"
     }
   },
-  "front_url": "FRONT_URL"
+  "front_url": "FRONT_URL",
+  "vapid": {
+    "publicKey": "VAPID_publicKey",
+    "privateKey": "VAPID_privateKey",
+    "subject": "VAPID_subject"
+  }
 }
