@@ -1,14 +1,15 @@
+import { disallow } from 'feathers-hooks-common'
 import webpush from '../../hooks/push/webpush'
 
 export default {
   before: {
     all: [],
-    find: [],
-    get: [],
+    find: [disallow()],
+    get: [disallow()],
     create: [],
-    update: [],
-    patch: [],
-    remove: [],
+    update: [disallow()],
+    patch: [disallow()],
+    remove: [disallow()],
   },
 
   after: {
