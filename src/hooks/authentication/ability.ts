@@ -211,8 +211,8 @@ export default function defineAbilitiesFor(user: User): Ability {
     }
 
     if (is('admin', user)) {
-      can('create', 'push')
-      can('create', 'notifications')
+      can('create', 'push', ['notificationId'])
+      can('create', 'notifications', ['title', 'body', 'image', 'icon', 'data'])
 
       can(['create', 'patch'], ['subjects', 'years', 'departments'])
       can('find', 'posts', [

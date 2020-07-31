@@ -27,7 +27,9 @@ async function findSubscription(
   app: Application,
   query: object
 ): Promise<Paginated<PushSubscription>> {
-  return app.service('subscriptions').find({ query })
+  return app.service('subscriptions-notifications').find({ query }) as Promise<
+    Paginated<PushSubscription>
+  >
 }
 
 function getVapidKeys(app: Application): VapidKeys & { subject: string } {
@@ -35,7 +37,7 @@ function getVapidKeys(app: Application): VapidKeys & { subject: string } {
   return {
     subject: vapid.subject,
     publicKey: vapid.publicKey,
-    privateKey: vapid.publicKey,
+    privateKey: vapid.privateKey,
   }
 }
 
@@ -51,7 +53,11 @@ export default (options = {}): Hook => {
     const { app, data } = context
 
     if (data) {
-      setVapid(getVapidKeys(app as Application))
+      try {
+        setVapid(getVapidKeys(app as Application))
+      } catch (error) {
+        throw new GeneralError('impossible to set vapid keys')
+      }
       let notification: NotificationData
       if ((data as NotificationData).title) {
         notification = data as NotificationData
@@ -77,9 +83,22 @@ export default (options = {}): Hook => {
           throw new GeneralError('impossible to find subscription')
         }
 
-        for (const subscription of result.data) {
+        for await (const subscription of result.data) {
           try {
-            triggerPushMsg(subscription, JSON.stringify(data))
+            await triggerPushMsg(
+              subscription,
+              JSON.stringify({
+                notification: {
+                  title: notification.title,
+                  body: notification.body,
+                  image: '',
+                  icon: '',
+                  data: {
+                    url: 'oui',
+                  },
+                },
+              })
+            )
           } catch (error) {
             throw new GeneralError('webpush failed to send notification')
           }
