@@ -64,6 +64,8 @@ export default function defineAbilitiesFor(user: User): Ability {
   can('find', 'rooms', ['_id', 'campus', '__v'])
 
   if (user) {
+    can('create', 'subscriptions-notifications')
+
     can('find', 'users', [
       '_id',
       'lastName',
