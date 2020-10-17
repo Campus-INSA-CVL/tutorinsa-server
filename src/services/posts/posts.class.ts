@@ -8,12 +8,14 @@ export class Posts extends Service {
   constructor(options: Partial<MongooseServiceOptions>, app: Application) {
     super(options)
   }
+  // @ts-ignore
   async find(params: Params) {
     return super.find(params)
   }
   async get(id: Id, params: Params) {
     return super.get(id, params)
   }
+  // @ts-ignore
   async create(data: Post & { room?: Room }, params: Params) {
     const userId = getUserId(params)
     // Add the creator to the correct fields
