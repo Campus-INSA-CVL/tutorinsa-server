@@ -64,6 +64,8 @@ export default function defineAbilitiesFor(user: User): Ability {
   can('find', 'rooms', ['_id', 'campus', '__v'])
 
   if (user) {
+    can('create', 'subscriptions-notifications', ['endpoint', 'keys'])
+
     can('find', 'users', [
       '_id',
       'lastName',
@@ -209,6 +211,9 @@ export default function defineAbilitiesFor(user: User): Ability {
     }
 
     if (is('admin', user)) {
+      can('create', 'push', ['notificationId'])
+      can('create', 'notifications', ['title', 'body', 'image', 'icon', 'data'])
+
       can(['create', 'patch'], ['subjects', 'years', 'departments'])
       can('find', 'posts', [
         '_id',
