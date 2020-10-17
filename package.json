@@ -1,7 +1,7 @@
 {
   "name": "tutorinsa-server",
   "description": "API for Application of TutorINSA, an association whose aim is to give tutoring courses to students",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "homepage": "https://github.com/Campus-INSA-CVL/tutorinsa-server",
   "private": true,
   "main": "src",
