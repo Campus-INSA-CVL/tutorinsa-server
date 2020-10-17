@@ -8,6 +8,7 @@ export class SubscriptionsNotifications extends Service {
   constructor(options: Partial<MongooseServiceOptions>, app: Application) {
     super(options)
   }
+  // @ts-ignore
   async create(data: PushSubscription & { userId: Id }, params: Params) {
     const { user } = params
     if (!(user as User)._id) {
