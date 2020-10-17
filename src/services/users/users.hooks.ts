@@ -6,6 +6,7 @@ import {
   isProvider,
   fastJoin,
   preventChanges,
+  iffElse,
 } from 'feathers-hooks-common'
 // Don't remove this comment. It's needed to format import lines nicely.
 import checkData from '../../hooks/check/check-data'
@@ -138,17 +139,10 @@ export default {
       fastJoin(resolvers),
       // Make sure the password field is never sent to the client
       // Always must be the last hook
-      protect(
-        'password',
-        'verifyChanges',
-        'resetToken',
-        'resetExpires',
-        'verifyToken',
-        'verifyExpires'
-      ),
+      protect('password'),
     ],
-    find: [iff(isProvider('external'), pickResult())],
-    get: [iff(isProvider('external'), pickResult())],
+    find: [iff(isProvider('external'), pickResult()), removeVerification()],
+    get: [iff(isProvider('external'), pickResult()), removeVerification()],
     create: [
       (context: HookContext<User>) => {
         accountService(context.app as Application).notifier(
@@ -159,8 +153,8 @@ export default {
       removeVerification(),
     ],
     update: [],
-    patch: [],
-    remove: [],
+    patch: [removeVerification()],
+    remove: [removeVerification()],
   },
 
   error: {
